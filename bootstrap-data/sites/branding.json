@@ -1,0 +1,234 @@
+{
+    "dashboardConfig": {
+        "dashboardPage": "site/branding/dashboard", 
+        "dashlets": [
+            {
+                "regionId": "component-1-1", 
+                "url": "/components/dashlets/site-profile"
+            }, 
+            {
+                "config": {
+                    "height": "292"
+                }, 
+                "regionId": "component-1-2", 
+                "url": "/components/dashlets/colleagues"
+            }, 
+            {
+                "config": {
+                    "height": "298"
+                }, 
+                "regionId": "component-1-3", 
+                "url": "/components/dashlets/docsummary"
+            }, 
+            {
+                "config": {
+                    "height": "489", 
+                    "wikipage": "Main_Page"
+                }, 
+                "regionId": "component-2-1", 
+                "url": "/components/dashlets/wiki"
+            }, 
+            {
+                "config": {
+                    "height": "253"
+                }, 
+                "regionId": "component-2-2", 
+                "url": "/components/dashlets/activityfeed"
+            }
+        ], 
+        "templateId": "dashboard-2-columns-wide-right"
+    }, 
+    "description": "Project to develop a new brand for Green Energy. Work to develop a unified branding that supports all three divisions.", 
+    "isPublic": true, 
+    "memberships": [
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/ad2fc0e3-7515-48f6-ab19-1cc176f28bcf/content/thumbnails/avatar", 
+                "firstName": "Bolaji", 
+                "fullName": "bburchetts", 
+                "jobtitle": "Marketing Manager", 
+                "lastName": "Burchetts", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/bburchetts", 
+                "userName": "bburchetts"
+            }, 
+            "role": "SiteCollaborator", 
+            "url": "/alfresco/s/api/sites/branding/memberships/bburchetts"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/e48033de-8791-46a2-b3ef-cf399155a1a7/content/thumbnails/avatar", 
+                "firstName": "Cloud", 
+                "fullName": "clouduser", 
+                "jobtitle": "Senior Demo User", 
+                "lastName": "Trial-User", 
+                "organization": "", 
+                "url": "/alfresco/s/api/people/clouduser", 
+                "userName": "clouduser"
+            }, 
+            "role": "SiteConsumer", 
+            "url": "/alfresco/s/api/sites/branding/memberships/clouduser"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/2d290bb2-afdc-4246-960b-1029141f9c2a/content/thumbnails/avatar", 
+                "firstName": "Jackie", 
+                "fullName": "jtalbot", 
+                "jobtitle": "Account Director", 
+                "lastName": "Talbot", 
+                "organization": "Fresh Brands", 
+                "url": "/alfresco/s/api/people/jtalbot", 
+                "userName": "jtalbot"
+            }, 
+            "role": "SiteContributor", 
+            "url": "/alfresco/s/api/sites/branding/memberships/jtalbot"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/39e2e16f-e5b5-4061-8280-9625c45f112a/content/thumbnails/avatar", 
+                "firstName": "Chris", 
+                "fullName": "cknowl", 
+                "jobtitle": "Senior Manager Website and Intranet", 
+                "lastName": "Knowl", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/cknowl", 
+                "userName": "cknowl"
+            }, 
+            "role": "SiteCollaborator", 
+            "url": "/alfresco/s/api/sites/branding/memberships/cknowl"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/1399ff99-9437-465f-a6e4-6c45b7a63c56/content/thumbnails/avatar", 
+                "firstName": "Nancy", 
+                "fullName": "nwoodland", 
+                "jobtitle": "Partner Manager", 
+                "lastName": "Woodland", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/nwoodland", 
+                "userName": "nwoodland"
+            }, 
+            "role": "SiteCollaborator", 
+            "url": "/alfresco/s/api/sites/branding/memberships/nwoodland"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/34fbaa33-96bc-4427-a044-9c40aa009c70/content/thumbnails/avatar", 
+                "firstName": "Nikki", 
+                "fullName": "nswallowfield", 
+                "jobtitle": "Head of Corporate Communications", 
+                "lastName": "Swallowfield", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/nswallowfield", 
+                "userName": "nswallowfield"
+            }, 
+            "role": "SiteCollaborator", 
+            "url": "/alfresco/s/api/sites/branding/memberships/nswallowfield"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/a01ebacb-6d57-4b92-9787-1d93a9c1151a/content/thumbnails/avatar", 
+                "firstName": "Paul", 
+                "fullName": "phampton", 
+                "jobtitle": "Product Marketing Director", 
+                "lastName": "Hampton", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/phampton", 
+                "userName": "phampton"
+            }, 
+            "role": "SiteManager", 
+            "url": "/alfresco/s/api/sites/branding/memberships/phampton"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/946e36b1-cbfd-4473-8059-a593c63cd0bc/content/thumbnails/avatar", 
+                "firstName": "Simon", 
+                "fullName": "sclark", 
+                "jobtitle": "Account Executive", 
+                "lastName": "Clark", 
+                "organization": "Fresh Brands", 
+                "url": "/alfresco/s/api/people/sclark", 
+                "userName": "sclark"
+            }, 
+            "role": "SiteContributor", 
+            "url": "/alfresco/s/api/sites/branding/memberships/sclark"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/86b6cc21-985b-4e83-a809-fa3ff014b8b6/content/thumbnails/avatar", 
+                "firstName": "Ian", 
+                "fullName": "iwargrave", 
+                "jobtitle": "Chief Marketing Officer", 
+                "lastName": "Wargrave", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/iwargrave", 
+                "userName": "iwargrave"
+            }, 
+            "role": "SiteCollaborator", 
+            "url": "/alfresco/s/api/sites/branding/memberships/iwargrave"
+        }
+    ], 
+    "metadata": {
+        "aspects": [
+            "{http://www.alfresco.org/model/content/1.0}auditable", 
+            "{http://www.alfresco.org/model/content/1.0}tagscope", 
+            "{http://www.alfresco.org/model/system/1.0}referenceable", 
+            "{http://www.alfresco.org/model/content/1.0}titled"
+        ], 
+        "mimetype": "application/octet-stream", 
+        "nodeRef": "workspace://SpacesStore/70463ae3-7b42-4a3b-af63-17a69517d465", 
+        "properties": {
+            "{http://www.alfresco.org/model/content/1.0}created": "Tue Jan 05 17:51:25 EST 2010", 
+            "{http://www.alfresco.org/model/content/1.0}creator": "phampton", 
+            "{http://www.alfresco.org/model/content/1.0}description": "Project to develop a new brand for Green Energy. Work to develop a unified branding that supports all three divisions.", 
+            "{http://www.alfresco.org/model/content/1.0}modified": "Tue Jul 13 13:06:40 EDT 2010", 
+            "{http://www.alfresco.org/model/content/1.0}modifier": "phampton", 
+            "{http://www.alfresco.org/model/content/1.0}name": "branding", 
+            "{http://www.alfresco.org/model/content/1.0}tagScopeCache": "contentUrl=store://2010/7/13/13/6/07e4230d-15a3-450f-a347-143dda16858e.bin|mimetype=text/plain|size=399|encoding=utf-8|locale=en_GB_", 
+            "{http://www.alfresco.org/model/content/1.0}title": "Marketing: 2010 Company Rebranding", 
+            "{http://www.alfresco.org/model/site/1.0}sitePreset": "site-dashboard", 
+            "{http://www.alfresco.org/model/site/1.0}siteVisibility": "PUBLIC", 
+            "{http://www.alfresco.org/model/system/1.0}node-dbid": 1091, 
+            "{http://www.alfresco.org/model/system/1.0}node-uuid": "70463ae3-7b42-4a3b-af63-17a69517d465", 
+            "{http://www.alfresco.org/model/system/1.0}store-identifier": "SpacesStore", 
+            "{http://www.alfresco.org/model/system/1.0}store-protocol": "workspace"
+        }, 
+        "type": "{http://www.alfresco.org/model/site/1.0}site"
+    }, 
+    "node": "/alfresco/s/api/node/workspace/SpacesStore/70463ae3-7b42-4a3b-af63-17a69517d465", 
+    "shortName": "branding", 
+    "siteManagers": [
+        "phampton"
+    ], 
+    "sitePages": [
+        {
+            "pageId": "wiki-page"
+        }, 
+        {
+            "pageId": "documentlibrary"
+        }, 
+        {
+            "pageId": "links"
+        }, 
+        {
+            "pageId": "discussions-topiclist"
+        }, 
+        {
+            "pageId": "blog-postlist"
+        }
+    ], 
+    "sitePreset": "site-dashboard", 
+    "tagScope": "/alfresco/s/api/tagscopes/workspace/SpacesStore/70463ae3-7b42-4a3b-af63-17a69517d465", 
+    "title": "Marketing: 2010 Company Rebranding", 
+    "url": "/alfresco/s/api/sites/branding", 
+    "visibility": "PUBLIC"
+}

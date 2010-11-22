@@ -1,0 +1,4602 @@
+{
+    "people": [
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "ashurlock@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Andrew", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Territory Executive", 
+            "lastName": "Shurlock", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Andrew-Shurlock", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/ashurlock", 
+            "userName": "ashurlock"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "sburrowhill@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Simon", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Burrowhill", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Simon-Burrowhill", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/sburrowhill", 
+            "userName": "sburrowhill"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "smimbridge@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Steve", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "QA Manager", 
+            "lastName": "Mimbridge", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Steve-Mimbridge", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/smimbridge", 
+            "userName": "smimbridge"
+        }, 
+        {
+            "avatar": "profile-images/sclark.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "23 Broad Street", 
+            "companyaddress2": "Oxford", 
+            "companyaddress3": "", 
+            "companyemail": "info@fresh-brands-demo.com", 
+            "companyfax": "", 
+            "companypostcode": "OX01 3AL", 
+            "companytelephone": "", 
+            "dashboardConfig": {
+                "dashboardPage": "user/sclark/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "sclark@fresh-brands-demo.com", 
+            "enabled": true, 
+            "firstName": "Simon", 
+            "googleusername": null, 
+            "instantmsg": "", 
+            "jobtitle": "Account Executive", 
+            "lastName": "Clark", 
+            "location": "", 
+            "mobile": "+44(0) 7788 77665543", 
+            "organization": "Fresh Brands", 
+            "persondescription": "", 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "documentList": {
+                                "showFolders": true
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 3120694, 
+            "skype": "", 
+            "telephone": "+44(0) 7788 77665543", 
+            "url": "/alfresco/s/api/person/sclark", 
+            "userName": "sclark"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "ccockpole@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Cliff", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Cockpole", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Cliff-Cockpole", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/ccockpole", 
+            "userName": "ccockpole"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "scavendish@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Thomas", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Cavendish", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Thomas-Cavendish", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/scavendish", 
+            "userName": "scavendish"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "bholyport@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Bill", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "VP Sales Americas", 
+            "lastName": "Holyport", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Bill-Holyport", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/bholyport", 
+            "userName": "bholyport"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "mwellington@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Martin", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Chief Information Officer", 
+            "lastName": "Wellington", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Martin-Wellington", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/mwellington", 
+            "userName": "mwellington"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "mfleet@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Matt", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Fleet", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Matt-Fleet", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/mfleet", 
+            "userName": "mfleet"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "pharley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Paul", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "VP of Engineering", 
+            "lastName": "Harley", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Paul-Harley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/pharley", 
+            "userName": "pharley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "10 King Street", 
+            "companyaddress2": "Tokyo", 
+            "companyaddress3": "Japan", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "XX65", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "jassendon@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Jean", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Director of Production, APAC", 
+            "lastName": "Assendon", 
+            "location": "APAC", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Jean-Assendon", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jassendon", 
+            "userName": "jassendon"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "brosehill@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Briana", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Documentation Manager", 
+            "lastName": "Rosehill", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Briana-Rosehill", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/brosehill", 
+            "userName": "brosehill"
+        }, 
+        {
+            "avatar": "profile-images/dfarnham.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "10 Rue de la Widget", 
+            "companyaddress2": "Paris", 
+            "companyaddress3": "France", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "W1099876", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/dfarnham/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "dfarnham@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Denis", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Head of Accounts", 
+            "lastName": "Farnham", 
+            "location": "France", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "sites": {
+                                "favourites": {
+                                    "rm": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 394259, 
+            "skype": "Denis-Farnham", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/dfarnham", 
+            "userName": "dfarnham"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "vbyfleet@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Viji", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Byfleet", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Viji-Byfleet", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/vbyfleet", 
+            "userName": "vbyfleet"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "gbirdhill@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Gary", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Birdhill", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Gary-Birdhill", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/gbirdhill", 
+            "userName": "gbirdhill"
+        }, 
+        {
+            "avatar": "profile-images/dtaplow.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/dtaplow/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "dtaplow@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Dave", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Sales Manager, UK, Ireland & Nordics", 
+            "lastName": "Taplow", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 112872, 
+            "skype": "Dave-Taplow", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/dtaplow", 
+            "userName": "dtaplow"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "bhurst@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Ben", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Sales Manager, France", 
+            "lastName": "Hurst", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Ben-Hurst", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/bhurst", 
+            "userName": "bhurst"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "jowlsmoor@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Jared", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Partner Manager", 
+            "lastName": "Owlsmoor", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Jared-Owlsmoor", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jowlsmoor", 
+            "userName": "jowlsmoor"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "fwindsor@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Floyd", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Technical Support Engineer", 
+            "lastName": "Windsor", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Floyd-Windsor", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/fwindsor", 
+            "userName": "fwindsor"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "eetonwick@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Erik", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Etonwick", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Erik-Etonwick", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/eetonwick", 
+            "userName": "eetonwick"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "gpaley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Gavin", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Paley", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Gavin-Paley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/gpaley", 
+            "userName": "gpaley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "rsouthwood@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Ryan", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Technical Author", 
+            "lastName": "Southwood", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Ryan-Southwood", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/rsouthwood", 
+            "userName": "rsouthwood"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "hwoosehill@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Helen", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Director, Technical Support", 
+            "lastName": "Woosehill", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Helen-Woosehill", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/hwoosehill", 
+            "userName": "hwoosehill"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "degypt@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Derek", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Egypt", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Derek-Egypt", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/degypt", 
+            "userName": "degypt"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "23 Bundeskanzleramt", 
+            "companyaddress2": "10924 Berlin", 
+            "companyaddress3": "Germany", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "Postfach 610261", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "cwarren@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Christian", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Sales Director, Germany", 
+            "lastName": "Warren", 
+            "location": "Germany", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Christian-Warren", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/cwarren", 
+            "userName": "cwarren"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "10 Rue de la Widget", 
+            "companyaddress2": "Paris", 
+            "companyaddress3": "France", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "W1099876", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "mlongcross@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Michael", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Events Coordinator", 
+            "lastName": "Longcross", 
+            "location": "France", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Michael-Longcross", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/mlongcross", 
+            "userName": "mlongcross"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "htwyford@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Helen", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Technical Author", 
+            "lastName": "Twyford", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Helen-Twyford", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/htwyford", 
+            "userName": "htwyford"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "kwindlesham@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Ken", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Linux System Administrator", 
+            "lastName": "Windlesham", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Ken-Windlesham", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/kwindlesham", 
+            "userName": "kwindlesham"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "pminley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Phil", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Channels Manager", 
+            "lastName": "Minley", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Phil-Minley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/pminley", 
+            "userName": "pminley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "10 Rue de la Widget", 
+            "companyaddress2": "Paris", 
+            "companyaddress3": "France", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "W1099876", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "dcookham@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Danilo", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Consultant & Solutions Engineer", 
+            "lastName": "Cookham", 
+            "location": "France", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Danilo-Cookham", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/dcookham", 
+            "userName": "dcookham"
+        }, 
+        {
+            "avatar": "profile-images/nwoodland.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/nwoodland/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "nwoodland@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Nancy", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Partner Manager", 
+            "lastName": "Woodland", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 1936026, 
+            "skype": "Nancy-Woodland", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/nwoodland", 
+            "userName": "nwoodland"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "yfulmer@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Yong", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Senior VP of Production", 
+            "lastName": "Fulmer", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Yong-Fulmer", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/yfulmer", 
+            "userName": "yfulmer"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "nfarley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Nina", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Sales Manager", 
+            "lastName": "Farley", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Nina-Farley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/nfarley", 
+            "userName": "nfarley"
+        }, 
+        {
+            "avatar": "profile-images/priseley.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/priseley/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/my-documents"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "config": {
+                            "height": "285"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }
+                ], 
+                "templateId": "dashboard-2-columns-wide-left"
+            }, 
+            "email": "priseley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Patti", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Executive Vice President, Human Resources", 
+            "lastName": "Riseley", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "sites": {
+                                "favourites": {
+                                    "exec1": true, 
+                                    "rm": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 1344639, 
+            "skype": "Patti-Riseley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/priseley", 
+            "userName": "priseley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "awoodley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Alex", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Support Engineer", 
+            "lastName": "Woodley", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Alex-Woodley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/awoodley", 
+            "userName": "awoodley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "jcranbourne@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Jeff", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Sales Director, UK & N. Europe", 
+            "lastName": "Cranbourne", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Jeff-Cranbourne", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jcranbourne", 
+            "userName": "jcranbourne"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "rfrimley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Ron", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Frimley", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Ron-Frimley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/rfrimley", 
+            "userName": "rfrimley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "phartford@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Peter", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Hartford", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Peter-Hartford", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/phartford", 
+            "userName": "phartford"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "jlittlewick@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "John", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Production Manager", 
+            "lastName": "Littlewick", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "John-Littlewick", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jlittlewick", 
+            "userName": "jlittlewick"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "23 Bundeskanzleramt", 
+            "companyaddress2": "10924 Berlin", 
+            "companyaddress3": "Germany", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "Postfach 610261", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "sfoxcorner@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Thomas", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Marketing Manager", 
+            "lastName": "Foxcorner", 
+            "location": "Germany", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Thomas-Foxcorner", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/sfoxcorner", 
+            "userName": "sfoxcorner"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "slightwater@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Scott", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Lightwater", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Scott-Lightwater", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/slightwater", 
+            "userName": "slightwater"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "23 Bundeskanzleramt", 
+            "companyaddress2": "10924 Berlin", 
+            "companyaddress3": "Germany", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "Postfach 610261", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "bwerner@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Bernard", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Solutions Engineer", 
+            "lastName": "Werner", 
+            "location": "Germany", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Bernard-Werner", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/bwerner", 
+            "userName": "bwerner"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Paseo de Recoletos, 20", 
+            "companyaddress2": "Madrid", 
+            "companyaddress3": "Spain", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "28071", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "bdownshire@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Bill", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Solutions Engineer", 
+            "lastName": "Downshire", 
+            "location": "Spain", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Bill-Downshire", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/bdownshire", 
+            "userName": "bdownshire"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "lsandhurst@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Lawrence", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Account Executive", 
+            "lastName": "Sandhurst", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Lawrence-Sandhurst", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/lsandhurst", 
+            "userName": "lsandhurst"
+        }, 
+        {
+            "avatar": "profile-images/jsonning.png", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/jsonning/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "jsonning@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "James", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Legal Council", 
+            "lastName": "Sonning", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "sites": {
+                                "favourites": {
+                                    "rm": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 19316, 
+            "skype": "James-Sonning", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jsonning", 
+            "userName": "jsonning"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "sottershaw@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Thibaut", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Channels Manager", 
+            "lastName": "Ottershaw", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Thibaut-Ottershaw", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/sottershaw", 
+            "userName": "sottershaw"
+        }, 
+        {
+            "avatar": "profile-images/nswallowfield.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/nswallowfield/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "nswallowfield@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Nikki", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Head of Corporate Communications", 
+            "lastName": "Swallowfield", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "documentList": {
+                                "showFolders": true
+                            }, 
+                            "sites": {
+                                "favourites": {
+                                    "rm": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 2823948, 
+            "skype": "Nikki-Swallowfield", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/nswallowfield", 
+            "userName": "nswallowfield"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "lbisley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Lee", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Corporate Communications Manager", 
+            "lastName": "Bisley", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Lee-Bisley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/lbisley", 
+            "userName": "lbisley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "jmillend@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Jessica", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Millend", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Jessica-Millend", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jmillend", 
+            "userName": "jmillend"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "llittlewick@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Lawrence", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Account Executive", 
+            "lastName": "Littlewick", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Lawrence-Littlewick", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/llittlewick", 
+            "userName": "llittlewick"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "jremenham@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Joe", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Marketing Manager", 
+            "lastName": "Remenham", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Joe-Remenham", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jremenham", 
+            "userName": "jremenham"
+        }, 
+        {
+            "avatar": "profile-images/rmuser.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": null, 
+            "companyaddress2": null, 
+            "companyaddress3": null, 
+            "companyemail": null, 
+            "companyfax": null, 
+            "companypostcode": null, 
+            "companytelephone": null, 
+            "dashboardConfig": {
+                "dashboardPage": "user/rmuser/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "config": {
+                            "height": "150"
+                        }, 
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "config": {
+                            "height": "221"
+                        }, 
+                        "regionId": "component-1-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "config": {
+                            "height": "753", 
+                            "webviewTitle": "Welcome", 
+                            "webviewURI": "http://www.alfresco.com/products/trials/cloud/rm_welcome.html"
+                        }, 
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/webview"
+                    }
+                ], 
+                "templateId": "dashboard-2-columns-wide-right"
+            }, 
+            "email": "none@none.com", 
+            "enabled": true, 
+            "firstName": "Compliance", 
+            "googleusername": null, 
+            "instantmsg": null, 
+            "jobtitle": null, 
+            "lastName": "Trial-User", 
+            "location": null, 
+            "mobile": null, 
+            "organization": null, 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "documentList": {
+                                "showFolders": true, 
+                                "simpleView": true
+                            }, 
+                            "sites": {
+                                "favourites": {
+                                    "exec1": true, 
+                                    "rm": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 210350, 
+            "skype": null, 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/rmuser", 
+            "userName": "rmuser"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "rfrogmore@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Ricardo", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Frogmore", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Ricardo-Frogmore", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/rfrogmore", 
+            "userName": "rfrogmore"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "dburnham@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "David", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Burnham", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "David-Burnham", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/dburnham", 
+            "userName": "dburnham"
+        }, 
+        {
+            "avatar": "profile-images/jmillride.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/jmillride/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "jmillride@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "John", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Chief Executive Officer", 
+            "lastName": "Millride", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "sites": {
+                                "favourites": {
+                                    "rm": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 20915, 
+            "skype": "John-Millride", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jmillride", 
+            "userName": "jmillride"
+        }, 
+        {
+            "avatar": "profile-images/clouduser.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": true
+            }, 
+            "companyaddress1": "", 
+            "companyaddress2": "", 
+            "companyaddress3": "", 
+            "companyemail": "", 
+            "companyfax": "", 
+            "companypostcode": "", 
+            "companytelephone": "", 
+            "dashboardConfig": {
+                "dashboardPage": "user/clouduser/dashboard", 
+                "dashlets": [
+                    {
+                        "config": {
+                            "height": "399"
+                        }, 
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "config": {
+                            "height": "178"
+                        }, 
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/my-documents"
+                    }, 
+                    {
+                        "config": {
+                            "height": "206"
+                        }, 
+                        "regionId": "component-1-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "config": {
+                            "height": "836", 
+                            "webviewTitle": "Welcome", 
+                            "webviewURI": "http://www.alfresco.com/products/trials/cloud/cloud_welcome.html"
+                        }, 
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/webview"
+                    }
+                ], 
+                "templateId": "dashboard-2-columns-wide-right"
+            }, 
+            "email": "none@none.com", 
+            "enabled": true, 
+            "firstName": "Cloud", 
+            "googleusername": "", 
+            "instantmsg": "xxx", 
+            "jobtitle": "Senior Demo User", 
+            "lastName": "Trial-User", 
+            "location": "World Wide", 
+            "mobile": "+1 0202020202020202", 
+            "organization": "", 
+            "persondescription": "This is the demo user account for the Alfresco cloud hosted trial\n\n********************************************************************\nPlease Note: Any changes to this profile will not be saved\n********************************************************************", 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "activities": {
+                                "filter": "others", 
+                                "range": "7"
+                            }, 
+                            "documentList": {
+                                "hideNavBar": true, 
+                                "showFolders": true, 
+                                "simpleView": false
+                            }, 
+                            "documents": {
+                                "favourites": "workspace://SpacesStore/cb4982c6-a267-4219-867a-7b808723b082,workspace://SpacesStore/aa5deb51-5c3f-44c9-8211-36dfc4b7b47b"
+                            }, 
+                            "sites": {
+                                "favourites": {
+                                    "branding": false, 
+                                    "images": false, 
+                                    "project001": true, 
+                                    "test001": false, 
+                                    "usersgroup2010": false
+                                }
+                            }, 
+                            "twisters": {
+                                "collapsed": ""
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 28651966, 
+            "skype": "trial-user", 
+            "telephone": "+1 0101010101010101", 
+            "url": "/alfresco/s/api/person/clouduser", 
+            "userName": "clouduser"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "mwoodley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Michael", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Product Marketing Manager", 
+            "lastName": "Woodley", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Michael-Woodley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/mwoodley", 
+            "userName": "mwoodley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "phazeley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Patrick", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Hazeley", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Patrick-Hazeley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/phazeley", 
+            "userName": "phazeley"
+        }, 
+        {
+            "avatar": "profile-images/jswinley.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/jswinley/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "config": {
+                            "height": "366"
+                        }, 
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "config": {
+                            "height": "144"
+                        }, 
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/my-documents"
+                    }, 
+                    {
+                        "config": {
+                            "height": "117"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "config": {
+                            "height": "132"
+                        }, 
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-2-columns-wide-right"
+            }, 
+            "email": "jswinley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Julie", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Office Manager", 
+            "lastName": "Swinley", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "documentList": {
+                                "showFolders": true, 
+                                "simpleView": false
+                            }, 
+                            "sites": {
+                                "favourites": {
+                                    "exec1": true, 
+                                    "rm": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 1504349, 
+            "skype": "Julie-Swinley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jswinley", 
+            "userName": "jswinley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "mgrazeley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Mike", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Director, Product Management", 
+            "lastName": "Grazeley", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Mike-Grazeley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/mgrazeley", 
+            "userName": "mgrazeley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "jbadgemore@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Jason", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Sales Manager, US", 
+            "lastName": "Badgemore", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Jason-Badgemore", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jbadgemore", 
+            "userName": "jbadgemore"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "jhenley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Jary", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "U.S. Channel Manager", 
+            "lastName": "Henley", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Jary-Henley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jhenley", 
+            "userName": "jhenley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "asandford@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Andy", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Senior Software Engineer", 
+            "lastName": "Sandford", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Andy-Sandford", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/asandford", 
+            "userName": "asandford"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "mwinnersh@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Mark", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Marketing Manager", 
+            "lastName": "Winnersh", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Mark-Winnersh", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/mwinnersh", 
+            "userName": "mwinnersh"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "leversley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Linton", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Eversley", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Linton-Eversley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/leversley", 
+            "userName": "leversley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "jtemple@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Joe", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Director of Production, US", 
+            "lastName": "Temple", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Joe-Temple", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jtemple", 
+            "userName": "jtemple"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "marborfield@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Mark", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Arborfield", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Mark-Arborfield", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/marborfield", 
+            "userName": "marborfield"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "rpirbright@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Roy", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Pirbright", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Roy-Pirbright", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/rpirbright", 
+            "userName": "rpirbright"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "scove@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Scot", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Cove", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Scot-Cove", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/scove", 
+            "userName": "scove"
+        }, 
+        {
+            "avatar": "profile-images/jtalbot.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "23 Broad Street", 
+            "companyaddress2": "Oxford", 
+            "companyaddress3": "", 
+            "companyemail": "info@fresh-brands-demo.com", 
+            "companyfax": "", 
+            "companypostcode": "OX01 3AL", 
+            "companytelephone": "+44(0) 7788 77665543", 
+            "dashboardConfig": {
+                "dashboardPage": "user/jtalbot/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "jtalbot@fresh-brand-demo.com", 
+            "enabled": true, 
+            "firstName": "Jackie", 
+            "googleusername": null, 
+            "instantmsg": "", 
+            "jobtitle": "Account Director", 
+            "lastName": "Talbot", 
+            "location": "", 
+            "mobile": "", 
+            "organization": "Fresh Brands", 
+            "persondescription": "", 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "documentList": {
+                                "showFolders": true
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 152388, 
+            "skype": "", 
+            "telephone": "+44(0) 7788 77665543", 
+            "url": "/alfresco/s/api/person/jtalbot", 
+            "userName": "jtalbot"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "supton@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Scott", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Upton", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Scott-Upton", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/supton", 
+            "userName": "supton"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "bhurley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Brian", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Director, Technical Services", 
+            "lastName": "Hurley", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Brian-Hurley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/bhurley", 
+            "userName": "bhurley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "235 rue de Passage", 
+            "companyaddress2": null, 
+            "companyaddress3": "Luxembourg", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "L-1670", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "penglefield@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Philippe", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Englefield", 
+            "location": "Luxemburg", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Philippe-Englefield", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/penglefield", 
+            "userName": "penglefield"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": true, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": null, 
+            "companyaddress2": null, 
+            "companyaddress3": null, 
+            "companyemail": null, 
+            "companyfax": null, 
+            "companypostcode": null, 
+            "companytelephone": null, 
+            "dashboardConfig": {
+                "dashboardPage": "user/admin/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-1-3", 
+                        "url": "/components/dashlets/rma"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/webpage-welcome"
+                    }, 
+                    {
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-4", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "config": {
+                            "height": "167"
+                        }, 
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "admin@alfresco.com", 
+            "enabled": true, 
+            "firstName": "Administrator", 
+            "googleusername": null, 
+            "instantmsg": null, 
+            "jobtitle": null, 
+            "lastName": "", 
+            "location": null, 
+            "mobile": null, 
+            "organization": null, 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "documentList": {
+                                "showFolders": true, 
+                                "simpleView": false
+                            }, 
+                            "mytasks": {
+                                "filter": "invites"
+                            }, 
+                            "sites": {
+                                "favourites": {
+                                    "rm": true, 
+                                    "sample": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 24338620, 
+            "skype": null, 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/admin", 
+            "userName": "admin"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "wwexham@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Will", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Wexham", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Will-Wexham", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/wwexham", 
+            "userName": "wwexham"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "cwoodend@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Chris", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Customer Satisfaction Manager", 
+            "lastName": "Woodend", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Chris-Woodend", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/cwoodend", 
+            "userName": "cwoodend"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "rwestheath@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Rick", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Westheath", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Rick-Westheath", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/rwestheath", 
+            "userName": "rwestheath"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "joakley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Jeff", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Senior Director, US Field Sales", 
+            "lastName": "Oakley", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Jeff-Oakley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/joakley", 
+            "userName": "joakley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "laddlestone@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Luis", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Addlestone", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Luis-Addlestone", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/laddlestone", 
+            "userName": "laddlestone"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "mwhitley@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Mike", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Whitley", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Mike-Whitley", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/mwhitley", 
+            "userName": "mwhitley"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "cdanesfield@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Carlos", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Account Executive", 
+            "lastName": "Danesfield", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Carlos-Danesfield", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/cdanesfield", 
+            "userName": "cdanesfield"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "fhawthorn@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Fabrizio", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Technical Support Engineer", 
+            "lastName": "Hawthorn", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Fabrizio-Hawthorn", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/fhawthorn", 
+            "userName": "fhawthorn"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "dbourne@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Dave", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Account Executive", 
+            "lastName": "Bourne", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Dave-Bourne", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/dbourne", 
+            "userName": "dbourne"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "mhampstead@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Miguel", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Global Events Manager", 
+            "lastName": "Hampstead", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Miguel-Hampstead", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/mhampstead", 
+            "userName": "mhampstead"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "10 Rue de la Widget", 
+            "companyaddress2": "Paris", 
+            "companyaddress3": "France", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "W1099876", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "protherwick@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Philippe", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Commercial  Director", 
+            "lastName": "Rotherwick", 
+            "location": "France", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Philippe-Rotherwick", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/protherwick", 
+            "userName": "protherwick"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "ncox@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Natasha", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Cox", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Natasha-Cox", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/ncox", 
+            "userName": "ncox"
+        }, 
+        {
+            "avatar": "profile-images/mritter.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/mritter/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "mritter@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Michael", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Executive Chairman of the Board", 
+            "lastName": "Ritter", 
+            "location": "USA", 
+            "mobile": null, 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "sites": {
+                                "favourites": {
+                                    "rm": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 200883, 
+            "skype": "Michael-Ritter", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/mritter", 
+            "userName": "mritter"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "abinfield@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Ashutosh", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Senior OEM Programme Manager", 
+            "lastName": "Binfield", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Ashutosh-Binfield", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/abinfield", 
+            "userName": "abinfield"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "jshiplake@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Jan", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Shiplake", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Jan-Shiplake", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jshiplake", 
+            "userName": "jshiplake"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "rwentworth@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Richard", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Test Engineer", 
+            "lastName": "Wentworth", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Richard-Wentworth", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/rwentworth", 
+            "userName": "rwentworth"
+        }, 
+        {
+            "avatar": "profile-images/bburchetts.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/bburchetts/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "bburchetts@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Bolaji", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Marketing Manager", 
+            "lastName": "Burchetts", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 2152111, 
+            "skype": "Bolaji-Burchetts", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/bburchetts", 
+            "userName": "bburchetts"
+        }, 
+        {
+            "avatar": "profile-images/kblackwater.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/kblackwater/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/rma"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/my-docs-editing"
+                    }
+                ], 
+                "templateId": "dashboard-2-columns-wide-right"
+            }, 
+            "email": "kblackwater@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Kevin", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Contract Manager", 
+            "lastName": "Blackwater", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "documentList": {
+                                "simpleView": true
+                            }, 
+                            "sites": {
+                                "favourites": {
+                                    "rm": true
+                                }
+                            }, 
+                            "twisters": {
+                                "collapsed": ""
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 148860, 
+            "skype": "Kevin-Blackwater", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/kblackwater", 
+            "userName": "kblackwater"
+        }, 
+        {
+            "avatar": "profile-images/jwinkfield.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/jwinkfield/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "jwinkfield@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "John", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Accounts", 
+            "lastName": "Winkfield", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "sites": {
+                                "favourites": {
+                                    "rm": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 197701, 
+            "skype": "John-Winkfield", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jwinkfield", 
+            "userName": "jwinkfield"
+        }, 
+        {
+            "avatar": "profile-images/abarkham.png", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Paseo de Recoletos, 20", 
+            "companyaddress2": "Madrid", 
+            "companyaddress3": "Spain", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "28071", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/abarkham/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "abarkham@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Andres", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Executive Vice President, Public Affairs", 
+            "lastName": "Barkham", 
+            "location": "Spain", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 43302, 
+            "skype": "Andres-Barkham", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/abarkham", 
+            "userName": "abarkham"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "jascot@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "John", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Chief Technology Officer", 
+            "lastName": "Ascot", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "John-Ascot", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jascot", 
+            "userName": "jascot"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "awaltham@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Andy", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Technical Support Engineer", 
+            "lastName": "Waltham", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Andy-Waltham", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/awaltham", 
+            "userName": "awaltham"
+        }, 
+        {
+            "avatar": "profile-images/sstanyards.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/sstanyards/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "sstanyards@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Steve", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Chief Financial Officer", 
+            "lastName": "Stanyards", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "documentList": {
+                                "showFolders": true
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 85605, 
+            "skype": "Steve-Stanyards", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/sstanyards", 
+            "userName": "sstanyards"
+        }, 
+        {
+            "avatar": "profile-images/jwatmore.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/jwatmore/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "jwatmore@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Jennifer", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Executive Vice President, General Counsel and Corporate Secretary", 
+            "lastName": "Watmore", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": null, 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "sites": {
+                                "favourites": {
+                                    "rm": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 25820, 
+            "skype": "Jennifer-Watmore", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/jwatmore", 
+            "userName": "jwatmore"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Lunnaeuskade 2009", 
+            "companyaddress2": "Amsterdam", 
+            "companyaddress3": "Netherlands", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "1098 BG", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "pthorpe@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Paul", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Director, Solutions Engineering", 
+            "lastName": "Thorpe", 
+            "location": "The Netherlands", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Paul-Thorpe", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/pthorpe", 
+            "userName": "pthorpe"
+        }, 
+        {
+            "avatar": "profile-images/phampton.jpg", 
+            "capabilities": {
+                "isAdmin": true, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/phampton/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "config": {
+                            "height": "385"
+                        }, 
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/my-tasks"
+                    }, 
+                    {
+                        "regionId": "component-1-3", 
+                        "url": "/components/dashlets/rma"
+                    }, 
+                    {
+                        "config": {
+                            "height": "269"
+                        }, 
+                        "regionId": "component-1-4", 
+                        "url": "/components/dashlets/my-documents"
+                    }, 
+                    {
+                        "config": {
+                            "height": "409"
+                        }, 
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/my-docs-editing"
+                    }, 
+                    {
+                        "config": {
+                            "height": "429"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }
+                ], 
+                "templateId": "dashboard-2-columns-wide-right"
+            }, 
+            "email": "phampton@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Paul", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Product Marketing Director", 
+            "lastName": "Hampton", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "documentList": {
+                                "hideNavBar": false, 
+                                "showFolders": true, 
+                                "simpleView": true
+                            }, 
+                            "documents": {
+                                "favourites": "workspace://SpacesStore/531a4286-a7ef-42ca-9e0b-9fcf3e60d2cf,workspace://SpacesStore/aa5deb51-5c3f-44c9-8211-36dfc4b7b47b"
+                            }, 
+                            "mytasks": {
+                                "filter": "all"
+                            }, 
+                            "sites": {
+                                "favourites": {
+                                    "branding": true, 
+                                    "exec1": true, 
+                                    "images": true, 
+                                    "rm": true, 
+                                    "usersgroup2010": true
+                                }
+                            }, 
+                            "twisters": {
+                                "collapsed": "DocListFilter,DocListCategories,DataListFilter"
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 25184414, 
+            "skype": "Paul-Hampton", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/phampton", 
+            "userName": "phampton"
+        }, 
+        {
+            "avatar": "profile-images/cknowl.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/cknowl/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "cknowl@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Chris", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Senior Manager Website and Intranet", 
+            "lastName": "Knowl", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 3207399, 
+            "skype": "Chris-Knowl", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/cknowl", 
+            "userName": "cknowl"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "10 Rue de la Widget", 
+            "companyaddress2": "Paris", 
+            "companyaddress3": "France", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "W1099876", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "swoking@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Thomas", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Sales Manager, APAC", 
+            "lastName": "Woking", 
+            "location": "France", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Thomas-Woking", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/swoking", 
+            "userName": "swoking"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "nspencer@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Neil", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Design Engineer", 
+            "lastName": "Spencer", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Neil-Spencer", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/nspencer", 
+            "userName": "nspencer"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Marina Village Parkway", 
+            "companyaddress2": "Wilmington", 
+            "companyaddress3": "USA", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "DE 19801-5852", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "mfinch@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Martin", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Sr. Director, Alliances", 
+            "lastName": "Finch", 
+            "location": "USA", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "Martin-Finch", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/mfinch", 
+            "userName": "mfinch"
+        }, 
+        {
+            "avatar": "profile-images/iwargrave.jpg", 
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "dashboardConfig": {
+                "dashboardPage": "user/iwargrave/dashboard", 
+                "dashlets": [
+                    {
+                        "regionId": "component-1-1", 
+                        "url": "/components/dashlets/user-calendar"
+                    }, 
+                    {
+                        "regionId": "component-1-2", 
+                        "url": "/components/dashlets/alfresco-network"
+                    }, 
+                    {
+                        "regionId": "component-2-1", 
+                        "url": "/components/dashlets/user-welcome"
+                    }, 
+                    {
+                        "config": {
+                            "limit": "10"
+                        }, 
+                        "regionId": "component-2-2", 
+                        "url": "/components/dashlets/rssfeed"
+                    }, 
+                    {
+                        "regionId": "component-2-3", 
+                        "url": "/components/dashlets/my-activities"
+                    }, 
+                    {
+                        "regionId": "component-3-1", 
+                        "url": "/components/dashlets/my-profile"
+                    }, 
+                    {
+                        "regionId": "component-3-2", 
+                        "url": "/components/dashlets/my-sites"
+                    }, 
+                    {
+                        "regionId": "component-3-3", 
+                        "url": "/components/dashlets/my-tasks"
+                    }
+                ], 
+                "templateId": "dashboard-3-columns"
+            }, 
+            "email": "iwargrave@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "Ian", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Chief Marketing Officer", 
+            "lastName": "Wargrave", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {
+                "org": {
+                    "alfresco": {
+                        "share": {
+                            "documentList": {
+                                "showFolders": true
+                            }, 
+                            "sites": {
+                                "favourites": {
+                                    "branding": true, 
+                                    "marketing": true, 
+                                    "rm": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }, 
+            "quota": -1, 
+            "sizeCurrent": 323919, 
+            "skype": "Ian-Wargrave", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/iwargrave", 
+            "userName": "iwargrave"
+        }, 
+        {
+            "capabilities": {
+                "isAdmin": false, 
+                "isGuest": false, 
+                "isMutable": false
+            }, 
+            "companyaddress1": "Park House\n10 Park Street", 
+            "companyaddress2": "Windsor", 
+            "companyaddress3": "Berkshire", 
+            "companyemail": "info@green-energy-demo.com", 
+            "companyfax": "+1(0) 999 888 778", 
+            "companypostcode": "WIN01 01ZZ", 
+            "companytelephone": "+1(0) 999 888 777", 
+            "email": "dlambourne@green-energy-demo.com", 
+            "enabled": true, 
+            "firstName": "David", 
+            "googleusername": null, 
+            "instantmsg": "Use Skype", 
+            "jobtitle": "Web Manager", 
+            "lastName": "Lambourne", 
+            "location": "UK", 
+            "mobile": "+1(0) 999 888 778", 
+            "organization": "Green Energy", 
+            "persondescription": null, 
+            "preferences": {}, 
+            "quota": -1, 
+            "sizeCurrent": 0, 
+            "skype": "David-Lambourne", 
+            "telephone": null, 
+            "url": "/alfresco/s/api/person/dlambourne", 
+            "userName": "dlambourne"
+        }
+    ]
+}

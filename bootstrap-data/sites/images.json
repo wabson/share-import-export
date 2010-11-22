@@ -1,0 +1,163 @@
+{
+    "dashboardConfig": {
+        "dashboardPage": "site/images/dashboard", 
+        "dashlets": [
+            {
+                "regionId": "component-1-1", 
+                "url": "/components/dashlets/site-profile"
+            }, 
+            {
+                "regionId": "component-1-2", 
+                "url": "/components/dashlets/colleagues"
+            }, 
+            {
+                "regionId": "component-1-3", 
+                "url": "/components/dashlets/docsummary"
+            }, 
+            {
+                "config": {
+                    "height": "657"
+                }, 
+                "regionId": "component-2-1", 
+                "url": "/components/dashlets/imagesummary"
+            }
+        ], 
+        "templateId": "dashboard-2-columns-wide-right"
+    }, 
+    "description": "Library resource for all corporate images and multi-media files", 
+    "isPublic": true, 
+    "memberships": [
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/e48033de-8791-46a2-b3ef-cf399155a1a7/content/thumbnails/avatar", 
+                "firstName": "Cloud", 
+                "fullName": "clouduser", 
+                "jobtitle": "Senior Demo User", 
+                "lastName": "Trial-User", 
+                "organization": "", 
+                "url": "/alfresco/s/api/people/clouduser", 
+                "userName": "clouduser"
+            }, 
+            "role": "SiteConsumer", 
+            "url": "/alfresco/s/api/sites/images/memberships/clouduser"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/39e2e16f-e5b5-4061-8280-9625c45f112a/content/thumbnails/avatar", 
+                "firstName": "Chris", 
+                "fullName": "cknowl", 
+                "jobtitle": "Senior Manager Website and Intranet", 
+                "lastName": "Knowl", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/cknowl", 
+                "userName": "cknowl"
+            }, 
+            "role": "SiteConsumer", 
+            "url": "/alfresco/s/api/sites/images/memberships/cknowl"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/1399ff99-9437-465f-a6e4-6c45b7a63c56/content/thumbnails/avatar", 
+                "firstName": "Nancy", 
+                "fullName": "nwoodland", 
+                "jobtitle": "Partner Manager", 
+                "lastName": "Woodland", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/nwoodland", 
+                "userName": "nwoodland"
+            }, 
+            "role": "SiteConsumer", 
+            "url": "/alfresco/s/api/sites/images/memberships/nwoodland"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/34fbaa33-96bc-4427-a044-9c40aa009c70/content/thumbnails/avatar", 
+                "firstName": "Nikki", 
+                "fullName": "nswallowfield", 
+                "jobtitle": "Head of Corporate Communications", 
+                "lastName": "Swallowfield", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/nswallowfield", 
+                "userName": "nswallowfield"
+            }, 
+            "role": "SiteConsumer", 
+            "url": "/alfresco/s/api/sites/images/memberships/nswallowfield"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/a01ebacb-6d57-4b92-9787-1d93a9c1151a/content/thumbnails/avatar", 
+                "firstName": "Paul", 
+                "fullName": "phampton", 
+                "jobtitle": "Product Marketing Director", 
+                "lastName": "Hampton", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/phampton", 
+                "userName": "phampton"
+            }, 
+            "role": "SiteManager", 
+            "url": "/alfresco/s/api/sites/images/memberships/phampton"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/86b6cc21-985b-4e83-a809-fa3ff014b8b6/content/thumbnails/avatar", 
+                "firstName": "Ian", 
+                "fullName": "iwargrave", 
+                "jobtitle": "Chief Marketing Officer", 
+                "lastName": "Wargrave", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/iwargrave", 
+                "userName": "iwargrave"
+            }, 
+            "role": "SiteConsumer", 
+            "url": "/alfresco/s/api/sites/images/memberships/iwargrave"
+        }
+    ], 
+    "metadata": {
+        "aspects": [
+            "{http://www.alfresco.org/model/content/1.0}auditable", 
+            "{http://www.alfresco.org/model/content/1.0}tagscope", 
+            "{http://www.alfresco.org/model/system/1.0}referenceable", 
+            "{http://www.alfresco.org/model/content/1.0}titled"
+        ], 
+        "mimetype": "application/octet-stream", 
+        "nodeRef": "workspace://SpacesStore/9074105b-dd19-440c-ae4c-ec78d02417b1", 
+        "properties": {
+            "{http://www.alfresco.org/model/content/1.0}created": "Tue Jan 05 16:46:35 EST 2010", 
+            "{http://www.alfresco.org/model/content/1.0}creator": "phampton", 
+            "{http://www.alfresco.org/model/content/1.0}description": "Library resource for all corporate images and multi-media files", 
+            "{http://www.alfresco.org/model/content/1.0}modified": "Thu Apr 01 15:54:48 EDT 2010", 
+            "{http://www.alfresco.org/model/content/1.0}modifier": "phampton", 
+            "{http://www.alfresco.org/model/content/1.0}name": "images", 
+            "{http://www.alfresco.org/model/content/1.0}tagScopeCache": "contentUrl=store://2010/4/1/15/54/6df9ded2-b5a6-43c8-8526-5cd70f3cb176.bin|mimetype=text/plain|size=201|encoding=utf-8|locale=en_GB_", 
+            "{http://www.alfresco.org/model/content/1.0}title": "Marketing: Image Gallery", 
+            "{http://www.alfresco.org/model/site/1.0}sitePreset": "site-dashboard", 
+            "{http://www.alfresco.org/model/site/1.0}siteVisibility": "PUBLIC", 
+            "{http://www.alfresco.org/model/system/1.0}node-dbid": 824, 
+            "{http://www.alfresco.org/model/system/1.0}node-uuid": "9074105b-dd19-440c-ae4c-ec78d02417b1", 
+            "{http://www.alfresco.org/model/system/1.0}store-identifier": "SpacesStore", 
+            "{http://www.alfresco.org/model/system/1.0}store-protocol": "workspace"
+        }, 
+        "type": "{http://www.alfresco.org/model/site/1.0}site"
+    }, 
+    "node": "/alfresco/s/api/node/workspace/SpacesStore/9074105b-dd19-440c-ae4c-ec78d02417b1", 
+    "shortName": "images", 
+    "siteManagers": [
+        "phampton"
+    ], 
+    "sitePages": [
+        {
+            "pageId": "documentlibrary"
+        }
+    ], 
+    "sitePreset": "site-dashboard", 
+    "tagScope": "/alfresco/s/api/tagscopes/workspace/SpacesStore/9074105b-dd19-440c-ae4c-ec78d02417b1", 
+    "title": "Marketing: Image Gallery", 
+    "url": "/alfresco/s/api/sites/images", 
+    "visibility": "PUBLIC"
+}

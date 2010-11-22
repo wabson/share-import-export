@@ -1,0 +1,113 @@
+{
+    "dashboardConfig": {
+        "dashboardPage": "site/usersgroup2010/dashboard", 
+        "dashlets": [
+            {
+                "regionId": "component-1-1", 
+                "url": "/components/dashlets/site-profile"
+            }, 
+            {
+                "config": {
+                    "height": "449"
+                }, 
+                "regionId": "component-1-2", 
+                "url": "/components/dashlets/colleagues"
+            }, 
+            {
+                "regionId": "component-2-1", 
+                "url": "/components/dashlets/site-datalists"
+            }, 
+            {
+                "config": {
+                    "height": "60"
+                }, 
+                "regionId": "component-2-2", 
+                "url": "/components/dashlets/activityfeed"
+            }, 
+            {
+                "regionId": "component-2-3", 
+                "url": "/components/dashlets/docsummary"
+            }
+        ], 
+        "templateId": "dashboard-2-columns-wide-right"
+    }, 
+    "description": "Marketing site for planning the 2010 series of user group meetings", 
+    "isPublic": true, 
+    "memberships": [
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/e48033de-8791-46a2-b3ef-cf399155a1a7/content/thumbnails/avatar", 
+                "firstName": "Cloud", 
+                "fullName": "clouduser", 
+                "jobtitle": "Senior Demo User", 
+                "lastName": "Trial-User", 
+                "organization": "", 
+                "url": "/alfresco/s/api/people/clouduser", 
+                "userName": "clouduser"
+            }, 
+            "role": "SiteConsumer", 
+            "url": "/alfresco/s/api/sites/usersgroup2010/memberships/clouduser"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/a01ebacb-6d57-4b92-9787-1d93a9c1151a/content/thumbnails/avatar", 
+                "firstName": "Paul", 
+                "fullName": "phampton", 
+                "jobtitle": "Product Marketing Director", 
+                "lastName": "Hampton", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/phampton", 
+                "userName": "phampton"
+            }, 
+            "role": "SiteManager", 
+            "url": "/alfresco/s/api/sites/usersgroup2010/memberships/phampton"
+        }
+    ], 
+    "metadata": {
+        "aspects": [
+            "{http://www.alfresco.org/model/content/1.0}auditable", 
+            "{http://www.alfresco.org/model/content/1.0}tagscope", 
+            "{http://www.alfresco.org/model/system/1.0}referenceable", 
+            "{http://www.alfresco.org/model/content/1.0}titled"
+        ], 
+        "mimetype": "application/octet-stream", 
+        "nodeRef": "workspace://SpacesStore/0df91b5f-a9bd-4292-ad9a-19e6ee99fae0", 
+        "properties": {
+            "{http://www.alfresco.org/model/content/1.0}created": "Fri Jun 25 05:45:45 EDT 2010", 
+            "{http://www.alfresco.org/model/content/1.0}creator": "phampton", 
+            "{http://www.alfresco.org/model/content/1.0}description": "Marketing site for planning the 2010 series of user group meetings", 
+            "{http://www.alfresco.org/model/content/1.0}modified": "Thu Jul 01 11:19:48 EDT 2010", 
+            "{http://www.alfresco.org/model/content/1.0}modifier": "phampton", 
+            "{http://www.alfresco.org/model/content/1.0}name": "usersgroup2010", 
+            "{http://www.alfresco.org/model/content/1.0}tagScopeCache": "contentUrl=store://2010/7/1/11/19/ab600647-9e6d-42c4-8868-b6fcf1f00683.bin|mimetype=text/plain|size=110|encoding=utf-8|locale=en_GB_", 
+            "{http://www.alfresco.org/model/content/1.0}title": "Marketing: Global User Group Meetings (2010)", 
+            "{http://www.alfresco.org/model/site/1.0}sitePreset": "site-dashboard", 
+            "{http://www.alfresco.org/model/site/1.0}siteVisibility": "PUBLIC", 
+            "{http://www.alfresco.org/model/system/1.0}node-dbid": 11130, 
+            "{http://www.alfresco.org/model/system/1.0}node-uuid": "0df91b5f-a9bd-4292-ad9a-19e6ee99fae0", 
+            "{http://www.alfresco.org/model/system/1.0}store-identifier": "SpacesStore", 
+            "{http://www.alfresco.org/model/system/1.0}store-protocol": "workspace"
+        }, 
+        "type": "{http://www.alfresco.org/model/site/1.0}site"
+    }, 
+    "node": "/alfresco/s/api/node/workspace/SpacesStore/0df91b5f-a9bd-4292-ad9a-19e6ee99fae0", 
+    "shortName": "usersgroup2010", 
+    "siteManagers": [
+        "phampton"
+    ], 
+    "sitePages": [
+        {
+            "pageId": "documentlibrary"
+        }, 
+        {
+            "pageId": "data-lists"
+        }
+    ], 
+    "sitePreset": "site-dashboard", 
+    "tagScope": "/alfresco/s/api/tagscopes/workspace/SpacesStore/0df91b5f-a9bd-4292-ad9a-19e6ee99fae0", 
+    "title": "Marketing: Global User Group Meetings (2010)", 
+    "url": "/alfresco/s/api/sites/usersgroup2010", 
+    "visibility": "PUBLIC"
+}
