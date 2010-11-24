@@ -1,0 +1,195 @@
+{
+    "dashboardConfig": {
+        "dashboardPage": "site/exec1/dashboard", 
+        "dashlets": [
+            {
+                "regionId": "component-1-1", 
+                "url": "/components/dashlets/site-welcome"
+            }, 
+            {
+                "regionId": "component-2-1", 
+                "url": "/components/dashlets/docsummary"
+            }, 
+            {
+                "regionId": "component-2-2", 
+                "url": "/components/dashlets/activityfeed"
+            }, 
+            {
+                "regionId": "component-3-1", 
+                "url": "/components/dashlets/site-profile"
+            }, 
+            {
+                "regionId": "component-3-2", 
+                "url": "/components/dashlets/colleagues"
+            }, 
+            {
+                "regionId": "component-3-3", 
+                "url": "/components/dashlets/site-links"
+            }
+        ], 
+        "templateId": "dashboard-3-columns"
+    }, 
+    "description": "Collaboration site for the development of the business", 
+    "isPublic": false, 
+    "memberships": [
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/64d35b72-4261-443f-81b3-344513fdafdf/content/thumbnails/avatar", 
+                "firstName": "Steve", 
+                "fullName": "sstanyards", 
+                "jobtitle": "Chief Financial Officer", 
+                "lastName": "Stanyards", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/sstanyards", 
+                "userName": "sstanyards"
+            }, 
+            "role": "SiteCollaborator", 
+            "url": "/alfresco/s/api/sites/exec1/memberships/sstanyards"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/954f2e14-2660-4a2d-8c93-461c451fbc62/content/thumbnails/avatar", 
+                "firstName": "Patti", 
+                "fullName": "priseley", 
+                "jobtitle": "Executive Vice President, Human Resources", 
+                "lastName": "Riseley", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/priseley", 
+                "userName": "priseley"
+            }, 
+            "role": "SiteCollaborator", 
+            "url": "/alfresco/s/api/sites/exec1/memberships/priseley"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/b3e9bf0a-bdac-4ff9-b8f6-0ecbef1e5e2a/content/thumbnails/avatar", 
+                "firstName": "Compliance", 
+                "fullName": "rmuser", 
+                "lastName": "Trial-User", 
+                "url": "/alfresco/s/api/people/rmuser", 
+                "userName": "rmuser"
+            }, 
+            "role": "SiteConsumer", 
+            "url": "/alfresco/s/api/sites/exec1/memberships/rmuser"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/088ceddf-0a73-4ff4-9806-a5ce08d7eb22/content/thumbnails/avatar", 
+                "firstName": "Jennifer", 
+                "fullName": "jwatmore", 
+                "jobtitle": "Executive Vice President, General Counsel and Corporate Secretary", 
+                "lastName": "Watmore", 
+                "url": "/alfresco/s/api/people/jwatmore", 
+                "userName": "jwatmore"
+            }, 
+            "role": "SiteCollaborator", 
+            "url": "/alfresco/s/api/sites/exec1/memberships/jwatmore"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/c47dc6e1-4df9-4d42-9462-b66ca6daffae/content/thumbnails/avatar", 
+                "firstName": "Julie", 
+                "fullName": "jswinley", 
+                "jobtitle": "Office Manager", 
+                "lastName": "Swinley", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/jswinley", 
+                "userName": "jswinley"
+            }, 
+            "role": "SiteCollaborator", 
+            "url": "/alfresco/s/api/sites/exec1/memberships/jswinley"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/a01ebacb-6d57-4b92-9787-1d93a9c1151a/content/thumbnails/avatar", 
+                "firstName": "Paul", 
+                "fullName": "phampton", 
+                "jobtitle": "Product Marketing Director", 
+                "lastName": "Hampton", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/phampton", 
+                "userName": "phampton"
+            }, 
+            "role": "SiteManager", 
+            "url": "/alfresco/s/api/sites/exec1/memberships/phampton"
+        }, 
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "avatar": "api/node/workspace/SpacesStore/86b6cc21-985b-4e83-a809-fa3ff014b8b6/content/thumbnails/avatar", 
+                "firstName": "Ian", 
+                "fullName": "iwargrave", 
+                "jobtitle": "Chief Marketing Officer", 
+                "lastName": "Wargrave", 
+                "organization": "Green Energy", 
+                "url": "/alfresco/s/api/people/iwargrave", 
+                "userName": "iwargrave"
+            }, 
+            "role": "SiteCollaborator", 
+            "url": "/alfresco/s/api/sites/exec1/memberships/iwargrave"
+        }
+    ], 
+    "metadata": {
+        "aspects": [
+            "{http://www.alfresco.org/model/content/1.0}auditable", 
+            "{http://www.alfresco.org/model/content/1.0}tagscope", 
+            "{http://www.alfresco.org/model/system/1.0}referenceable", 
+            "{http://www.alfresco.org/model/content/1.0}titled"
+        ], 
+        "mimetype": "application/octet-stream", 
+        "nodeRef": "workspace://SpacesStore/52fae691-902b-46b0-a038-0c7a746c3b41", 
+        "properties": {
+            "{http://www.alfresco.org/model/content/1.0}created": "Thu Mar 18 04:06:50 EDT 2010", 
+            "{http://www.alfresco.org/model/content/1.0}creator": "phampton", 
+            "{http://www.alfresco.org/model/content/1.0}description": "Collaboration site for the development of the business", 
+            "{http://www.alfresco.org/model/content/1.0}modified": "Thu Mar 18 04:06:50 EDT 2010", 
+            "{http://www.alfresco.org/model/content/1.0}modifier": "phampton", 
+            "{http://www.alfresco.org/model/content/1.0}name": "exec1", 
+            "{http://www.alfresco.org/model/content/1.0}tagScopeCache": "contentUrl=store://2010/3/18/4/6/e35d0642-fab7-4fcd-9b40-2f9fbbc5ab39.bin|mimetype=text/plain|size=0|encoding=UTF-8|locale=en_GB_", 
+            "{http://www.alfresco.org/model/content/1.0}title": "Executives: Business Development", 
+            "{http://www.alfresco.org/model/site/1.0}sitePreset": "site-dashboard", 
+            "{http://www.alfresco.org/model/site/1.0}siteVisibility": "PRIVATE", 
+            "{http://www.alfresco.org/model/system/1.0}node-dbid": 4828, 
+            "{http://www.alfresco.org/model/system/1.0}node-uuid": "52fae691-902b-46b0-a038-0c7a746c3b41", 
+            "{http://www.alfresco.org/model/system/1.0}store-identifier": "SpacesStore", 
+            "{http://www.alfresco.org/model/system/1.0}store-protocol": "workspace"
+        }, 
+        "type": "{http://www.alfresco.org/model/site/1.0}site"
+    }, 
+    "node": "/alfresco/s/api/node/workspace/SpacesStore/52fae691-902b-46b0-a038-0c7a746c3b41", 
+    "shortName": "exec1", 
+    "siteManagers": [
+        "phampton"
+    ], 
+    "sitePages": [
+        {
+            "pageId": "wiki-page"
+        }, 
+        {
+            "pageId": "blog-postlist"
+        }, 
+        {
+            "pageId": "documentlibrary"
+        }, 
+        {
+            "pageId": "calendar"
+        }, 
+        {
+            "pageId": "links"
+        }, 
+        {
+            "pageId": "discussions-topiclist"
+        }
+    ], 
+    "sitePreset": "site-dashboard", 
+    "tagScope": "/alfresco/s/api/tagscopes/workspace/SpacesStore/52fae691-902b-46b0-a038-0c7a746c3b41", 
+    "title": "Executives: Business Development", 
+    "url": "/alfresco/s/api/sites/exec1", 
+    "visibility": "PRIVATE"
+}
