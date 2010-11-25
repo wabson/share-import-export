@@ -297,11 +297,15 @@ class ShareClient:
         #print treeData
         # Locate the container item
         containerData = None
+        tempContainerData = None
+        tempContainerName = 'temp'
         for child in treeData['items']:
             if child['name'] == containerId:
                 containerData = child
+            if child['name'] == 'temp':
+                tempContainerData = child
         if containerData is None:
-            # TODO Create container if it doesn't exist
+            # Create container if it doesn't exist
             folderData = { 'alf_destination': siteNodeRef, 'prop_cm_name': containerId, 'prop_cm_title': containerId, 'prop_cm_description': '' }
             createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
             containerData = { 'nodeRef': createData['persistedObject'], 'name' : containerId }
@@ -309,7 +313,12 @@ class ShareClient:
             self.doPost('proxy/alfresco/slingshot/doclib/action/aspects/node/%s' % (str(containerData['nodeRef']).replace('://', '/')), '{"added":["cm:tagscope"],"removed":[]}', 'application/json;charset=UTF-8')
             #print createData
             #raise Exception("Container '%s' does not exist" % (containerId))
-        # First apply a ruleset to the folder
+        if tempContainerData is None:
+            # Create upload container if it doesn't exist
+            folderData = { 'alf_destination': siteNodeRef, 'prop_cm_name': tempContainerName, 'prop_cm_title': tempContainerName, 'prop_cm_description': '' }
+            createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
+            tempContainerData = { 'nodeRef': createData['persistedObject'], 'name' : tempContainerName }
+        # First apply a ruleset to the temp folder
         # This will perform the import automatically when we upload the ACP file
         rulesetDef = {
             'id': '',
@@ -341,11 +350,9 @@ class ShareClient:
             "executeAsynchronously": False,
             "ruleType":["inbound"]
         }
-        #print "Setting rules on %s" % (containerId)
-        rulesData = self.doJSONPost('proxy/alfresco/api/node/%s/ruleset/rules' % (containerData['nodeRef'].replace('://', '/')), json.dumps(rulesetDef))
-        #print rulesData
+        rulesData = self.doJSONPost('proxy/alfresco/api/node/%s/ruleset/rules' % (tempContainerData['nodeRef'].replace('://', '/')), json.dumps(rulesetDef))
         # Now upload the file
-        uparams = { 'filedata' : f, 'siteid':siteId, 'containerid':containerId, 'destination':'', 'username':'', 'updateNodeRef':'', 'uploadDirectory':'/', 'overwrite':'false', 'thumbnails':'', 'successCallback':'', 'successScope':'', 'failureCallback':'', 'failureScope':'', 'contentType':'cm:content', 'majorVersion':'false', 'description':'' }
+        uparams = { 'filedata' : f, 'siteid':siteId, 'containerid':tempContainerName, 'destination':'', 'username':'', 'updateNodeRef':'', 'uploadDirectory':'/', 'overwrite':'false', 'thumbnails':'', 'successCallback':'', 'successScope':'', 'failureCallback':'', 'failureScope':'', 'contentType':'cm:content', 'majorVersion':'false', 'description':'' }
         fr = self.doMultipartUpload("proxy/alfresco/api/upload", uparams)
         udata = json.loads(fr.read())
         if udata['status']['code'] == 200:

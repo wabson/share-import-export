@@ -12,6 +12,7 @@ def main(argv):
     password = "admin"
     url = "http://localhost:8080/share"
     skip_missing_members = False
+    create_site = True
     _debug = 0
     
     if len(argv) and not argv[0].startswith('-') > 0:
@@ -21,7 +22,7 @@ def main(argv):
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "skip-missing-members"])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "skip-missing-members", "no-create"])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -40,6 +41,8 @@ def main(argv):
             url = arg
         elif opt == '--skip-missing-members':
             skip_missing_members = True
+        elif opt == '--no-create':
+            create_site = False
     
     sc = alfresco.ShareClient(url=url, debug=_debug)
     print "Log in (%s)" % (username)
@@ -52,12 +55,13 @@ def main(argv):
         thisdir = os.path.dirname(filename)
         sd = json.loads(open(filename).read())
         siteId = str(sd['shortName'])
-        if sd['sitePreset'] == 'rm-site-dashboard':
-            print "Create RM site '%s'" % (siteId)
-            sc.createRmSite(sd)
-        else:
-            print "Create site '%s'" % (siteId)
-            sc.createSite(sd)
+        if create_site:
+            if sd['sitePreset'] == 'rm-site-dashboard':
+                print "Create RM site '%s'" % (siteId)
+                sc.createRmSite(sd)
+            else:
+                print "Create site '%s'" % (siteId)
+                sc.createSite(sd)
         sc.setSitePages({'pages': sd['sitePages'], 'siteId': siteId})
         sc.updateSiteDashboardConfig(sd)
         # Add site members
