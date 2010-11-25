@@ -289,7 +289,6 @@ class ShareClient:
     
     def importSiteContent(self, siteId, containerId, f):
         """Upload a content package into the site and extract it"""
-        #print "import content"
         # Get the site metadata
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (siteId))
         siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
@@ -358,13 +357,46 @@ class ShareClient:
         if udata['status']['code'] == 200:
             nodeRef = udata['nodeRef']
             #jsonResp = self.doJSONPost('proxy/alfresco/slingshot/doclib/action/import/node/%s' % (nodeRef.replace('://', '/')))
-            #TODO Investigate how this can be done without using the custom 'import' web script
             # Remove the rule definition
-            self.doJSONPost('proxy/alfresco/api/node/%s/ruleset/rules/%s' % (containerData['nodeRef'].replace('://', '/'), rulesData['data']['id']), method="DELETE")
+            self.doJSONPost('proxy/alfresco/api/node/%s/ruleset/rules/%s' % (tempContainerData['nodeRef'].replace('://', '/'), rulesData['data']['id']), method="DELETE")
             #importParams = { 'actionDefinitionName': 'import', 'actionedUponNode': nodeRef, 'parameterValues' : [ 'destination': '' ], 'executeAsync': false }
             #jsonResp = self.doJSONPost('/api/actionQueue?async=false/%s' % (nodeRef.replace('://', '/')), json.dumps(importParams))
             # Delete the ACP file
             self.doJSONPost('proxy/alfresco/slingshot/doclib/action/file/node/%s' % (nodeRef.replace('://', '/')), method="DELETE")
+            # Delete the temp upload container
+            self.doJSONPost('proxy/alfresco/slingshot/doclib/action/folder/node/%s' % (tempContainerData['nodeRef'].replace('://', '/')), method="DELETE")
+        else:
+            raise Exception("Could not upload file (got status code %s)" % (udata['status']['code']))
+    
+    def importRmSiteContent(self, siteId, containerId, f):
+        # Get the site metadata
+        siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (siteId))
+        siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
+        treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
+        # Locate the container item
+        containerData = None
+        tempContainerData = None
+        for child in treeData['items']:
+            if child['name'] == containerId:
+                containerData = child
+            if child['name'] == 'temp':
+                tempContainerData = child
+        if containerData is None:
+            # Create container if it doesn't exist
+            folderData = { 'alf_destination': siteNodeRef, 'prop_cm_name': containerId, 'prop_cm_title': containerId, 'prop_cm_description': '' }
+            createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
+            containerData = { 'nodeRef': createData['persistedObject'], 'name' : containerId }
+            # Add the tagscope aspect to the container - otherwise an error occurs when viewed by a site consumer
+            self.doPost('proxy/alfresco/slingshot/doclib/action/aspects/node/%s' % (str(containerData['nodeRef']).replace('://', '/')), '{"added":["cm:tagscope"],"removed":[]}', 'application/json;charset=UTF-8')
+        uparams = { 'archive' : f, 'destination':containerData['nodeRef'] }
+        fr = self.doMultipartUpload("proxy/alfresco/api/rma/admin/import", uparams)
+        udata = json.loads(fr.read())
+        if udata['status']['code'] == 200:
+            nodeRef = udata['nodeRef']
+            # Delete the ACP file
+            self.doJSONPost('proxy/alfresco/slingshot/doclib/action/file/node/%s' % (nodeRef.replace('://', '/')), method="DELETE")
+            # Delete the temp upload container
+            self.doJSONPost('proxy/alfresco/slingshot/doclib/action/folder/node/%s' % (tempContainerData['nodeRef'].replace('://', '/')), method="DELETE")
         else:
             raise Exception("Could not upload file (got status code %s)" % (udata['status']['code']))
 

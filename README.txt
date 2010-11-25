@@ -9,8 +9,10 @@ Full site contents (via ACP, for export this must be done manually for now after
 
 What is not included
 
+Custom security groups
 Activity service data
 Custom dashlets
+Tag data??
 
 Using the tools
 
@@ -27,6 +29,13 @@ Exporting users
 Removing a site
 
 python purge-site.py siteurl|siteid [--username=username] [--password=username] [--url=username] [-d]
+
+
+Importing a site
+
+python bootstrap-site.py bootstrap-data/sites/rm.json --no-content
+# Set up the current user as a repo admin and a records admin
+python bootstrap-site.py bootstrap-data/sites/rm.json --no-create --no-members --no-dashboard --no-configuration
 
 FAQ
 

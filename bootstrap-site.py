@@ -4,7 +4,7 @@ import json, alfresco, sys, getopt, os
 global _debug
 
 def usage():
-    print "Usage: python bootstrap-site.py file.json [--username=username] [--password=username] [--url=username] [--skip-missing-members] [-d]"
+    print "Usage: python bootstrap-site.py file.json [--username=username] [--password=username] [--url=username] [--skip-missing-members] [--containers=container1,...] [--no-content] [-d]"
 
 def main(argv):
 
@@ -13,6 +13,10 @@ def main(argv):
     url = "http://localhost:8080/share"
     skip_missing_members = False
     create_site = True
+    add_members = True
+    update_config = True
+    update_dashboard = True
+    siteContainers = [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]
     _debug = 0
     
     if len(argv) and not argv[0].startswith('-') > 0:
@@ -22,7 +26,7 @@ def main(argv):
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "skip-missing-members", "no-create"])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content"])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -43,6 +47,16 @@ def main(argv):
             skip_missing_members = True
         elif opt == '--no-create':
             create_site = False
+        elif opt == '--containers':
+            siteContainers = arg.split(',')
+        elif opt == '--no-content':
+            siteContainers = []
+        elif opt == '--no-configuration':
+            update_config = False
+        elif opt == '--no-members':
+            add_members = False
+        elif opt == '--no-dashboard':
+            update_dashboard = False
     
     sc = alfresco.ShareClient(url=url, debug=_debug)
     print "Log in (%s)" % (username)
@@ -62,16 +76,25 @@ def main(argv):
             else:
                 print "Create site '%s'" % (siteId)
                 sc.createSite(sd)
-        sc.setSitePages({'pages': sd['sitePages'], 'siteId': siteId})
-        sc.updateSiteDashboardConfig(sd)
+        if update_config:
+            print "Set site configuration"
+            sc.setSitePages({'pages': sd['sitePages'], 'siteId': siteId})
+        if update_dashboard:
+            print "Set dashboard configuration"
+            sc.updateSiteDashboardConfig(sd)
         # Add site members
-        sc.addSiteMembers(siteId, sd['memberships'], skip_missing_members)
+        if add_members:
+            print "Add site members"
+            sc.addSiteMembers(siteId, sd['memberships'], skip_missing_members)
         # Import ACP files
-        for container in [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]:
+        for container in siteContainers:
             acpFile = thisdir + os.sep + '%s-%s.acp' % (filenamenoext, container.replace(' ', '_'))
             if os.path.isfile(acpFile):
                 print "Import %s content" % (container)
-                sc.importSiteContent(siteId, container, file(acpFile, 'rb'))
+                if siteId == 'rm' and container == 'documentLibrary':
+                    sc.importRmSiteContent(siteId, container, file(acpFile, 'rb'))
+                else:
+                    sc.importSiteContent(siteId, container, file(acpFile, 'rb'))
     except alfresco.SurfRequestError, e:
         if e.description == "error.duplicateShortName":
             print "Site with short name '%s' already exists" % (siteId)
