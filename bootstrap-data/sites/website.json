@@ -1,0 +1,94 @@
+{
+    "dashboardConfig": {
+        "dashboardPage": "site/website/dashboard", 
+        "dashlets": [
+            {
+                "regionId": "component-1-1", 
+                "url": "/components/dashlets/wcmqs"
+            }, 
+            {
+                "regionId": "component-1-3", 
+                "url": "/components/dashlets/site-welcome"
+            }, 
+            {
+                "regionId": "component-2-1", 
+                "url": "/components/dashlets/docsummary"
+            }, 
+            {
+                "regionId": "component-2-2", 
+                "url": "/components/dashlets/activityfeed"
+            }, 
+            {
+                "regionId": "component-3-1", 
+                "url": "/components/dashlets/site-profile"
+            }, 
+            {
+                "regionId": "component-3-2", 
+                "url": "/components/dashlets/colleagues"
+            }, 
+            {
+                "regionId": "component-3-3", 
+                "url": "/components/dashlets/site-links"
+            }
+        ], 
+        "templateId": "dashboard-3-columns"
+    }, 
+    "description": "Web content for Green Energy site", 
+    "isPublic": true, 
+    "memberships": [
+        {
+            "authority": {
+                "authorityType": "USER", 
+                "firstName": "Paul", 
+                "fullName": "phampton", 
+                "jobtitle": "Product Marketing Director", 
+                "lastName": "Hampton", 
+                "url": "/alfresco/s/api/people/phampton", 
+                "userName": "phampton"
+            }, 
+            "role": "SiteManager", 
+            "url": "/alfresco/s/api/sites/website/memberships/phampton"
+        }
+    ], 
+    "metadata": {
+        "aspects": [
+            "{http://www.alfresco.org/model/content/1.0}auditable", 
+            "{http://www.alfresco.org/model/content/1.0}tagscope", 
+            "{http://www.alfresco.org/model/system/1.0}referenceable", 
+            "{http://www.alfresco.org/model/content/1.0}titled"
+        ], 
+        "mimetype": "application/octet-stream", 
+        "nodeRef": "workspace://SpacesStore/7da5483d-ff38-4c62-beb0-0185480da89f", 
+        "properties": {
+            "{http://www.alfresco.org/model/content/1.0}created": "Thu Nov 25 17:59:44 GMT 2010", 
+            "{http://www.alfresco.org/model/content/1.0}creator": "phampton", 
+            "{http://www.alfresco.org/model/content/1.0}description": "Web content for Green Energy site", 
+            "{http://www.alfresco.org/model/content/1.0}modified": "Thu Nov 25 17:59:44 GMT 2010", 
+            "{http://www.alfresco.org/model/content/1.0}modifier": "phampton", 
+            "{http://www.alfresco.org/model/content/1.0}name": "website", 
+            "{http://www.alfresco.org/model/content/1.0}title": "Corporate Web Site", 
+            "{http://www.alfresco.org/model/site/1.0}sitePreset": "site-dashboard", 
+            "{http://www.alfresco.org/model/site/1.0}siteVisibility": "PUBLIC", 
+            "{http://www.alfresco.org/model/system/1.0}node-dbid": 1994, 
+            "{http://www.alfresco.org/model/system/1.0}node-uuid": "7da5483d-ff38-4c62-beb0-0185480da89f", 
+            "{http://www.alfresco.org/model/system/1.0}store-identifier": "SpacesStore", 
+            "{http://www.alfresco.org/model/system/1.0}store-protocol": "workspace"
+        }, 
+        "type": "{http://www.alfresco.org/model/site/1.0}site"
+    }, 
+    "node": "/alfresco/s/api/node/workspace/SpacesStore/7da5483d-ff38-4c62-beb0-0185480da89f", 
+    "shortName": "website", 
+    "siteManagers": [
+        "phampton"
+    ], 
+    "sitePages": [
+        {
+            "pageId": "documentlibrary"
+        }
+    ], 
+    "sitePreset": "site-dashboard", 
+    "tagScope": "/alfresco/s/api/tagscopes/workspace/SpacesStore/7da5483d-ff38-4c62-beb0-0185480da89f", 
+    "title": "Corporate Web Site", 
+    "url": "/alfresco/s/api/sites/website", 
+    "visibility": "PUBLIC"
+}
