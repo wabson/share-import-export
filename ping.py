@@ -39,14 +39,12 @@ def main(argv):
     socket.setdefaulttimeout(timeout)
     
     sc = alfresco.ShareClient(url, debug=_debug)
-    if not filename == "-":
-        print "Log in (%s)" % (username)
+    print "Log in (%s)" % (username)
     loginres = sc.doLogin(username, password)
     if not loginres['success']:
         print "Could not log in using specified credentials"
         sys.exit(1)
-    if not filename == "-":
-        print "Log out (%s)" % (username)
+    print "Log out (%s)" % (username)
     sc.doLogout()
 
 if __name__ == "__main__":
