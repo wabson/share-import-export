@@ -45,9 +45,9 @@ def main(argv):
     if not loginres['success']:
         print "Could not log in using specified credentials"
         sys.exit(1)
-     if not filename == "-":
-         print "Log out (%s)" % (username)
-     sc.doLogout()
+    if not filename == "-":
+        print "Log out (%s)" % (username)
+    sc.doLogout()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
