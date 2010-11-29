@@ -205,7 +205,6 @@ class ShareClient:
                 for j in [ 1, 2, 3, 4 ]:
                     dashlet = { }
                     try:
-                        #print 'proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, dashboardType, dashboardId)
                         dashletResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, dashboardType, dashboardId))
                         dashletTree = XML(dashletResp.read())
                         dashlet['url'] = dashletTree.findtext('url')
@@ -240,6 +239,8 @@ class ShareClient:
     
     def createRmSite(self, siteData):
         self.doGet('service/utils/create-rmsite?shortname=%s' % (siteData['shortName']))
+        self.doGet('page/site/%s/dashboard' % (siteData['shortName']))
+        print "Created RM site"
         self.updateSite(siteData)
     
     def updateSite(self, siteData):
@@ -299,9 +300,9 @@ class ShareClient:
         tempContainerData = None
         tempContainerName = 'temp'
         for child in treeData['items']:
-            if child['name'] == containerId:
+            if child['name'].lower() == containerId.lower():
                 containerData = child
-            if child['name'] == 'temp':
+            if child['name'].lower() == tempContainerName.lower():
                 tempContainerData = child
         if containerData is None:
             # Create container if it doesn't exist
@@ -354,7 +355,7 @@ class ShareClient:
         uparams = { 'filedata' : f, 'siteid':siteId, 'containerid':tempContainerName, 'destination':'', 'username':'', 'updateNodeRef':'', 'uploadDirectory':'/', 'overwrite':'false', 'thumbnails':'', 'successCallback':'', 'successScope':'', 'failureCallback':'', 'failureScope':'', 'contentType':'cm:content', 'majorVersion':'false', 'description':'' }
         fr = self.doMultipartUpload("proxy/alfresco/api/upload", uparams)
         udata = json.loads(fr.read())
-        if udata['status']['code'] == 200:
+        if ('success' in udata and udata['success'] == true) or ('status' in udata and udata['status']['code'] == 200):
             nodeRef = udata['nodeRef']
             #jsonResp = self.doJSONPost('proxy/alfresco/slingshot/doclib/action/import/node/%s' % (nodeRef.replace('://', '/')))
             # Remove the rule definition
@@ -366,39 +367,49 @@ class ShareClient:
             # Delete the temp upload container
             self.doJSONPost('proxy/alfresco/slingshot/doclib/action/folder/node/%s' % (tempContainerData['nodeRef'].replace('://', '/')), method="DELETE")
         else:
-            raise Exception("Could not upload file (got status code %s)" % (udata['status']['code']))
+            raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
     
     def importRmSiteContent(self, siteId, containerId, f):
+        # Forces creation of the doclib container
+        self.doGet('page/site/%s/documentlibrary' % (siteId))
+
+        # We need to add the user to the Records Management Administrator group before we can add the content
+        # TODO detect if we are running as the admin user or not
+        userData = self.doJSONGet('proxy/alfresco/api/people/%s?groups=true' % ('admin'))
+        isRecordsAdmin = False
+        userGroups = []
+        addGroups = []
+        # Get thr groups the user is a member of
+        for group in userData['groups']:
+            userGroups.append(group['itemName'])
+        # Find the Records Management Administrator groups(s)
+        raGroups = self.doJSONGet('proxy/alfresco/api/groups?zone=APP.DEFAULT&shortNameFilter=**Records%20Management%20Administrator')['data']
+        for group in raGroups:
+            if group['fullName'] not in userGroups:
+                addGroups.append(group['fullName'])
+        if len(addGroups) > 0:
+            putData = { 'addGroups': addGroups, 'disableAccount': False, 'email': userData['email'], 'firstName': userData['firstName'], 'lastName': userData['lastName'], 'quota': userData['quota'], 'removeGroups': [] }
+            self.doJSONPost('proxy/alfresco/api/people/%s' % ('admin'), json.dumps(putData), method="PUT")
+                
         # Get the site metadata
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (siteId))
         siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
         treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
         # Locate the container item
         containerData = None
-        tempContainerData = None
         for child in treeData['items']:
-            if child['name'] == containerId:
+            if child['name'].lower() == containerId.lower():
                 containerData = child
-            if child['name'] == 'temp':
-                tempContainerData = child
         if containerData is None:
-            # Create container if it doesn't exist
-            folderData = { 'alf_destination': siteNodeRef, 'prop_cm_name': containerId, 'prop_cm_title': containerId, 'prop_cm_description': '' }
-            createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
-            containerData = { 'nodeRef': createData['persistedObject'], 'name' : containerId }
-            # Add the tagscope aspect to the container - otherwise an error occurs when viewed by a site consumer
-            self.doPost('proxy/alfresco/slingshot/doclib/action/aspects/node/%s' % (str(containerData['nodeRef']).replace('://', '/')), '{"added":["cm:tagscope"],"removed":[]}', 'application/json;charset=UTF-8')
+            # Throw an error if the container doesn't exist
+            raise Exception("Could not find the RM documentLibrary container and it cannot be created")
         uparams = { 'archive' : f, 'destination':containerData['nodeRef'] }
         fr = self.doMultipartUpload("proxy/alfresco/api/rma/admin/import", uparams)
         udata = json.loads(fr.read())
-        if udata['status']['code'] == 200:
-            nodeRef = udata['nodeRef']
-            # Delete the ACP file
-            self.doJSONPost('proxy/alfresco/slingshot/doclib/action/file/node/%s' % (nodeRef.replace('://', '/')), method="DELETE")
-            # Delete the temp upload container
-            self.doJSONPost('proxy/alfresco/slingshot/doclib/action/folder/node/%s' % (tempContainerData['nodeRef'].replace('://', '/')), method="DELETE")
+        if ('success' in udata and udata['success']) or ('status' in udata and udata['status']['code'] == 200):
+            pass
         else:
-            raise Exception("Could not upload file (got status code %s)" % (udata['status']['code']))
+            raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
 
     # Admin functions
     
