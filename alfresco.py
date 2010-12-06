@@ -466,4 +466,44 @@ class ShareClient:
                     print "User '%s' did not exist, skipping" % (u['userName'])
                 else:
                     raise e
+    
+    def getAllGroups(self, skipGroups=[], getSiteGroups=False, getSystemGeneratedGroups=False):
+        """Fetch information on all the group objects in the repository"""
+        gdata = self.doJSONGet('proxy/alfresco/api/rootgroups')
+        groups = []
+        for g in gdata['data']:
+            if g['shortName'] not in skipGroups:
+                # Site groups
+                if g['shortName'].startswith('site_'):
+                    if getSiteGroups:
+                        groups.append(g)
+                elif re.search("AllRoles", g['shortName']) is not None:
+                    if getSystemGeneratedGroups:
+                        groups.append(g)
+                else:
+                    groups.append(g)
+        for g in groups:
+            g['children'] = self.doJSONGet('proxy/alfresco/api/groups/%s/children' % (urllib.quote(str(g['shortName']))))
+        return groups
+    
+    def getCategories(self, path):
+        """Fetch a list of child categories at the given location, in a recursive structure"""
+        categories = self.doJSONGet('proxy/alfresco/slingshot/doclib/categorynode/node/%s' % (urllib.quote(path)))['items']
+        # Recursively call the function on each child to find child categories
+        for c in categories:
+            c['children'] = self.getCategories('%s/%s' % (path, c['name']))
+        return categories
+    
+    def getAllCategories(self):
+        """Fetch all the categories in the repository, in a tree structure"""
+        return self.getCategories('alfresco/category/root')
+    
+    def getAllTags(self):
+        """Fetch all the tags used in the repository"""
+        tags = self.doGet('proxy/alfresco/api/tags/workspace/SpacesStore').read().strip("[] \r\n\t").replace("\r", '').replace("\n", '').replace("\t", '').split(',')
+        # Remove empty tags
+        while '' in tags:
+            tags.remove('')
+        tags.sort()
+        return tags
 
