@@ -1,43 +1,137 @@
-What is included?
+Share Import/Export Tools
+=========================
 
-For sites:
+Author: Will Abson
 
-Site pages
-Dashboard configuration, including layout, contents and dashlet configuration
-Site membership (users only at present)
-Full site contents (via ACP, for export this must be done manually for now after running the tool)
+The Share Import/Export tools provide a set of Python scripts for importing and 
+exporting site-based content and user information held within Alfresco Share, 
+together with sample content from the Alfresco Cloud Trial.
 
-What is not included
+The scripts connect to Alfresco Share via HTTP, so can be used against a local or
+a remote instance of Share.
 
-Custom security groups
-Activity service data
-Custom dashlets
-Tag data??
+What can be imported/exported?
 
-Using the tools
+  * Sites
+    * Site configurations
+    * Site members (users only at present)
+    * Site dashboards, including dashlet configuration
+    * All content held within the site (manual export via ACP)
+    * Records Management sites (must have RM installed)
+    * Web Quick Start sites (must have WQS installed)
+
+  * Users
+    * All profile information, including profile images
+    * User dashboard configurations
+    * User preferences
+
+What is not imported/exported?
+
+  * Category definitions, including tags
+  * User groups
+  * User passwords and account enabled flags (all accounts enabled)
+  * Activity feed entries
+  * File system-level customisations (e.g. custom dashlets) and configuration
+
+Requirements
+============
+
+  * Python 2.6+ (http://www.python.org/)
+  * Alfresco 3.3 or 3.4 target
+
+Importing Content
+=================
+
+Sites and users can be imported from JSON files on your local system, and examples of these
+are supplied in the 'data' folder.
+
+Note that you must normally create the users before creating sites, otherwise the site import
+script will fail when it tries to add site members which do not exist.
+
+Importing users
+---------------
+
+You can import users defined in a JSON users file. An example cloud-users.json is supplied in 
+the data folder.
+
+Change into the share-import-export directory at a command prompt. Then type the following
+
+  python import-users.py data/cloud-users.json --create-only  --username=username --password=username --url=username
+
+The 'username' and 'password' values must match those of an existing admin user on the system
+with the Share URL 'url'.
+
+If you are running a local instance of Alfresco and wish to run the import as the admin user
+using the default password, you can omit the --username, --password and --url arguments.
+
+To set user preferences and upload profile images, remove the --create-only argument from 
+the command. Note that on Windows systems, the large number of HTTP requests may cause
+problems.
+
+If you have problems you can constrain the list of users that are created using the --users=
+argument, e.g.
+
+  python import-users.py data/cloud-users.json --users=phampton,bburchetts,cknowl,iwargrave,jtalbot,nswallowfield,sclark
+
+Importing a site
+----------------
+
+Once you have imported your users you can create a site. You must supply a site JSON file from
+which information about the site will be read. Several examples are supplied in the data/sites folder.
+
+To import the 'branding' site and its contents, run the following command from a terminal.
+
+  python import-site.py data/branding.json --username=username --password=username --url=username
+
+The command will create the site and set it's configuration, members and dashboard configuration.
+Finally it will import the site content from any associated ACP files.
+
+Exporting Content
+=================
 
 Exporting a site
+----------------
 
 Run the following command from a terminal
 
-python dump-site.py siteurl|siteid file.json [--username=username] [--password=username] [--url=username] [-d]
+  python export-site.py siteid file.json --username=username --password=username --url=username
+
+The 'siteid' argument is the URL name of the site in Share. If you are not sure what this means
+you can use the full URL of the site dashboard page instead.
+
+The second argument is the name of the file where the site information will be stored in JSON 
+format.
 
 Exporting users
+---------------
 
+Run the following command from a terminal
 
+  python export-users.py siteid file.json --username=username --password=username --url=username
+
+Removing Content
+================
+
+If something goes wrong when importing content you may need to remove the old definitions before
+trying again.
 
 Removing a site
+---------------
 
-python purge-site.py siteurl|siteid [--username=username] [--password=username] [--url=username] [-d]
+You can remove a single site from the system by specifying the site ID or URL of the dashboard
+page.
 
+  python purge-site.py siteid --username=username --password=username --url=username
 
-Importing a site
+Removing users
+--------------
 
-python bootstrap-site.py bootstrap-data/sites/rm.json --no-content
-# Set up the current user as a repo admin and a records admin
-python bootstrap-site.py bootstrap-data/sites/rm.json --no-create --no-members --no-dashboard --no-configuration
+This will remove ALL the users from the local file users-file.json. Use this with extreme caution!
 
-FAQ
+  python purge-users.py users-file.json --username=username --password=username --url=username
+
+Troubleshooting
+===============
 
 When I try to import a site I see the following error reported:
 
@@ -78,3 +172,7 @@ To work around the issue, edit the XML descriptor file within the ACP package fo
     </cm:content>
 
 
+Credits
+=======
+
+Thanks to Paul Hampton for providing the sample content

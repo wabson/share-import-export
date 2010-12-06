@@ -4,7 +4,7 @@ import json, alfresco, sys, getopt, os
 global _debug
 
 def usage():
-    print "Usage: python bootstrap-site.py file.json [--username=username] [--password=username] [--url=username] [--skip-missing-members] [--containers=container1,...] [--no-content] [-d]"
+    print "Usage: python import-site.py file.json [--username=username] [--password=username] [--url=username] [--skip-missing-members] [--containers=container1,...] [--no-content] [-d]"
 
 def main(argv):
 

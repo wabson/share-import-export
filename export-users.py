@@ -4,7 +4,7 @@ import json, alfresco, sys, getopt, os, mimetypes
 global _debug
 
 def usage():
-    print "Usage: python dump-users.py file.json [--username=username] [--password=username] [--url=username] [--skip-users=user1[,user2,...]] [-d]"
+    print "Usage: python export-users.py file.json [--username=username] [--password=username] [--url=username] [--skip-users=user1[,user2,...]] [-d]"
 
 def main(argv):
 

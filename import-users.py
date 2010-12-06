@@ -4,7 +4,7 @@ import json, alfresco, sys, getopt, os
 global _debug
 
 def usage():
-    print "Usage: python bootstrap-users.py file.json [--username=username] [--password=username] [--url=username] [--users=user1[,user2,...]] [--skip-users=user1[,user2,...]] [--no-dashboards] [--no-preferences] [--no-update-profile] [--no-avatars] [--create-only] [-d]"
+    print "Usage: python import-users.py file.json [--username=username] [--password=username] [--url=username] [--users=user1[,user2,...]] [--skip-users=user1[,user2,...]] [--no-dashboards] [--no-preferences] [--no-update-profile] [--no-avatars] [--create-only] [-d]"
 
 def main(argv):
 

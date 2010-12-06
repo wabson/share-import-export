@@ -4,7 +4,7 @@ import json, alfresco, sys, re, getopt, os, xml.etree
 global _debug
 
 def usage():
-    print "Usage: python dump-site.py siteurl|siteid file.json [--username=username] [--password=username] [--url=username] [-d]"
+    print "Usage: python export-site.py siteurl|siteid file.json [--username=username] [--password=username] [--url=username] [-d]"
 
 def main(argv):
 
