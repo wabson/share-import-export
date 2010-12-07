@@ -1,3 +1,32 @@
+#! /usr/bin/env python
+# export-categories.py
+
+"""
+Export categories and tags from the repository in JSON format.
+
+Usage: python export-categories.py file.json|- [options]
+
+Options and arguments:
+
+file.json         Name of the file to export categories to. Will be created if
+                  it does not exist, or if it does the contents will be 
+                  overwritten. Use - to specify stdout.
+
+-u user           The username to authenticate as
+--username=user
+
+-p pass           The password to authenticate with
+--password=pass
+
+-U url            The URL of the Share web application, e.g. 
+--url=url         http://alfresco.test.com/share
+
+-d                Turn on debug mode
+
+-h                Display this message
+--help
+"""
+
 import getopt
 import json
 import os
@@ -9,7 +38,7 @@ import alfresco
 global _debug
 
 def usage():
-    print "Usage: python export-categories.py file.json [--username=username] [--password=username] [--url=username] [-d]"
+    print __doc__
 
 def main(argv):
 
@@ -19,8 +48,15 @@ def main(argv):
     _debug = 0
     
     if len(argv) > 0:
-        # File name to dump categories to, or '-' for stdout
-        filename = argv[0]
+        if argv[0] == "--help" or argv[0] == "-h":
+            usage()
+            sys.exit()
+        elif argv[0].startswith('-') and len(argv[0]) > 1:
+            usage()
+            sys.exit(1)
+        else:
+            # File name to dump categories to, or '-' for stdout
+            filename = argv[0]
     else:
         usage()
         sys.exit(1)

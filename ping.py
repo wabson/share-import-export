@@ -1,3 +1,35 @@
+#! /usr/bin/env python
+# ping.py
+
+"""
+Perform a basic login test against the repository. The script sets the socket
+timeout to ten minutes (unless overridden by --timeout) and blocks until either
+this time or until a log in and log out operation has been completed.
+
+This can be used to 'pause' execution of a program until, for instance, the
+Alfresco/Share server has fully started up.
+
+Usage: python ping.py [options]
+
+Options and arguments:
+
+-u user           The username to authenticate as
+--username=user
+
+-p pass           The password to authenticate with
+--password=pass
+
+-U url            The URL of the Share web application, e.g. 
+--url=url         http://alfresco.test.com/share
+
+--timeout         Timeout value to set in seconds
+
+-d                Turn on debug mode
+
+-h                Display this message
+--help
+"""
+
 import getopt
 import os
 import re
@@ -10,7 +42,7 @@ import alfresco
 global _debug
 
 def usage():
-    print "Usage: python ping.py [--username=username] [--password=username] [--url=username] [--timeout=timeout] [-d]"
+    print __doc__
 
 def main(argv):
 

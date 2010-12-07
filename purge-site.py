@@ -1,3 +1,31 @@
+#! /usr/bin/env python
+# purge-site.py
+
+"""
+Delete a site and all associated site data from the repository.
+
+Usage: python purge-site.py siteurl|siteid [options]
+
+Options and arguments:
+
+siteurl|siteid    URL name of the site to remove, alternatively the full site
+                  dashboard URL can be used (also implies --url).
+
+-u user           The username to authenticate as
+--username=user
+
+-p pass           The password to authenticate with
+--password=pass
+
+-U url            The URL of the Share web application, e.g. 
+--url=url         http://alfresco.test.com/share
+
+-d                Turn on debug mode
+
+-h                Display this message
+--help
+"""
+
 import getopt
 import re
 import sys
@@ -8,7 +36,7 @@ import alfresco
 global _debug
 
 def usage():
-    print "Usage: python purge-site.py siteurl|siteid [--username=username] [--password=username] [--url=username] [-d]"
+    print __doc__
 
 def main(argv):
 
@@ -17,6 +45,17 @@ def main(argv):
     url = "http://localhost:8080/share"
     _debug = 0
     sitename = ""
+    
+    if len(argv) > 0:
+        if argv[0] == "--help" or argv[0] == "-h":
+            usage()
+            sys.exit()
+        elif argv[0].startswith('-'):
+            usage()
+            sys.exit(1)
+    else:
+        usage()
+        sys.exit(1)
         
     try:
         opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url="])

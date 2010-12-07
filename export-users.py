@@ -1,3 +1,37 @@
+#! /usr/bin/env python
+# export-users.py
+
+"""
+Export user definitions from the repository in JSON format. This will export 
+ALL repository users (subject to the --skip-users option), including any which 
+have been imported from LDAP.
+
+Usage: python export-users.py file.json|- [options]
+
+Options and arguments:
+
+file.json         Name of the file to export information to. Will be created if
+                  it does not exist, or if it does the contents will be 
+                  overwritten. Use - to specify stdout.
+
+-u user           The username to authenticate as
+--username=user
+
+-p pass           The password to authenticate with
+--password=pass
+
+-U url            The URL of the Share web application, e.g. 
+--url=url         http://alfresco.test.com/share
+
+--skip-users=arg  Comma-separated list of usernames to exclude from the 
+                  export
+
+-d                Turn on debug mode
+
+-h                Display this message
+--help
+"""
+
 import getopt
 import json
 import mimetypes
@@ -10,7 +44,7 @@ import alfresco
 global _debug
 
 def usage():
-    print "Usage: python export-users.py file.json [--username=username] [--password=username] [--url=username] [--skip-users=user1[,user2,...]] [-d]"
+    print __doc__
 
 def main(argv):
 
@@ -22,8 +56,15 @@ def main(argv):
     downloadAvatars = True
     
     if len(argv) > 0:
-        # File name to dump users to, or '-' for stdout
-        filename = argv[0]
+        if argv[0] == "--help" or argv[0] == "-h":
+            usage()
+            sys.exit()
+        elif argv[0].startswith('-') and len(argv[0]) > 1:
+            usage()
+            sys.exit(1)
+        else:
+            # File name to dump users to, or '-' for stdout
+            filename = argv[0]
     else:
         usage()
         sys.exit(1)

@@ -1,3 +1,43 @@
+#! /usr/bin/env python
+# import-site.py
+
+"""
+Import a site definition and site content from the local file system.
+
+Usage: python import-site.py file.json [options]
+
+Options and arguments:
+
+file.json              Name of the JSON file to import information from. 
+                       Content packages in ACP format will be imported from 
+                       the same directory and must have the same prefix as the
+                       JSON file, saparated by a hyphen, e.g. importing from 
+                       file.json will look for the ACP files
+                       file-documentLibrary.acp, file-wiki.acp, etc.
+
+-u user                The username to authenticate as
+--username=user
+
+-p pass                The password to authenticate with
+--password=pass
+
+-U url                 The URL of the Share web application, e.g. 
+--url=url              http://alfresco.test.com/share
+
+--skip-missing-members Ignore any errors which occur when members of a site are
+                       found to not exist in the repository
+
+--containers=list      Comma-separated list of container names to import site
+                       content into, e.g. documentLibrary,wiki
+
+--no-content           Do not import any content packages into the site
+
+-d                     Turn on debug mode
+
+-h                     Display this message
+--help
+"""
+
 import getopt
 import json
 import os
@@ -9,7 +49,7 @@ import alfresco
 global _debug
 
 def usage():
-    print "Usage: python import-site.py file.json [--username=username] [--password=username] [--url=username] [--skip-missing-members] [--containers=container1,...] [--no-content] [-d]"
+    print __doc__
 
 def main(argv):
 
@@ -24,8 +64,15 @@ def main(argv):
     siteContainers = [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]
     _debug = 0
     
-    if len(argv) and not argv[0].startswith('-') > 0:
-        filename = argv[0]
+    if len(argv) > 0:
+        if argv[0] == "--help" or argv[0] == "-h":
+            usage()
+            sys.exit()
+        elif argv[0].startswith('-'):
+            usage()
+            sys.exit(1)
+        else:
+            filename = argv[0]
     else:
         usage()
         sys.exit(1)

@@ -1,3 +1,54 @@
+#! /usr/bin/env python
+# import-users.py
+
+"""
+Import repository users from a JSON file. Users who do not exist will be 
+created and existing users will be updated.
+
+Usage: python import-users.py file.json [options]
+
+Options and arguments:
+
+file.json           Name of the JSON file to import user information from. 
+
+-u user             The username to authenticate as
+--username=user
+
+-p pass             The password to authenticate with
+--password=pass
+
+-U url              The URL of the Share web application, e.g. 
+--url=url           http://alfresco.test.com/share
+
+--users=arg         Comma-separated list of user names to import. Users in the
+                    JSON file whose user names do not exactly match one of the 
+                    values will be skipped and not created.
+
+--skip-users=arg    Comma-separated list of user names to exclude from the 
+                    import
+
+--no-dashboards     Do not set user dashboard configurations
+
+--no-preferences    Do not set user preferences
+
+--no-update-profile Do not update profile information after creation. The 
+                    default behaviour is to send a request to the edit user 
+                    profile form handler to update values for existing users 
+                    and for new users to set any properties that the create 
+                    operation does not set itself.
+
+--no-avatars        Do not upload user profile images
+
+--create-only       Create missing users and do nothing else. Equivalent to 
+                    --no-dashboards --no-preferences --no-preferences 
+                    --no-update-profile --no-avatars
+
+-d                  Turn on debug mode
+
+-h                  Display this message
+--help
+"""
+
 import getopt
 import json
 import os
@@ -9,7 +60,7 @@ import alfresco
 global _debug
 
 def usage():
-    print "Usage: python import-users.py file.json [--username=username] [--password=username] [--url=username] [--users=user1[,user2,...]] [--skip-users=user1[,user2,...]] [--no-dashboards] [--no-preferences] [--no-update-profile] [--no-avatars] [--create-only] [-d]"
+    print __doc__
 
 def main(argv):
 
@@ -25,9 +76,16 @@ def main(argv):
     _debug = 0
     
     if len(argv) > 0:
-        # File name to load users from, or '-' for stdin
-        filename = argv[0]
-        # TODO Support stdin as input mechanism
+        if argv[0] == "--help" or argv[0] == "-h":
+            usage()
+            sys.exit()
+        elif argv[0].startswith('-'):
+            usage()
+            sys.exit(1)
+        else:
+            # File name to load users from
+            # TODO Support stdin as input mechanism
+            filename = argv[0]
     else:
         usage()
         sys.exit(1)

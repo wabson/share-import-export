@@ -1,3 +1,35 @@
+#! /usr/bin/env python
+# export-site.py
+
+"""
+Export information on a specific collaboration or RM site in JSON format.
+
+Usage: python export-site.py siteurl|siteid file.json|- [options]
+
+Options and arguments:
+
+siteurl|siteid    URL name of the site to export, alternatively the full site
+                  dashboard URL can be used (also implies --url).
+
+file.json         Name of the file to export information to. Will be created if
+                  it does not exist, or if it does the contents will be 
+                  overwritten. Use - to specify stdout.
+
+-u user           The username to authenticate as
+--username=user
+
+-p pass           The password to authenticate with
+--password=pass
+
+-U url            The URL of the Share web application, e.g. 
+--url=url         http://alfresco.test.com/share
+
+-d                Turn on debug mode
+
+-h                Display this message
+--help
+"""
+
 import getopt
 import json
 import os
@@ -10,7 +42,7 @@ import alfresco
 global _debug
 
 def usage():
-    print "Usage: python export-site.py siteurl|siteid file.json [--username=username] [--password=username] [--url=username] [-d]"
+    print __doc__
 
 def main(argv):
 
@@ -21,37 +53,50 @@ def main(argv):
     sitename = ""
     filename = ""
     
-    try:
-        opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url="])
-    except getopt.GetoptError, e:
-        usage()
-        sys.exit(1)
-    
-    for opt, arg in opts:
-        if opt in ("-h", "--help"):
+    if len(argv) > 0:
+        if argv[0] == "--help" or argv[0] == "-h":
             usage()
             sys.exit()
-        elif opt == '-d':
-            _debug = 1
-        elif opt in ("-u", "--username"):
-            username = arg
-        elif opt in ("-p", "--password"):
-            password = arg
-        elif opt in ("-U", "--url"):
-            url = arg
-    
+        elif argv[0].startswith('-') and len(argv[0]) > 1:
+            usage()
+            sys.exit(1)
+
     if len(argv) > 1:
-        idm = re.match('^(\w+)$', argv[0])
-        urlm = re.match('^(https?\\://[\w\\-\\.\\:]+/share)/page/site/(\w+)/[\w\\-\\./]*$', argv[0])
-        if idm is not None:
-            sitename = argv[0]
-        elif urlm is not None:
-            url = urlm.group(1)
-            sitename = urlm.group(2)
+    
+        if not argv[1].startswith('-'):
+            try:
+                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url="])
+            except getopt.GetoptError, e:
+                usage()
+                sys.exit(1)
+            
+            for opt, arg in opts:
+                if opt in ("-h", "--help"):
+                    usage()
+                    sys.exit()
+                elif opt == '-d':
+                    _debug = 1
+                elif opt in ("-u", "--username"):
+                    username = arg
+                elif opt in ("-p", "--password"):
+                    password = arg
+                elif opt in ("-U", "--url"):
+                    url = arg
+            
+            idm = re.match('^(\w+)$', argv[0])
+            urlm = re.match('^(https?\\://[\w\\-\\.\\:]+/share)/page/site/(\w+)/[\w\\-\\./]*$', argv[0])
+            if idm is not None:
+                sitename = argv[0]
+            elif urlm is not None:
+                url = urlm.group(1)
+                sitename = urlm.group(2)
+            else:
+                raise Exception("Not a valid site URL or ID (%s)" % (argv[0]))
+            
+            filename = argv[1]
         else:
-            raise Exception("Not a valid site URL or ID (%s)" % (argv[0]))
-        
-        filename = argv[1]
+            usage()
+            sys.exit(1)
     else:
         usage()
         sys.exit(1)

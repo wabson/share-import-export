@@ -1,3 +1,13 @@
+#! /usr/bin/env python
+# alfresco.py
+
+"""This module provides a client implementation for connecting to, authenticating against and
+performing operations against an Alfresco server.
+
+Currently only a single main class ShareClient is defined by the module, which is designed to
+mimic the action of a web browser in logging in to the Share application and performing actions.
+"""
+
 import cookielib
 import json
 import os
