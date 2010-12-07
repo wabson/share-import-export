@@ -1,4 +1,8 @@
-import json, alfresco, sys, getopt
+import getopt
+import json
+import sys
+
+import alfresco
 
 # HTTP debugging flag
 global _debug

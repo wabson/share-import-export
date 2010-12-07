@@ -1,4 +1,10 @@
-import json, alfresco, sys, re, getopt, os, xml.etree
+import getopt
+import json
+import os
+import re
+import sys
+
+import alfresco
 
 # HTTP debugging flag
 global _debug

@@ -1,4 +1,9 @@
-import urllib, urllib2, cookielib, json, re, xml.etree, os
+import cookielib
+import json
+import os
+import re
+import urllib
+import urllib2
 
 class SurfRequest(urllib2.Request):
     """A request sent to a SpringSurf-based server. Adds support for additional method types in addition to GET and POST."""
@@ -248,7 +253,7 @@ class ShareClient:
         return self.doJSONPost('proxy/alfresco/api/sites/%s' % (siteData['shortName']), json.dumps(siteData), method="PUT")
     
     def setSitePages(self, pageData):
-        """Set the pages from xml.etree.ElementTree import ElementTreepresent in a site
+        """Set the pages in a site
         
         pageData should be a dict object with keys 'pages' and 'siteId'"""
         return self.doJSONPost('service/components/site/customise-pages', json.dumps(pageData))
