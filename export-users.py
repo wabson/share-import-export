@@ -30,6 +30,8 @@ file.json         Name of the file to export information to. Will be created if
 --skip-users=arg  Comma-separated list of usernames to exclude from the 
                   export
 
+--no-avatars      Do not download user profile images
+
 -d                Turn on debug mode
 
 -h                Display this message
@@ -69,13 +71,13 @@ def main(argv):
             sys.exit(1)
         else:
             # File name to dump users to, or '-' for stdout
-            filename = argv[0]
+            filename = os.path.abspath(argv[0])
     else:
         usage()
         sys.exit(1)
     
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "users=", "skip-users="])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "users=", "skip-users=", "no-avatars"])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -92,6 +94,8 @@ def main(argv):
             password = arg
         elif opt in ("-U", "--url"):
             url = arg
+        elif opt == "--no-avatars":
+            downloadAvatars = False
         elif opt == "--users":
             include_users = arg.split(',')
         elif opt == "--skip-users":
@@ -107,7 +111,7 @@ def main(argv):
     try:
         if not filename == "-":
             print "Get user information"
-        pdata = sc.getAllUsers(getFullDetails=True, getDashboardConfig=True, getPreferences=True)
+        pdata = sc.getAllUsers(getFullDetails=True, getDashboardConfig=True, getPreferences=True, getGroups=True)
         export_users = []
         
         # Filter the users
@@ -126,9 +130,8 @@ def main(argv):
                 os.makedirs(os.path.dirname(filename))
             
             # Download avatars
-            if downloadAvatars:
-                if not filename == "-":
-                    print "Download profile images"
+            if downloadAvatars and filename != "-":
+                print "Download profile images"
                 for p in export['people']:
                     if 'avatar' in p:
                         if not os.path.exists('%s/profile-images' % (os.path.dirname(filename))):

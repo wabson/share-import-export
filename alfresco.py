@@ -15,6 +15,8 @@ import re
 import urllib
 import urllib2
 
+GUID_REGEXP = re.compile('[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{8}')
+
 class SurfRequest(urllib2.Request):
     """A request sent to a SpringSurf-based server. Adds support for additional method types in addition to GET and POST."""
 
@@ -84,6 +86,7 @@ class ShareClient:
         self.opener = opener
         self.m_opener = m_opener
         self.debug = debug
+        self._username = None
 
     def doRequest(self, method, path, data=None, dataType=None):
         """Perform a general HTTP request against Share"""
@@ -129,6 +132,7 @@ class ShareClient:
         failureurl = '/share/page/type/login?error=true'
         resp = self.doPost('page/dologin', urllib.urlencode({'username': username, 'password': password, 'success': successurl, 'failure': failureurl}))
         if (resp.geturl() == '%s/page/user/%s/dashboard' % (self.url, username)):
+            self._username = username
             return { 'success': True }
         else:
             return { 'success': False }
@@ -136,6 +140,8 @@ class ShareClient:
     def doLogout(self):
         """Log the current user out of Share using the logout servlet"""
         resp = self.doGet('page/dologout')
+        self._username = None
+    
     def updateDashboardConfig(self, configData):
         """Update a Share dashboard configuration"""
         result = {}
@@ -396,29 +402,48 @@ class ShareClient:
     def deleteFolder(self, f):
         return self.doJSONPost('proxy/alfresco/slingshot/doclib/action/folder/node/%s' % (f.replace('://', '/')), method="DELETE")
     
+    def addUserGroups(self, user, groups):
+        if isinstance(user, (dict)):
+            userData = user
+        elif isinstance(user, (str, unicode)):
+            userData = self.doJSONGet('proxy/alfresco/api/people/%s?groups=true' % (str(user)))
+        else:
+            raise Exception('Bad user data type %s' % (type(user)))
+        
+        userGroups = []
+        addGroups = []
+        # Get the groups the user is a member of - since we can't add users to a group twice
+        for group in userData['groups']:
+            userGroups.append(group['itemName'])
+        for group in groups:
+            if isinstance(group, (dict)):
+                if 'fullName' in group:
+                    groupName = group['fullName']
+                elif 'itemName' in group:
+                    groupName = group['itemName']
+                else:
+                    raise Exception('Could not locate group name')
+            elif isinstance(user, (str)):
+                groupName = group
+            else:
+                raise Exception('Bad group type %s' % (type(group)))
+            
+            if groupName not in userGroups:
+                addGroups.append(groupName)
+        
+        putData = { 'addGroups': addGroups, 'disableAccount': False, 'email': userData['email'], 'firstName': userData['firstName'], 'lastName': userData['lastName'], 'quota': userData['quota'], 'removeGroups': [] }
+        return self.doJSONPost('proxy/alfresco/api/people/%s' % (userData['userName']), json.dumps(putData), method="PUT")
+    
     def importRmSiteContent(self, siteId, containerId, f):
         """Upload a content package into an RM site and extract it"""
         # Forces creation of the doclib container
         self.doGet('page/site/%s/documentlibrary' % (siteId))
 
-        # We need to add the user to the Records Management Administrator group before we can add the content
-        # TODO detect if we are running as the admin user or not
-        userData = self.doJSONGet('proxy/alfresco/api/people/%s?groups=true' % ('admin'))
-        isRecordsAdmin = False
-        userGroups = []
-        addGroups = []
-        # Get thr groups the user is a member of
-        for group in userData['groups']:
-            userGroups.append(group['itemName'])
+        # We need to add the user to the Records Management Administrator group(s) before we can add the content
         # Find the Records Management Administrator groups(s)
         raGroups = self.doJSONGet('proxy/alfresco/api/groups?zone=APP.DEFAULT&shortNameFilter=**Records%20Management%20Administrator')['data']
-        for group in raGroups:
-            if group['fullName'] not in userGroups:
-                addGroups.append(group['fullName'])
-        if len(addGroups) > 0:
-            putData = { 'addGroups': addGroups, 'disableAccount': False, 'email': userData['email'], 'firstName': userData['firstName'], 'lastName': userData['lastName'], 'quota': userData['quota'], 'removeGroups': [] }
-            self.doJSONPost('proxy/alfresco/api/people/%s' % ('admin'), json.dumps(putData), method="PUT")
-                
+        self.addUserGroups(self._username, raGroups)
+        
         # Get the site metadata
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (siteId))
         siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
@@ -623,12 +648,26 @@ class ShareClient:
     
     # Admin functions
     
-    def getAllUsers(self, getFullDetails=False, getDashboardConfig=False, getPreferences=False):
-        """Fetch information on all the person objects in the repository"""
+    def getAllUsers(self, getFullDetails=False, getDashboardConfig=False, getPreferences=False, getGroups=False):
+        """Fetch information on all the person objects in the repository
+        
+        getFullDetails adds 'capabilities' object to the user object with booleans
+        isMutable, isGuest and isAdmin
+        
+        getGroups adds 'groups' and 'mutability' objects. Implies getFullDetails=True.
+        """
         pdata = self.doJSONGet('proxy/alfresco/api/people')
         if getFullDetails or getDashboardConfig or getPreferences:
             for p in pdata['people']:
-                if getFullDetails:
+                if getGroups:
+                    p.update(self.doJSONGet('proxy/alfresco/api/people/%s?groups=true' % (p['userName'])))
+                    # Remove site groups and those with a GUID in them (e.g. RM security groups)
+                    groups = []
+                    for g in p['groups']:
+                        if not g['itemName'].startswith('GROUP_site_') and GUID_REGEXP.search(g['itemName']) is None:
+                            groups.append(g)
+                    p['groups'] = groups
+                elif getFullDetails:
                     p.update(self.doJSONGet('proxy/alfresco/api/people/%s' % (p['userName'])))
                 if getDashboardConfig:
                     dc = self.getDashboardConfig('user', p['userName'])
@@ -636,6 +675,7 @@ class ShareClient:
                         p['dashboardConfig'] = dc
                 if getPreferences:
                     p['preferences'] = self.doJSONGet('proxy/alfresco/api/people/%s/preferences' % (p['userName']))
+                    
         return pdata
         
     def createUser(self, user):
@@ -657,6 +697,9 @@ class ShareClient:
                         print "User '%s' already exists, skipping" % (u['userName'])
                     else:
                         print e
+                # Add user groups if they exist
+                if 'groups' in u:
+                    self.addUserGroups(u['userName'], u['groups'])
     
     def setUserPreferences(self, username, prefs):
         return self.doJSONPost('proxy/alfresco/api/people/%s/preferences' % (username), json.dumps(prefs))
@@ -687,7 +730,7 @@ class ShareClient:
                 if g['shortName'].startswith('site_'):
                     if getSiteGroups:
                         groups.append(g)
-                elif re.search("AllRoles", g['shortName']) is not None:
+                elif GUID_REGEXP.search(g['shortName']) is not None:
                     if getSystemGeneratedGroups:
                         groups.append(g)
                 else:
