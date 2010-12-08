@@ -312,7 +312,7 @@ class ShareClient:
         return self.doJSONPost('proxy/alfresco/api/node/%s/ruleset/rules/%s' % (nodeRef.replace('://', '/'), rulesetId), method="DELETE")
     
     def importSiteContent(self, siteId, containerId, f):
-        """Upload a content package into the site and extract it"""
+        """Upload a content package into a collaboration site and extract it"""
         # Get the site metadata
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (siteId))
         siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
@@ -381,19 +381,23 @@ class ShareClient:
         udata = json.loads(fr.read())
         if ('success' in udata and udata['success'] == true) or ('status' in udata and udata['status']['code'] == 200):
             nodeRef = udata['nodeRef']
-            #jsonResp = self.doJSONPost('proxy/alfresco/slingshot/doclib/action/import/node/%s' % (nodeRef.replace('://', '/')))
             # Remove the rule definition
             self._deleteSpaceRuleset(tempContainerData['nodeRef'], rulesData['data']['id'])
-            #importParams = { 'actionDefinitionName': 'import', 'actionedUponNode': nodeRef, 'parameterValues' : [ 'destination': '' ], 'executeAsync': false }
-            #jsonResp = self.doJSONPost('/api/actionQueue?async=false/%s' % (nodeRef.replace('://', '/')), json.dumps(importParams))
             # Delete the ACP file
-            self.doJSONPost('proxy/alfresco/slingshot/doclib/action/file/node/%s' % (nodeRef.replace('://', '/')), method="DELETE")
+            self.deleteFile(nodeRef)
             # Delete the temp upload container
-            self.doJSONPost('proxy/alfresco/slingshot/doclib/action/folder/node/%s' % (tempContainerData['nodeRef'].replace('://', '/')), method="DELETE")
+            self.deleteFolder(tempContainerData['nodeRef'])
         else:
             raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
     
+    def deleteFile(self, f):
+        return self.doJSONPost('proxy/alfresco/slingshot/doclib/action/file/node/%s' % (f.replace('://', '/')), method="DELETE")
+    
+    def deleteFolder(self, f):
+        return self.doJSONPost('proxy/alfresco/slingshot/doclib/action/folder/node/%s' % (f.replace('://', '/')), method="DELETE")
+    
     def importRmSiteContent(self, siteId, containerId, f):
+        """Upload a content package into an RM site and extract it"""
         # Forces creation of the doclib container
         self.doGet('page/site/%s/documentlibrary' % (siteId))
 
@@ -436,10 +440,12 @@ class ShareClient:
             raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
 
     def exportSiteContent(self, siteId, containerId):
+        """Export an ACP file of a specific site component and store it in the repository"""
         # Get the site metadata
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (siteId))
         siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
         treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
+        acpFile = "%s-%s" % (siteId, containerId)
         # Locate the container item
         containerData = None
         tempContainerData = None
@@ -451,79 +457,169 @@ class ShareClient:
                 tempContainerData = child
         if containerData is None:
             raise Exception("Container '%s' does not exist" % (containerId))
+            
         if tempContainerData is None:
             # Create export container if it doesn't exist
             folderData = { 'alf_destination': siteNodeRef, 'prop_cm_name': tempContainerName, 'prop_cm_title': tempContainerName, 'prop_cm_description': '' }
             createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
             tempContainerData = { 'nodeRef': createData['persistedObject'], 'name' : tempContainerName }
-            
-        # First apply a ruleset to the source folder
-        rulesetDef = {
-            'id': '',
-            'action': {
-                "actionDefinitionName":"composite-action",
-                "conditions": [
-                    {
-                        "conditionDefinitionName":"compare-property-value",
-                        "parameterValues": {
-                            "operation":"ENDS",
-                            "value":".acp",
-                            "property":"cm:name"
-                        }
-                    }
-                ],
-                "actions": [
-                    {
-                        "actionDefinitionName":"export",
-                        "parameterValues": {
-                            "package-name": "%s-%s" % (siteId, containerId),
-                            "destination": tempContainerData['nodeRef'],
-                            "include-children": True,
-                            "include-self": False,
-                            "store": "workspace://SpacesStore"
-                        }
-                    }
-                ]
-            },
-            "title":"Export ACP file",
-            "description":"",
-            "disabled": False,
-            "applyToChildren": False,
-            "executeAsynchronously": False,
-            "ruleType":["outbound"]
-        }
-        rulesData = self._setSpaceRuleset(containerData['nodeRef'], rulesetDef)
+        else:
+            # Does the ACP file exist in the export container already?
+            docList = self._getDocumentList('Sites/%s/%s' % (siteId, tempContainerName))
+            acp = self._getDocumentListItem(docList, '%s.acp' % (acpFile))
+            if acp is not None:
+                self.deleteFile(acp['nodeRef'])
         
-        # Now trigger the rules
-        self.doJSONPost('proxy/alfresco/api/actionQueue', json.dumps({"actionedUponNode":"workspace://SpacesStore/2e78a675-0f48-4e3d-b03f-0ae724eb5f9f","actionDefinitionName":"execute-all-rules","parameterValues":{"execute-inherited-rules":true,"run-all-rules-on-children":false}}))
+        # Execute the export action and run it directly
+        actionDef = {
+            "actionedUponNode":containerData['nodeRef'],
+            "actionDefinitionName":"export",
+            "parameterValues": {
+                "package-name": acpFile,
+                "destination": tempContainerData['nodeRef'],
+                "include-children": True,
+                "include-self": False,
+                "store": "workspace://SpacesStore",
+                "encoding": "UTF-8"
+            }
+        }
+        self.doJSONPost('proxy/alfresco/api/actionQueue', json.dumps(actionDef))
         """
         Response is something like
-        
         {
             "data" : 
             {
                 "status" : "success",
                 "actionedUponNode" : "workspace://SpacesStore/2e78a675-0f48-4e3d-b03f-0ae724eb5f9f",
                 "action" : 
-                {"actionDefinitionName":"execute-all-rules","parameterValues":{"run-all-rules-on-children":false,"execute-inherited-rules":true}}
+                {"actionDefinitionName": ... }
             }
         }
         """
         
-        # Delete the rules
-        #self._deleteSpaceRuleset(tempContainerData['nodeRef'], rulesData['data']['id'])
-        
     def exportAllSiteContent(self, siteId):
-        """Produce an ACP file for each component in the site"""
+        """Export an ACP file for each component in the site and store them in the repository"""
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (siteId))
         siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
         treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
+        results = { 'exportFiles': [] }
         # Locate the container item
         for child in treeData['items']:
             if child['name'] != 'export':
-                print "Export %s" % (child['name'])
-                self.exportSiteContent(siteId, child['name'])
+                docList = self._getDocumentList('Sites/%s/%s' % (siteId, child['name']))
+                if docList['totalRecords'] > 0:
+                    print "Export %s" % (child['name'])
+                    self.exportSiteContent(siteId, child['name'])
+                    results['exportFiles'].append(child['name'])
+        return results
     
+    def _getDocumentList(self, space):
+        """Return a list of documents in the space identified by parameter space
+        
+        Response will be something like
+        {
+           "totalRecords": 9,
+           "startIndex": 0,
+           "metadata":
+           {
+              "parent":
+              {
+                 "nodeRef": "workspace://SpacesStore/e9bc6bf6-d399-497f-b6d2-c31afbe1a2b0",
+                 "permissions":
+                 {
+                    "userAccess":
+                    {
+                       "permissions": true,
+                       "edit": true,
+                       "delete": true,
+                       "cancel-checkout": false,
+                       "create": true
+                    }
+                 }
+              },
+              "onlineEditing": true,
+              "itemCounts":
+              {
+                 "folders": 9,
+                 "documents": 0
+              }
+           },
+           "items":
+           [
+              {
+                   "nodeRef": "workspace://SpacesStore/c11231d1-31f4-4b5e-8425-e4c7234827e2",
+                   "nodeType": "cm:folder",
+                   "type": "folder",
+                   "mimetype": "",
+                   "isFolder": true,
+                   "isLink": false,
+                   "fileName": "Content for Partner Site",
+                   "displayName": "Content for Partner Site",
+                   "status": "",
+                   "title": "",
+                   "description": "Put your content here. Not for project management type doc's",
+                   "author": "",
+                   "createdOn": "08 Apr 2010 19:44:58 GMT+0100 (BST)",
+                   "createdBy": "Paul Jongen",
+                   "createdByUser": "pjongen",
+                   "modifiedOn": "01 Jun 2010 16:00:40 GMT+0100 (BST)",
+                   "modifiedBy": "Paul Jongen",
+                   "modifiedByUser": "pjongen",
+                   "lockedBy": "",
+                   "lockedByUser": "",
+                   "size": "0",
+                   "version": "1.0",
+                   "contentUrl": "api/node/content/workspace/SpacesStore/c11231d1-31f4-4b5e-8425-e4c7234827e2/Content%20for%20Partner%20Site",
+                   "webdavUrl": "\/webdav\/Sites\/PEP\/documentLibrary\/Content%20for%20Partner%20Site",
+                   "actionSet": "folder",
+                   "tags": [],
+                   "categories": [],
+                   "activeWorkflows": "",
+                   "isFavourite": false,
+                   "location":
+                   {
+                      "site": "",
+                      "siteTitle": "",
+                      "container": "",
+                      "path": "\/Sites\/PEP\/documentLibrary",
+                      "file": "Content for Partner Site"
+                   },
+                   "permissions":
+                   {
+                      "inherited": true,
+                      "roles":
+                      [
+                         "ALLOWED;GROUP_site_PEP_SiteManager;SiteManager;INHERITED",
+                         "ALLOWED;GROUP_EVERYONE;SiteConsumer;INHERITED",
+                         "ALLOWED;GROUP_EVERYONE;ReadPermissions;INHERITED",
+                         "ALLOWED;GROUP_site_PEP_SiteContributor;SiteContributor;INHERITED",
+                         "ALLOWED;GROUP_site_PEP_SiteConsumer;SiteConsumer;INHERITED",
+                         "ALLOWED;GROUP_site_PEP_SiteCollaborator;SiteCollaborator;INHERITED"
+                      ],
+                      "userAccess":
+                      {
+                         "permissions": true,
+                         "edit": true,
+                         "delete": true,
+                         "cancel-checkout": false,
+                         "create": true
+                      }
+                   }
+           ]
+        }
+        """
+        
+        # Assume space is a path for now e.g. 'Sites/test/documentLibrary'
+        return self.doJSONGet('proxy/alfresco/slingshot/doclib/doclist/all/node/alfresco/company/home/%s' % (space))
+    
+    def _getDocumentListItem(self, list, itemName):
+        for item in list['items']:
+            if item['fileName'] == itemName:
+                return item
+        return None
+    
+    def _documentListHasItem(self, list, itemName):
+        return self._getDocumentListItem(list, itemName) is not None
     
     # Admin functions
     

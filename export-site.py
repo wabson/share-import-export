@@ -24,6 +24,10 @@ file.json         Name of the file to export information to. Will be created if
 -U url            The URL of the Share web application, e.g. 
 --url=url         http://alfresco.test.com/share
 
+--export-content  Export content of each of the site components (in ACP format)
+                  to disk, alongside the JSON file. Will be ignored if stdout
+                  if specified for the output.
+
 -d                Turn on debug mode
 
 -h                Display this message
@@ -35,6 +39,7 @@ import json
 import os
 import re
 import sys
+import urllib
 
 import alfresco
 
@@ -134,7 +139,17 @@ def main(argv):
         if exportContent:
             if not filename == "-":
                 print "Export all site content"
-            sc.exportAllSiteContent(sitename)
+                results = sc.exportAllSiteContent(sitename)
+                
+                for component in results['exportFiles']:
+                    acpFileName = "%s-%s.acp" % (filename.replace('.json', ''), component)
+                    print "Saving %s" % (acpFileName)
+                    resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/Sites/%s/export/%s-%s.acp' % (sitename, sitename, component)))
+                    acpfile = open(acpFileName, 'w')
+                    acpfile.write(resp.read())
+                    acpfile.close()
+                
+                # TODO Delete the 'export' folder afterwards
             
     finally:
         if not filename == "-":

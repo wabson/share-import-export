@@ -16,7 +16,7 @@ What can be imported/exported?
     * Site configurations
     * Site members (users only at present)
     * Site dashboards, including dashlet configuration
-    * All content held within the site (manual export via ACP)
+    * All content held within the site
     * Records Management sites (must have RM installed)
     * Web Quick Start sites (must have WQS installed)
 
@@ -101,6 +101,8 @@ you can use the full URL of the site dashboard page instead.
 
 The second argument is the name of the file where the site information will be stored in JSON 
 format.
+
+To also export the site content in ACP format, add the --export-content flag to the command.
 
 Exporting users
 ---------------
