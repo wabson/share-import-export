@@ -698,7 +698,7 @@ class ShareClient:
                     else:
                         print e
                 # Add user groups if they exist
-                if 'groups' in u:
+                if 'groups' in u and len(u['groups']) > 0:
                     self.addUserGroups(u['userName'], u['groups'])
     
     def setUserPreferences(self, username, prefs):
