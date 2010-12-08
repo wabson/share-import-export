@@ -60,7 +60,7 @@ def main(argv):
             sys.exit(1)
         else:
             # File name to dump groups to, or '-' for stdout
-            filename = argv[0]
+            filename = os.path.abspath(argv[0])
     else:
         usage()
         sys.exit(1)

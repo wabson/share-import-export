@@ -112,7 +112,13 @@ class ShareClient:
 
     def doJSONPost(self, path, data="", method="POST"):
         """Perform a HTTP POST request against Share and parse the output JSON data"""
-        jsonData = self.doPost(path, data, 'application/json; charset=UTF-8', method).read()
+        if isinstance(data, (dict)):
+            dataStr = json.dumps(data)
+        elif isinstance(data, (str, unicode)):
+            dataStr = data
+        else:
+            raise Exception('Bad data type %s' % (type(data)))
+        jsonData = self.doPost(path, dataStr, 'application/json; charset=UTF-8', method).read()
         if self.debug == 1:
             print jsonData
         return json.loads(jsonData)
@@ -736,8 +742,40 @@ class ShareClient:
                 else:
                     groups.append(g)
         for g in groups:
-            g['children'] = self.doJSONGet('proxy/alfresco/api/groups/%s/children' % (urllib.quote(str(g['shortName']))))
-        return groups
+            g['children'] = self.doJSONGet('proxy/alfresco/api/groups/%s/children' % (urllib.quote(str(g['shortName']))))['data']
+        return { 'groups': groups }
+    
+    def getGroup(self, name):
+        """Return a single group object from the repository, or None if it does not exist"""
+        try:
+            group = self.doJSONGet('proxy/alfresco/api/groups/%s' % (name))
+            return group
+        except SurfRequestError, e:
+            if e.code == 404:
+                return None
+            else:
+                raise e
+    
+    def createGroup(self, name, displayName, parent=None):
+        """Create a single group authority"""
+        if parent is None:
+            self.doJSONPost('proxy/alfresco/api/rootgroups/%s' % (name), {'displayName':displayName})
+        else:
+            self.doJSONPost('proxy/alfresco/api/groups/%s/children/GROUP_%s' % (parent, name))
+            self.doJSONPost('proxy/alfresco/api/groups/%s' % (name), {'displayName':displayName}, method='PUT')
+    
+    def createGroups(self, group, parent=None):
+        """Create a group authority with nested sub-groups"""
+        # Only create the group if it doesn't already exist
+        if self.getGroup(group['shortName']) is None:
+            self.createGroup(group['shortName'], group['displayName'], parent)
+        if 'children' in group:
+            if parent is None:
+                childBase = group['displayName']
+            else:
+                childBase = '%s/%s' % (parent, group['displayName'])
+            for child in group['children']:
+                self.createGroups(child, childBase)
     
     def getCategories(self, path):
         """Fetch a list of child categories at the given location, in a recursive structure"""
