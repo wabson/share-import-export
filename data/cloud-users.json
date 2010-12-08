@@ -4156,6 +4156,12 @@
             "enabled": true, 
             "firstName": "Paul", 
             "googleusername": null, 
+            "groups": [
+                {
+                    "displayName": "ALFRESCO_ADMINISTRATORS", 
+                    "itemName": "GROUP_ALFRESCO_ADMINISTRATORS"
+                }
+            ], 
             "instantmsg": "Use Skype", 
             "jobtitle": "Product Marketing Director", 
             "lastName": "Hampton", 
