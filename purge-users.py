@@ -68,7 +68,7 @@ def main(argv):
         sys.exit(1)
     
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "skip-users="])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "users=", "skip-users="])
     except getopt.GetoptError, e:
         print e
         usage()
@@ -88,6 +88,8 @@ def main(argv):
             url = arg
         elif opt == "--users":
             include_users = arg.split(',')
+        elif opt == "--skip-users":
+            skip_users = arg.split(',')
     
     sc = alfresco.ShareClient(url, debug=_debug)
     print "Log in (%s)" % (username)

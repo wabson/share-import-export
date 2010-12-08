@@ -23,6 +23,10 @@ file.json         Name of the file to export information to. Will be created if
 -U url            The URL of the Share web application, e.g. 
 --url=url         http://alfresco.test.com/share
 
+--users=arg       Comma-separated list of user names to export. Users in the
+                  whose user names do not exactly match one of the values will 
+                  be skipped and not exported.
+
 --skip-users=arg  Comma-separated list of usernames to exclude from the 
                   export
 
@@ -51,9 +55,10 @@ def main(argv):
     username = "admin"
     password = "admin"
     url = "http://localhost:8080/share"
-    _debug = 0
+    include_users = None
     skip_users = [ 'System' ]
     downloadAvatars = True
+    _debug = 0
     
     if len(argv) > 0:
         if argv[0] == "--help" or argv[0] == "-h":
@@ -70,7 +75,7 @@ def main(argv):
         sys.exit(1)
     
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "skip-users="])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "users=", "skip-users="])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -87,6 +92,8 @@ def main(argv):
             password = arg
         elif opt in ("-U", "--url"):
             url = arg
+        elif opt == "--users":
+            include_users = arg.split(',')
         elif opt == "--skip-users":
             skip_users = arg.split(',')
     
@@ -101,14 +108,18 @@ def main(argv):
         if not filename == "-":
             print "Get user information"
         pdata = sc.getAllUsers(getFullDetails=True, getDashboardConfig=True, getPreferences=True)
+        export_users = []
         
-        # Remove unwanted users
-        for p in pdata['people']:
-            if p['userName'] in skip_users:
-                pdata['people'].remove(p)
+        # Filter the users
+        for u in pdata['people']:
+            if (include_users is None or str(u['userName']) in include_users) and u['userName'] not in skip_users:
+                export_users.append(u)
+        
+        # Export a dict object
+        export = { 'people': export_users }
         
         if filename == '-':
-            userJson = json.dumps(pdata, sort_keys=True, indent=4)
+            userJson = json.dumps(export, sort_keys=True, indent=4)
             print userJson
         else:
             if not os.path.exists(os.path.dirname(filename)):
@@ -118,12 +129,13 @@ def main(argv):
             if downloadAvatars:
                 if not filename == "-":
                     print "Download profile images"
-                for p in pdata['people']:
+                for p in export['people']:
                     if 'avatar' in p:
-                        # api/node/workspace/SpacesStore/259a1c59-d2db-4b3c-ba04-b4042de39821/content/thumbnails/avatar
-                        # Download the original avatar, not the thumbnail
                         if not os.path.exists('%s/profile-images' % (os.path.dirname(filename))):
                             os.makedirs('%s/profile-images' % (os.path.dirname(filename)))
+                        # Thumbnail will be something like
+                        # /api/node/workspace/SpacesStore/259a1c59-d2db-4b3c-ba04-b4042de39821/content/thumbnails/avatar
+                        # We want to download the original avatar, not the thumbnail
                         resp = sc.doGet('proxy/alfresco/%s' % (p['avatar'].replace('/thumbnails/avatar', '')))
                         # Detect image type from Content-Type header and guess extension (includes leading dot)
                         imgext = mimetypes.guess_extension(resp.info().gettype())
@@ -135,7 +147,7 @@ def main(argv):
                         p['avatar'] = 'profile-images/%s%s' % (p['userName'], imgext)
                         
             # Write user data to a file
-            userJson = json.dumps(pdata, sort_keys=True, indent=4)
+            userJson = json.dumps(export, sort_keys=True, indent=4)
             userfile = open(filename, 'w')
             userfile.write(userJson)
             userfile.close()
