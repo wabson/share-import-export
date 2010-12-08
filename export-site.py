@@ -52,6 +52,7 @@ def main(argv):
     _debug = 0
     sitename = ""
     filename = ""
+    exportContent = False
     
     if len(argv) > 0:
         if argv[0] == "--help" or argv[0] == "-h":
@@ -65,7 +66,7 @@ def main(argv):
     
         if not argv[1].startswith('-'):
             try:
-                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url="])
+                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url=", "export-content"])
             except getopt.GetoptError, e:
                 usage()
                 sys.exit(1)
@@ -82,6 +83,8 @@ def main(argv):
                     password = arg
                 elif opt in ("-U", "--url"):
                     url = arg
+                elif opt == '--export-content':
+                    exportContent = True
             
             idm = re.match('^(\w+)$', argv[0])
             urlm = re.match('^(https?\\://[\w\\-\\.\\:]+/share)/page/site/(\w+)/[\w\\-\\./]*$', argv[0])
@@ -117,7 +120,7 @@ def main(argv):
             siteJson = json.dumps(sdata, sort_keys=True, indent=4)
             print siteJson
         else:
-            if not os.path.exists(os.path.dirname(filename)):
+            if not os.path.exists(os.path.dirname(filename)) and os.path.dirname(filename) != '':
                 os.makedirs(os.path.dirname(filename))
             
             # TODO Download ACP files
@@ -127,6 +130,11 @@ def main(argv):
             siteFile = open(filename, 'w')
             siteFile.write(siteJson)
             siteFile.close()
+            
+        if exportContent:
+            if not filename == "-":
+                print "Export all site content"
+            sc.exportAllSiteContent(sitename)
             
     finally:
         if not filename == "-":

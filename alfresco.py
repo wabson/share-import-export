@@ -303,13 +303,20 @@ class ShareClient:
         #return self.doJSONPost('proxy/alfresco/api/sites', json.dumps(siteData), method="DELETE")
         return self.doJSONPost('service/modules/delete-site', json.dumps(siteData))
     
+    def _setSpaceRuleset(self, nodeRef, rulesetDef):
+        """Set up rules on a space"""
+        return self.doJSONPost('proxy/alfresco/api/node/%s/ruleset/rules' % (nodeRef.replace('://', '/')), json.dumps(rulesetDef))
+    
+    def _deleteSpaceRuleset(self, nodeRef, rulesetId):
+        """Set up rules on a space"""
+        return self.doJSONPost('proxy/alfresco/api/node/%s/ruleset/rules/%s' % (nodeRef.replace('://', '/'), rulesetId), method="DELETE")
+    
     def importSiteContent(self, siteId, containerId, f):
         """Upload a content package into the site and extract it"""
         # Get the site metadata
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (siteId))
         siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
         treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
-        #print treeData
         # Locate the container item
         containerData = None
         tempContainerData = None
@@ -333,6 +340,7 @@ class ShareClient:
             folderData = { 'alf_destination': siteNodeRef, 'prop_cm_name': tempContainerName, 'prop_cm_title': tempContainerName, 'prop_cm_description': '' }
             createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
             tempContainerData = { 'nodeRef': createData['persistedObject'], 'name' : tempContainerName }
+            
         # First apply a ruleset to the temp folder
         # This will perform the import automatically when we upload the ACP file
         rulesetDef = {
@@ -365,7 +373,8 @@ class ShareClient:
             "executeAsynchronously": False,
             "ruleType":["inbound"]
         }
-        rulesData = self.doJSONPost('proxy/alfresco/api/node/%s/ruleset/rules' % (tempContainerData['nodeRef'].replace('://', '/')), json.dumps(rulesetDef))
+        rulesData = self._setSpaceRuleset(tempContainerData['nodeRef'], rulesetDef)
+        
         # Now upload the file
         uparams = { 'filedata' : f, 'siteid':siteId, 'containerid':tempContainerName, 'destination':'', 'username':'', 'updateNodeRef':'', 'uploadDirectory':'/', 'overwrite':'false', 'thumbnails':'', 'successCallback':'', 'successScope':'', 'failureCallback':'', 'failureScope':'', 'contentType':'cm:content', 'majorVersion':'false', 'description':'' }
         fr = self.doMultipartUpload("proxy/alfresco/api/upload", uparams)
@@ -374,7 +383,7 @@ class ShareClient:
             nodeRef = udata['nodeRef']
             #jsonResp = self.doJSONPost('proxy/alfresco/slingshot/doclib/action/import/node/%s' % (nodeRef.replace('://', '/')))
             # Remove the rule definition
-            self.doJSONPost('proxy/alfresco/api/node/%s/ruleset/rules/%s' % (tempContainerData['nodeRef'].replace('://', '/'), rulesData['data']['id']), method="DELETE")
+            self._deleteSpaceRuleset(tempContainerData['nodeRef'], rulesData['data']['id'])
             #importParams = { 'actionDefinitionName': 'import', 'actionedUponNode': nodeRef, 'parameterValues' : [ 'destination': '' ], 'executeAsync': false }
             #jsonResp = self.doJSONPost('/api/actionQueue?async=false/%s' % (nodeRef.replace('://', '/')), json.dumps(importParams))
             # Delete the ACP file
@@ -426,6 +435,96 @@ class ShareClient:
         else:
             raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
 
+    def exportSiteContent(self, siteId, containerId):
+        # Get the site metadata
+        siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (siteId))
+        siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
+        treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
+        # Locate the container item
+        containerData = None
+        tempContainerData = None
+        tempContainerName = 'export'
+        for child in treeData['items']:
+            if child['name'].lower() == containerId.lower():
+                containerData = child
+            if child['name'].lower() == tempContainerName.lower():
+                tempContainerData = child
+        if containerData is None:
+            raise Exception("Container '%s' does not exist" % (containerId))
+        if tempContainerData is None:
+            # Create export container if it doesn't exist
+            folderData = { 'alf_destination': siteNodeRef, 'prop_cm_name': tempContainerName, 'prop_cm_title': tempContainerName, 'prop_cm_description': '' }
+            createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
+            tempContainerData = { 'nodeRef': createData['persistedObject'], 'name' : tempContainerName }
+            
+        # First apply a ruleset to the source folder
+        rulesetDef = {
+            'id': '',
+            'action': {
+                "actionDefinitionName":"composite-action",
+                "conditions": [
+                    {
+                        "conditionDefinitionName":"compare-property-value",
+                        "parameterValues": {
+                            "operation":"ENDS",
+                            "value":".acp",
+                            "property":"cm:name"
+                        }
+                    }
+                ],
+                "actions": [
+                    {
+                        "actionDefinitionName":"export",
+                        "parameterValues": {
+                            "package-name": "%s-%s" % (siteId, containerId),
+                            "destination": tempContainerData['nodeRef'],
+                            "include-children": True,
+                            "include-self": False,
+                            "store": "workspace://SpacesStore"
+                        }
+                    }
+                ]
+            },
+            "title":"Export ACP file",
+            "description":"",
+            "disabled": False,
+            "applyToChildren": False,
+            "executeAsynchronously": False,
+            "ruleType":["outbound"]
+        }
+        rulesData = self._setSpaceRuleset(containerData['nodeRef'], rulesetDef)
+        
+        # Now trigger the rules
+        self.doJSONPost('proxy/alfresco/api/actionQueue', json.dumps({"actionedUponNode":"workspace://SpacesStore/2e78a675-0f48-4e3d-b03f-0ae724eb5f9f","actionDefinitionName":"execute-all-rules","parameterValues":{"execute-inherited-rules":true,"run-all-rules-on-children":false}}))
+        """
+        Response is something like
+        
+        {
+            "data" : 
+            {
+                "status" : "success",
+                "actionedUponNode" : "workspace://SpacesStore/2e78a675-0f48-4e3d-b03f-0ae724eb5f9f",
+                "action" : 
+                {"actionDefinitionName":"execute-all-rules","parameterValues":{"run-all-rules-on-children":false,"execute-inherited-rules":true}}
+            }
+        }
+        """
+        
+        # Delete the rules
+        #self._deleteSpaceRuleset(tempContainerData['nodeRef'], rulesData['data']['id'])
+        
+    def exportAllSiteContent(self, siteId):
+        """Produce an ACP file for each component in the site"""
+        siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (siteId))
+        siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
+        treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
+        # Locate the container item
+        for child in treeData['items']:
+            if child['name'] != 'export':
+                print "Export %s" % (child['name'])
+                self.exportSiteContent(siteId, child['name'])
+    
+    
     # Admin functions
     
     def getAllUsers(self, getFullDetails=False, getDashboardConfig=False, getPreferences=False):
