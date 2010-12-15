@@ -24,11 +24,11 @@ What can be imported/exported?
     * All profile information, including profile images
     * User dashboard configurations
     * User preferences
+    * User groups and group memberships
 
 What is not imported/exported?
 
-  * Category definitions, including tags
-  * User groups
+  * Document categories and tags (not currently supported by ACP format)
   * User passwords and account enabled flags (all accounts enabled)
   * Activity feed entries
   * File system-level customisations (e.g. custom dashlets) and configuration
@@ -102,7 +102,8 @@ you can use the full URL of the site dashboard page instead.
 The second argument is the name of the file where the site information will be stored in JSON 
 format.
 
-To also export the site content in ACP format, add the --export-content flag to the command.
+To also export the site content in ACP format, add the --export-content flag to the command. You
+must have Contributor permission or greater on the site in order to export content.
 
 Exporting users
 ---------------
@@ -131,6 +132,8 @@ Removing users
 This will remove ALL the users from the local file users-file.json. Use this with extreme caution!
 
   python purge-users.py users-file.json --username=username --password=username --url=username
+
+To remove only a few selected users, add the --users=user1,user2 flag to the command.
 
 Troubleshooting
 ===============
