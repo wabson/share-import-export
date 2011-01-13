@@ -144,8 +144,9 @@ def main(argv):
                         imgext = mimetypes.guess_extension(resp.info().gettype())
                         if imgext == ".jpe":
                             imgext = ".jpg"
-                        imgfile = open('%s/profile-images/%s%s' % (os.path.dirname(filename), p['userName'], imgext), 'w')
+                        imgfile = open('%s/profile-images/%s%s' % (os.path.dirname(filename), p['userName'], imgext), 'wb')
                         imgfile.write(resp.read())
+                        resp.close()
                         imgfile.close()
                         p['avatar'] = 'profile-images/%s%s' % (p['userName'], imgext)
                         
