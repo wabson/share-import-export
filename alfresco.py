@@ -108,7 +108,10 @@ class ShareClient:
 
     def doJSONGet(self, path):
         """Perform a HTTP GET request against Share and parse the output JSON data"""
-        return json.loads(self.doGet(path).read())
+        resp = self.doGet(path)
+        respJson = json.loads(resp.read())
+        resp.close()
+        return respJson
 
     def doJSONPost(self, path, data="", method="POST"):
         """Perform a HTTP POST request against Share and parse the output JSON data"""
@@ -118,7 +121,10 @@ class ShareClient:
             dataStr = data
         else:
             raise Exception('Bad data type %s' % (type(data)))
-        jsonData = self.doPost(path, dataStr, 'application/json; charset=UTF-8', method).read()
+        resp = self.doPost(path, dataStr, 'application/json; charset=UTF-8', method)
+        jsonData = resp.read()
+        resp.close()
+        
         if self.debug == 1:
             print jsonData
         return json.loads(jsonData)
@@ -139,13 +145,16 @@ class ShareClient:
         resp = self.doPost('page/dologin', urllib.urlencode({'username': username, 'password': password, 'success': successurl, 'failure': failureurl}))
         if (resp.geturl() == '%s/page/user/%s/dashboard' % (self.url, username)):
             self._username = username
+            resp.close()
             return { 'success': True }
         else:
+            resp.close()
             return { 'success': False }
 
     def doLogout(self):
         """Log the current user out of Share using the logout servlet"""
         resp = self.doGet('page/dologout')
+        resp.close()
         self._username = None
     
     def updateDashboardConfig(self, configData):
@@ -208,6 +217,7 @@ class ShareClient:
             dashboardResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/site/%s/dashboard.xml' % (siteId))
             from xml.etree.ElementTree import XML
             dashboardTree = XML(dashboardResp.read())
+            dashboardResp.close()
             sitePages = json.loads(dashboardTree.findtext('properties/sitePages', '[]'))
             siteData['sitePages'] = sitePages
         if getDashboardConfig:
@@ -234,6 +244,7 @@ class ShareClient:
                     try:
                         dashletResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, dashboardType, dashboardId))
                         dashletTree = XML(dashletResp.read())
+                        dashboardResp.close()
                         dashlet['url'] = dashletTree.findtext('url')
                         dashlet['regionId'] = dashletTree.findtext('region-id')
                         
@@ -265,8 +276,10 @@ class ShareClient:
         return self.doJSONPost('service/modules/create-site', json.dumps(siteData))
     
     def createRmSite(self, siteData):
-        self.doGet('service/utils/create-rmsite?shortname=%s' % (siteData['shortName']))
-        self.doGet('page/site/%s/dashboard' % (siteData['shortName']))
+        resp = self.doGet('service/utils/create-rmsite?shortname=%s' % (siteData['shortName']))
+        resp.close()
+        resp = self.doGet('page/site/%s/dashboard' % (siteData['shortName']))
+        resp.close()
         print "Created RM site"
         self.updateSite(siteData)
     
@@ -344,7 +357,8 @@ class ShareClient:
             createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
             containerData = { 'nodeRef': createData['persistedObject'], 'name' : containerId }
             # Add the tagscope aspect to the container - otherwise an error occurs when viewed by a site consumer
-            self.doPost('proxy/alfresco/slingshot/doclib/action/aspects/node/%s' % (str(containerData['nodeRef']).replace('://', '/')), '{"added":["cm:tagscope"],"removed":[]}', 'application/json;charset=UTF-8')
+            resp = self.doPost('proxy/alfresco/slingshot/doclib/action/aspects/node/%s' % (str(containerData['nodeRef']).replace('://', '/')), '{"added":["cm:tagscope"],"removed":[]}', 'application/json;charset=UTF-8')
+            resp.close()
             #print createData
             #raise Exception("Container '%s' does not exist" % (containerId))
         if tempContainerData is None:
@@ -443,7 +457,8 @@ class ShareClient:
     def importRmSiteContent(self, siteId, containerId, f):
         """Upload a content package into an RM site and extract it"""
         # Forces creation of the doclib container
-        self.doGet('page/site/%s/documentlibrary' % (siteId))
+        resp = self.doGet('page/site/%s/documentlibrary' % (siteId))
+        resp.close()
 
         # We need to add the user to the Records Management Administrator group(s) before we can add the content
         # Find the Records Management Administrator groups(s)
@@ -791,7 +806,9 @@ class ShareClient:
     
     def getAllTags(self):
         """Fetch all the tags used in the repository"""
-        tags = self.doGet('proxy/alfresco/api/tags/workspace/SpacesStore').read().strip("[] \r\n\t").replace("\r", '').replace("\n", '').replace("\t", '').split(',')
+        resp = self.doGet('proxy/alfresco/api/tags/workspace/SpacesStore')
+        tags = resp.read().strip("[] \r\n\t").replace("\r", '').replace("\n", '').replace("\t", '').split(',')
+        resp.close()
         # Remove empty tags
         while '' in tags:
             tags.remove('')
