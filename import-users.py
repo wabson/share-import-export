@@ -31,17 +31,21 @@ file.json           Name of the JSON file to import user information from.
 
 --no-preferences    Do not set user preferences
 
---no-update-profile Do not update profile information after creation. The 
-                    default behaviour is to send a request to the edit user 
-                    profile form handler to update values for existing users 
-                    and for new users to set any properties that the create 
-                    operation does not set itself.
+--update-profile    Update profile information after creation. This will send 
+                    a request to the edit user profile form handler to update 
+                    values for existing users and for new users to set any 
+                    properties that the create operation does not set itself.
+                    The default is to not update profile information in this
+                    way.
 
 --no-avatars        Do not upload user profile images
 
 --create-only       Create missing users and do nothing else. Equivalent to 
                     --no-dashboards --no-preferences --no-preferences 
                     --no-update-profile --no-avatars
+
+--default-password  Password value to use for new users if no password is 
+                    specified
 
 -d                  Turn on debug mode
 
@@ -71,8 +75,9 @@ def main(argv):
     skip_users = [ 'System' ]
     set_dashboards = True
     set_prefs = True
-    update_profile = True
+    update_profile = False
     set_avatars = True
+    default_password = None
     _debug = 0
     
     if len(argv) > 0:
@@ -91,7 +96,7 @@ def main(argv):
         sys.exit(1)
     
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "users=", "skip-users=", "no-dashboards", "no-preferences", "no-update-profile", "no-avatars", "create-only"])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "users=", "skip-users=", "no-dashboards", "no-preferences", "update-profile", "no-avatars", "create-only", "default-password="])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -116,8 +121,8 @@ def main(argv):
             set_dashboards = False
         elif opt == '--no-preferences':
             set_prefs = False
-        elif opt == '--no-update-profile':
-            update_profile = False
+        elif opt == '--update-profile':
+            update_profile = True
         elif opt == '--no-avatars':
             set_avatars = False
         elif opt == '--create-only':
@@ -125,6 +130,8 @@ def main(argv):
             set_prefs = False
             update_profile = False
             set_avatars = False
+        elif opt == '--default-password':
+            default_password = arg
     
     sc = alfresco.ShareClient(url, debug=_debug)
     print "Log in (%s)" % (username)
@@ -141,18 +148,13 @@ def main(argv):
             create_users.append(u)
     
     for u in create_users:
-        # Work around bug where create/update user calls do not accept null values
-        # Create call does not like jobtitle being null; webtier update profile does not tolerate any being null
-        for k in u.keys():
-            if u[k] is None:
-                u[k] = ""
         # Set password to be the same as the username if not specified
         if 'password' not in u:
             u['password'] = u['userName']
             
     try:
         print "Create %s user(s)" % (len(create_users))
-        sc.createUsers(create_users, skip_users=skip_users)
+        sc.createUsers(create_users, skip_users=skip_users, default_password=default_password)
         
         # Set user preferences
         for u in create_users:

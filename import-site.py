@@ -8,33 +8,39 @@ Usage: python import-site.py file.json [options]
 
 Options and arguments:
 
-file.json              Name of the JSON file to import information from. 
-                       Content packages in ACP format will be imported from 
-                       the same directory and must have the same prefix as the
-                       JSON file, saparated by a hyphen, e.g. importing from 
-                       file.json will look for the ACP files
-                       file-documentLibrary.acp, file-wiki.acp, etc.
+file.json                   Name of the JSON file to import information from. 
+                            Content packages in ACP format will be imported from 
+                            the same directory and must have the same prefix as the
+                            JSON file, saparated by a hyphen, e.g. importing from 
+                            file.json will look for the ACP files
+                            file-documentLibrary.acp, file-wiki.acp, etc.
 
--u user                The username to authenticate as
+-u user                     The username to authenticate as
 --username=user
 
--p pass                The password to authenticate with
+-p pass                     The password to authenticate with
 --password=pass
 
--U url                 The URL of the Share web application, e.g. 
---url=url              http://alfresco.test.com/share
+-U url                      The URL of the Share web application, e.g. 
+--url=url                   http://alfresco.test.com/share
 
---skip-missing-members Ignore any errors which occur when members of a site are
-                       found to not exist in the repository
+--create-missing-members    Auto-create any members who do not exist in the 
+                            repository
 
---containers=list      Comma-separated list of container names to import site
-                       content into, e.g. documentLibrary,wiki
+--skip-missing-members      Ignore any errors which occur when members of a site are
+                            found to not exist in the repository
 
---no-content           Do not import any content packages into the site
+--users-file                File name to read user information from, for auto-creating 
+                            users
 
--d                     Turn on debug mode
+--containers=list           Comma-separated list of container names to import site
+                            content into, e.g. documentLibrary,wiki
 
--h                     Display this message
+--no-content                Do not import any content packages into the site
+
+-d                          Turn on debug mode
+
+-h                          Display this message
 --help
 """
 
@@ -56,11 +62,17 @@ def main(argv):
     username = "admin"
     password = "admin"
     url = "http://localhost:8080/share"
+    create_missing_members = False
+    users_file = None
+    groups_file = None
     skip_missing_members = False
     create_site = True
     add_members = True
     update_config = True
     update_dashboard = True
+    set_user_avatars = True
+    set_user_dashboards = True
+    set_user_prefs = True
     siteContainers = [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]
     _debug = 0
     
@@ -78,7 +90,7 @@ def main(argv):
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content"])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "create-missing-members", "users-file=", "groups-file=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content"])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -95,8 +107,14 @@ def main(argv):
             password = arg
         elif opt in ("-U", "--url"):
             url = arg
+        elif opt == '--create-missing-members':
+            create_missing_members = True
         elif opt == '--skip-missing-members':
             skip_missing_members = True
+        elif opt == '--users-file':
+            users_file = arg
+        elif opt == '--groups-file':
+            groups_file = arg
         elif opt == '--no-create':
             create_site = False
         elif opt == '--containers':
@@ -134,10 +152,44 @@ def main(argv):
         if update_dashboard:
             print "Set dashboard configuration"
             sc.updateSiteDashboardConfig(sd)
+            
         # Add site members
         if add_members:
             print "Add site members"
-            sc.addSiteMembers(siteId, sd['memberships'], skip_missing_members)
+            udata = None
+            gdata = None
+            if users_file is not None:
+                udata = json.loads(open(users_file).read())['people']
+            if groups_file is not None:
+                gdata = json.loads(open(groups_file).read())['groups']
+            authority_data = { 'people': udata, 'groups': gdata }
+            membersResult = sc.addSiteMembers(siteId, sd['memberships'], skip_missing_members, create_missing_members, authority_data)
+            
+            # Add thumbnails and dashboards for auto-created users, if they are specified in the user data
+            if users_file is not None and (set_user_avatars or set_user_dashboards):
+                users_file_dir = os.path.dirname(users_file)
+                for m in membersResult['membersCreated']:
+                    #print json.dumps(m)
+                    if 'person' in m:
+                        mUserName = str(m['person']['userName'])
+                        usc = alfresco.ShareClient(url=url, debug=_debug)
+                        # TODO Support custom passwords specified in JSON file
+                        uloginres = usc.doLogin(mUserName, mUserName)
+                        if uloginres['success']:
+                            if set_user_avatars and 'avatar' in m['person']:
+                                avatarPath = str(m['person']['avatar'])
+                                print "Setting profile image for user '%s'" % (mUserName)
+                                sc.setProfileImage(mUserName, users_file_dir + os.sep + avatarPath)
+                            if set_user_dashboards and 'dashboardConfig' in m['person']:
+                                print "Updating dashboard configuration for user '%s'" % (mUserName)
+                                usc.updateUserDashboardConfig(m['person'])
+                            if set_user_prefs and 'preferences' in m['person'] and len(m['person']['preferences']) > 0:
+                                print "Setting preferences for user '%s'" % (mUserName)
+                                sc.setUserPreferences(mUserName, m['person']['preferences'])
+                        else:
+                            raise Exception("Could not log in as user %s" % (mUserName))
+                        usc.doLogout()
+                    
         # Import ACP files
         for container in siteContainers:
             acpFile = thisdir + os.sep + '%s-%s.acp' % (filenamenoext, container.replace(' ', '_'))

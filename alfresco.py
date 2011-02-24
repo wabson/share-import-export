@@ -303,15 +303,32 @@ class ShareClient:
         authorityName = memberData['authority']['fullName']
         return self.doJSONPost('proxy/alfresco/api/sites/%s/memberships/%s' % (urllib.quote(str(siteName)), urllib.quote(str(authorityName))), json.dumps(memberData), method="PUT")
 
-    def addSiteMembers(self, siteName, membersData, skipMissingMembers=False):
+    def addSiteMembers(self, siteName, membersData, skipMissingMembers=False, createMissingMembers=False, authorityData=None):
         """Add one or more site members"""
-        results = []
+        results = { 'membersAdded': [], 'membersCreated': [] }
         for m in membersData:
             try:
-                results.append(self.addSiteMember(siteName, m))
+                results['membersAdded'].append({ 'member': m, 'result': self.addSiteMember(siteName, m)})
             except SurfRequestError, e:
                 if skipMissingMembers == True:
                     pass
+                elif createMissingMembers == True and m['authority']['authorityType'] == 'USER':
+                    if authorityData['people'] is not None:
+                        # Auto-create from people data
+                        # TODO Throw an error if the user is not found in the data
+                        for u in authorityData['people']:
+                            if u['userName'] == m['authority']['userName']:
+                                self.createUser(u)
+                                results['membersCreated'].append({ 'member': m, 'person': u, 'result': self.addSiteMember(siteName, m)})
+                    else:
+                        # Auto-create user based on info in their membership
+                        self.createUser(m['authority'])
+                        results['membersCreated'].append({ 'member': m, 'result': self.addSiteMember(siteName, m)})
+                elif createMissingMembers == True and m['authority']['authorityType'] == 'GROUP':
+                    # Auto-create group based on info in their membership
+                    # TODO Support creating non-root groups properly if defined in groups file
+                    self.createGroup(m['authority']['shortName'], m['authority']['displayName'], None)
+                    results['membersCreated'].append({ 'member': m, 'result': self.addSiteMember(siteName, m)})
                 else:
                     raise e
         return results
@@ -699,20 +716,28 @@ class ShareClient:
                     
         return pdata
         
-    def createUser(self, user):
+    def createUser(self, user, defaultPassword=None):
         """Create a person object in the repository"""
+        # Work around bug where create/update user calls do not accept null values
+        # Create call does not like jobtitle being null; webtier update profile does not tolerate any being null
+        for k in user.keys():
+            if user[k] is None:
+                user[k] = ""
         if not ('password' in user):
             print "Warning: using default password for user %s" % (user['userName'])
-            user['password'] = user['userName']
+            if defaultPassword is not None and defaultPassword != '':
+                user['password'] = defaultPassword
+            else:
+                user['password'] = user['userName']
         return self.doJSONPost('proxy/alfresco/api/people', json.dumps(user))
 
-    def createUsers(self, users, skip_users=[]):
+    def createUsers(self, users, skip_users=[], default_password=None):
         """Create several person objects in the repository"""
         for u in users:
             if not (u['userName'] in skip_users):
                 print "Creating user '%s'" % (u['userName'])
                 try:
-                    self.createUser(u)
+                    self.createUser(u, default_password)
                 except urllib2.HTTPError, e:
                     if e.code == 409:
                         print "User '%s' already exists, skipping" % (u['userName'])
@@ -741,9 +766,9 @@ class ShareClient:
                 else:
                     raise e
     
-    def getAllGroups(self, skipGroups=[], getSiteGroups=False, getSystemGeneratedGroups=False):
+    def getAllGroups(self, skipGroups=[], getSiteGroups=False, getSystemGeneratedGroups=False, zone='APP.DEFAULT'):
         """Fetch information on all the group objects in the repository"""
-        gdata = self.doJSONGet('proxy/alfresco/api/rootgroups')
+        gdata = self.doJSONGet('proxy/alfresco/api/rootgroups?zone=%s' % (urllib.quote(zone)))
         groups = []
         for g in gdata['data']:
             if g['shortName'] not in skipGroups:
