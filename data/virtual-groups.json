@@ -1,0 +1,286 @@
+{
+    "groups": [
+        {
+            "authorityType": "GROUP", 
+            "children": [
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Customer Support", 
+                    "fullName": "GROUP_Customer Support", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Customer Support", 
+                    "url": "/api/groups/Customer Support"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Documentation", 
+                    "fullName": "GROUP_Documentation", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Documentation", 
+                    "url": "/api/groups/Documentation"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Geo-Thermal Power Plants Division", 
+                    "fullName": "GROUP_Geo-Thermal Power Plants Division", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Geo-Thermal Power Plants Division", 
+                    "url": "/api/groups/Geo-Thermal Power Plants Division"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Tidal Power Division", 
+                    "fullName": "GROUP_Tidal Power Division", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Tidal Power Division", 
+                    "url": "/api/groups/Tidal Power Division"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Wind Turbine Division", 
+                    "fullName": "GROUP_Wind Turbine Division", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Wind Turbine Division", 
+                    "url": "/api/groups/Wind Turbine Division"
+                }
+            ], 
+            "displayName": "Engineering", 
+            "fullName": "GROUP_Engineering", 
+            "isAdminGroup": false, 
+            "isRootGroup": true, 
+            "shortName": "Engineering", 
+            "url": "/api/groups/Engineering"
+        }, 
+        {
+            "authorityType": "GROUP", 
+            "children": [
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Ads-R-Us", 
+                    "fullName": "GROUP_Ads-R-Us", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Ads-R-Us", 
+                    "url": "/api/groups/Ads-R-Us"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Fresh Brands", 
+                    "fullName": "GROUP_Fresh Brands", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Fresh Brands", 
+                    "url": "/api/groups/Fresh Brands"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Perfect Word", 
+                    "fullName": "GROUP_Perfect Word", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Perfect Word", 
+                    "url": "/api/groups/Perfect Word"
+                }
+            ], 
+            "displayName": "External Agencies", 
+            "fullName": "GROUP_External Agencies", 
+            "isAdminGroup": false, 
+            "isRootGroup": true, 
+            "shortName": "External Agencies", 
+            "url": "/api/groups/External Agencies"
+        }, 
+        {
+            "authorityType": "GROUP", 
+            "children": [
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Accounts", 
+                    "fullName": "GROUP_Accounts", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Accounts", 
+                    "url": "/api/groups/Accounts"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Executives", 
+                    "fullName": "GROUP_Executives", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Executives", 
+                    "url": "/api/groups/Executives"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Human Resources", 
+                    "fullName": "GROUP_Human Resources", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Human Resources", 
+                    "url": "/api/groups/Human Resources"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Legal", 
+                    "fullName": "GROUP_Legal", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Legal", 
+                    "url": "/api/groups/Legal"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Operations", 
+                    "fullName": "GROUP_Operations", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Operations", 
+                    "url": "/api/groups/Operations"
+                }
+            ], 
+            "displayName": "Finance and Administration", 
+            "fullName": "GROUP_Finance and Administration", 
+            "isAdminGroup": false, 
+            "isRootGroup": true, 
+            "shortName": "Finance and Administration", 
+            "url": "/api/groups/Finance and Administration"
+        }, 
+        {
+            "authorityType": "GROUP", 
+            "children": [
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Production Management", 
+                    "fullName": "GROUP_Production Management", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Production Management", 
+                    "url": "/api/groups/Production Management"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Quality Assurance", 
+                    "fullName": "GROUP_Quality Assurance", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Quality Assurance", 
+                    "url": "/api/groups/Quality Assurance"
+                }
+            ], 
+            "displayName": "Manufacturing", 
+            "fullName": "GROUP_Manufacturing", 
+            "isAdminGroup": false, 
+            "isRootGroup": true, 
+            "shortName": "Manufacturing", 
+            "url": "/api/groups/Manufacturing"
+        }, 
+        {
+            "authorityType": "GROUP", 
+            "children": [
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Corporate Communications", 
+                    "fullName": "GROUP_Corporate Communications", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Corporate Communications", 
+                    "url": "/api/groups/Corporate Communications"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Events Team", 
+                    "fullName": "GROUP_Events Team", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Events Team", 
+                    "url": "/api/groups/Events Team"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Field Marketing", 
+                    "fullName": "GROUP_Field Marketing", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Field Marketing", 
+                    "url": "/api/groups/Field Marketing"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Marketing Management", 
+                    "fullName": "GROUP_Marketing Management", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Marketing Management", 
+                    "url": "/api/groups/Marketing Management"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Partner Management", 
+                    "fullName": "GROUP_Partner Management", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Partner Management", 
+                    "url": "/api/groups/Partner Management"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Product Marketing", 
+                    "fullName": "GROUP_Product Marketing", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Product Marketing", 
+                    "url": "/api/groups/Product Marketing"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "Web Team", 
+                    "fullName": "GROUP_Web Team", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "Web Team", 
+                    "url": "/api/groups/Web Team"
+                }
+            ], 
+            "displayName": "Marketing", 
+            "fullName": "GROUP_Marketing", 
+            "isAdminGroup": false, 
+            "isRootGroup": true, 
+            "shortName": "Marketing", 
+            "url": "/api/groups/Marketing"
+        }, 
+        {
+            "authorityType": "GROUP", 
+            "children": [
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "EMEA Sales", 
+                    "fullName": "GROUP_EMEA Sales", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "EMEA Sales", 
+                    "url": "/api/groups/EMEA Sales"
+                }, 
+                {
+                    "authorityType": "GROUP", 
+                    "displayName": "US Sales", 
+                    "fullName": "GROUP_US Sales", 
+                    "isAdminGroup": false, 
+                    "isRootGroup": false, 
+                    "shortName": "US Sales", 
+                    "url": "/api/groups/US Sales"
+                }
+            ], 
+            "displayName": "Sales", 
+            "fullName": "GROUP_Sales", 
+            "isAdminGroup": false, 
+            "isRootGroup": true, 
+            "shortName": "Sales", 
+            "url": "/api/groups/Sales"
+        }
+    ]
+}
