@@ -45,21 +45,36 @@ Importing Content
 Sites and users can be imported from JSON files on your local system, and examples of these
 are supplied in the 'data' folder.
 
-Note that you must normally create the users before creating sites, otherwise the site import
-script will fail when it tries to add site members which do not exist.
+To import one of the sample sites, change into the share-import-export directory at a 
+command prompt. Then type the following
+
+  python import-site.py data/sites/branding.json --create-missing-members --users-file=data/cloud-users.json --username=username --password=password --url=share-url
+
+Note that you must either create the users (see below) before creating sites, or specify the 
+--create-missing-members and --users-file arguments, otherwise the site import script will 
+fail when it tries to add site members which do not exist.
+
+If your site has group-based members then you must import these separately first, using the
+import-groups.py script.
+
+The 'username' and 'password' values must match those of an existing admin user on the system
+with the Share URL 'share-url'.
+
+If you are running a local instance of Alfresco and wish to run the import as the admin user
+using the default password, you can omit the --username, --password and --url arguments.
 
 Importing users
 ---------------
 
-You can import users defined in a JSON users file. An example cloud-users.json is supplied in 
-the data folder.
+If you only want to import users without any site content, you can import users defined in 
+a JSON users file. An example cloud-users.json is supplied in the data folder.
 
 Change into the share-import-export directory at a command prompt. Then type the following
 
-  python import-users.py data/cloud-users.json --create-only  --username=username --password=username --url=username
+  python import-users.py data/cloud-users.json --create-only --username=username --password=password --url=share-url
 
 The 'username' and 'password' values must match those of an existing admin user on the system
-with the Share URL 'url'.
+with the Share URL 'share-url'.
 
 If you are running a local instance of Alfresco and wish to run the import as the admin user
 using the default password, you can omit the --username, --password and --url arguments.
@@ -81,7 +96,7 @@ which information about the site will be read. Several examples are supplied in 
 
 To import the 'branding' site and its contents, run the following command from a terminal.
 
-  python import-site.py data/branding.json --username=username --password=username --url=username
+  python import-site.py data/branding.json --username=username --password=password --url=share-url
 
 The command will create the site and set it's configuration, members and dashboard configuration.
 Finally it will import the site content from any associated ACP files.
@@ -94,7 +109,7 @@ Exporting a site
 
 Run the following command from a terminal
 
-  python export-site.py siteid file.json --username=username --password=username --url=username
+  python export-site.py siteid file.json --username=username --password=password --url=share-url
 
 The 'siteid' argument is the URL name of the site in Share. If you are not sure what this means
 you can use the full URL of the site dashboard page instead.
@@ -110,7 +125,7 @@ Exporting users
 
 Run the following command from a terminal
 
-  python export-users.py siteid file.json --username=username --password=username --url=username
+  python export-users.py siteid file.json --username=username --password=password --url=share-url
 
 Removing Content
 ================
@@ -124,14 +139,14 @@ Removing a site
 You can remove a single site from the system by specifying the site ID or URL of the dashboard
 page.
 
-  python purge-site.py siteid --username=username --password=username --url=username
+  python purge-site.py siteid --username=username --password=password --url=share-url
 
 Removing users
 --------------
 
 This will remove ALL the users from the local file users-file.json. Use this with extreme caution!
 
-  python purge-users.py users-file.json --username=username --password=username --url=username
+  python purge-users.py users-file.json --username=username --password=password --url=share-url
 
 To remove only a few selected users, add the --users=user1,user2 flag to the command.
 
