@@ -228,6 +228,7 @@
     ], 
     "sitePreset": "site-dashboard", 
     "tagScope": "/alfresco/s/api/tagscopes/workspace/SpacesStore/70463ae3-7b42-4a3b-af63-17a69517d465", 
+    "themeId": "default",
     "title": "Marketing: 2010 Company Rebranding", 
     "url": "/alfresco/s/api/sites/branding", 
     "visibility": "PUBLIC"

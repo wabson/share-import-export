@@ -148,7 +148,8 @@ def main(argv):
                 sc.createSite(sd)
         if update_config:
             print "Set site configuration"
-            sc.setSitePages({'pages': sd['sitePages'], 'siteId': siteId})
+            themeId = ('themeId' in sd) and sd['themeId'] or 'default'
+            sc.setSitePages({'pages': sd['sitePages'], 'siteId': siteId, 'themeId': themeId})
         if update_dashboard:
             print "Set dashboard configuration"
             sc.updateSiteDashboardConfig(sd)

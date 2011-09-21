@@ -344,6 +344,7 @@
     ], 
     "sitePreset": "rm-site-dashboard", 
     "tagScope": "/alfresco/s/api/tagscopes/workspace/SpacesStore/143fcf6f-01d5-4d65-aea1-68346d0ff6b1", 
+    "themeId": "default",
     "title": "Records Management", 
     "url": "/alfresco/s/api/sites/rm", 
     "visibility": "MODERATED"

@@ -157,6 +157,7 @@
     ], 
     "sitePreset": "site-dashboard", 
     "tagScope": "/alfresco/s/api/tagscopes/workspace/SpacesStore/9074105b-dd19-440c-ae4c-ec78d02417b1", 
+    "themeId": "default",
     "title": "Marketing: Image Gallery", 
     "url": "/alfresco/s/api/sites/images", 
     "visibility": "PUBLIC"

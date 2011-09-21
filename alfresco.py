@@ -290,7 +290,7 @@ class ShareClient:
     def setSitePages(self, pageData):
         """Set the pages in a site
         
-        pageData should be a dict object with keys 'pages' and 'siteId'"""
+        pageData should be a dict object with keys 'pages', 'siteId' and (in 4.0) 'themeId'"""
         return self.doJSONPost('service/components/site/customise-pages', json.dumps(pageData))
 
     def updateSiteDashboardConfig(self, siteData):
@@ -301,7 +301,15 @@ class ShareClient:
         """Add a site member"""
         # TODO Support group and person objects as well as authority, as per web script doc
         authorityName = memberData['authority']['fullName']
-        return self.doJSONPost('proxy/alfresco/api/sites/%s/memberships/%s' % (urllib.quote(str(siteName)), urllib.quote(str(authorityName))), json.dumps(memberData), method="PUT")
+        try:
+            # For 3.4 and under
+            return self.doJSONPost('proxy/alfresco/api/sites/%s/memberships/%s' % (urllib.quote(str(siteName)), urllib.quote(str(authorityName))), json.dumps(memberData), method="PUT")
+        except SurfRequestError, e:
+            if e.code == 404:
+                # For 4.0+
+                return self.doJSONPost('proxy/alfresco/api/sites/%s/memberships' % (urllib.quote(str(siteName))), json.dumps(memberData), method="PUT")
+            else:
+                raise e
 
     def addSiteMembers(self, siteName, membersData, skipMissingMembers=False, createMissingMembers=False, authorityData=None):
         """Add one or more site members"""
@@ -356,6 +364,7 @@ class ShareClient:
     def importSiteContent(self, siteId, containerId, f):
         """Upload a content package into a collaboration site and extract it"""
         # Get the site metadata
+        folderType = 'cm_content'
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(str(siteId))))
         siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
         treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
@@ -371,7 +380,14 @@ class ShareClient:
         if containerData is None:
             # Create container if it doesn't exist
             folderData = { 'alf_destination': siteNodeRef, 'prop_cm_name': containerId, 'prop_cm_title': containerId, 'prop_cm_description': '' }
-            createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
+            try:
+                createData = self.doJSONPost('proxy/alfresco/api/type/%s/formprocessor' % (urllib.quote(str(folderType))), json.dumps(folderData))
+            except SurfRequestError, e:
+                if e.code == 404:
+                    folderType = 'cm:folder'
+                    createData = self.doJSONPost('proxy/alfresco/api/type/%s/formprocessor' % (urllib.quote(str(folderType))), json.dumps(folderData))
+                else:
+                    raise e
             containerData = { 'nodeRef': createData['persistedObject'], 'name' : containerId }
             # Add the tagscope aspect to the container - otherwise an error occurs when viewed by a site consumer
             resp = self.doPost('proxy/alfresco/slingshot/doclib/action/aspects/node/%s' % (str(containerData['nodeRef']).replace('://', '/')), '{"added":["cm:tagscope"],"removed":[]}', 'application/json;charset=UTF-8')
@@ -381,7 +397,7 @@ class ShareClient:
         if tempContainerData is None:
             # Create upload container if it doesn't exist
             folderData = { 'alf_destination': siteNodeRef, 'prop_cm_name': tempContainerName, 'prop_cm_title': tempContainerName, 'prop_cm_description': '' }
-            createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
+            createData = self.doJSONPost('proxy/alfresco/api/type/%s/formprocessor' % (urllib.quote(str(folderType))), json.dumps(folderData))
             tempContainerData = { 'nodeRef': createData['persistedObject'], 'name' : tempContainerName }
             
         # First apply a ruleset to the temp folder
@@ -414,7 +430,7 @@ class ShareClient:
             "disabled": False,
             "applyToChildren": False,
             "executeAsynchronously": False,
-            "ruleType":["inbound"]
+            "ruleType":["update"]
         }
         rulesData = self._setSpaceRuleset(tempContainerData['nodeRef'], rulesetDef)
         
@@ -424,6 +440,13 @@ class ShareClient:
         udata = json.loads(fr.read())
         if ('success' in udata and udata['success'] == true) or ('status' in udata and udata['status']['code'] == 200):
             nodeRef = udata['nodeRef']
+            # Try to set the mimetype - required by 4.0, which incorrectly guesses type as application/zip
+            try:
+                self.doJSONPost('proxy/alfresco/api/node/%s/formprocessor' % (str(nodeRef).replace('://', '/')), {'prop_mimetype': 'application/acp'})
+            except SurfRequestError, e:
+                # Assume mimetype was not found, probably pre-4.0 instance
+                # Instead, we just need to update another property to get the ruleset to fire
+                self.doJSONPost('proxy/alfresco/api/node/%s/formprocessor' % (str(nodeRef).replace('://', '/')), {'prop_title': f.name})
             # Remove the rule definition
             self._deleteSpaceRuleset(tempContainerData['nodeRef'], rulesData['data']['id'])
             # Delete the ACP file

@@ -88,6 +88,7 @@
     ], 
     "sitePreset": "site-dashboard", 
     "tagScope": "/alfresco/s/api/tagscopes/workspace/SpacesStore/7da5483d-ff38-4c62-beb0-0185480da89f", 
+    "themeId": "default",
     "title": "Corporate Web Site", 
     "url": "/alfresco/s/api/sites/website", 
     "visibility": "PUBLIC"

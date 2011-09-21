@@ -107,6 +107,7 @@
     ], 
     "sitePreset": "site-dashboard", 
     "tagScope": "/alfresco/s/api/tagscopes/workspace/SpacesStore/0df91b5f-a9bd-4292-ad9a-19e6ee99fae0", 
+    "themeId": "default",
     "title": "Marketing: Global User Group Meetings (2010)", 
     "url": "/alfresco/s/api/sites/usersgroup2010", 
     "visibility": "PUBLIC"

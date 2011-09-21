@@ -189,6 +189,7 @@
     ], 
     "sitePreset": "site-dashboard", 
     "tagScope": "/alfresco/s/api/tagscopes/workspace/SpacesStore/52fae691-902b-46b0-a038-0c7a746c3b41", 
+    "themeId": "default",
     "title": "Executives: Business Development", 
     "url": "/alfresco/s/api/sites/exec1", 
     "visibility": "PRIVATE"
