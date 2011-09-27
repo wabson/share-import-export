@@ -364,7 +364,7 @@ class ShareClient:
     def importSiteContent(self, siteId, containerId, f):
         """Upload a content package into a collaboration site and extract it"""
         # Get the site metadata
-        folderType = 'cm_content'
+        folderType = 'cm_folder'
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(str(siteId))))
         siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
         treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
