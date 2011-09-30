@@ -128,7 +128,7 @@ def main(argv):
             if not os.path.exists(os.path.dirname(filename)) and os.path.dirname(filename) != '':
                 os.makedirs(os.path.dirname(filename))
             
-            # TODO Download ACP files
+            # Download ACP files
             
             # Write site data to a file
             siteJson = json.dumps(sdata, sort_keys=True, indent=4)
@@ -145,7 +145,7 @@ def main(argv):
                     acpFileName = "%s-%s.acp" % (filename.replace('.json', ''), component)
                     print "Saving %s" % (acpFileName)
                     resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/Sites/%s/export/%s-%s.acp' % (sitename, sitename, component)))
-                    acpfile = open(acpFileName, 'w')
+                    acpfile = open(acpFileName, 'wb')
                     acpfile.write(resp.read())
                     acpfile.close()
                 
