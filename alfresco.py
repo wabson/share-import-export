@@ -561,7 +561,12 @@ class ShareClient:
         if tempContainerData is None:
             # Create export container if it doesn't exist
             folderData = { 'alf_destination': siteNodeRef, 'prop_cm_name': tempContainerName, 'prop_cm_title': tempContainerName, 'prop_cm_description': '' }
-            createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
+            try:
+                createData = self.doJSONPost('proxy/alfresco/api/type/cm_folder/formprocessor', json.dumps(folderData))
+            except SurfRequestError, e:
+                if e.code == 404:
+                    # 4.0 syntax
+                    createData = self.doJSONPost('proxy/alfresco/api/type/%s/formprocessor' % (urllib.quote('cm:folder')), json.dumps(folderData))
             tempContainerData = { 'nodeRef': createData['persistedObject'], 'name' : tempContainerName }
         else:
             # Does the ACP file exist in the export container already?
@@ -599,13 +604,14 @@ class ShareClient:
         
     def exportAllSiteContent(self, siteId):
         """Export an ACP file for each component in the site and store them in the repository"""
+        # TODO Can we not just call proxy/alfresco/slingshot/doclib/treenode/node/alfresco/company/home/Sites/sitename ?
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(str(siteId))))
         siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
         treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
         results = { 'exportFiles': [] }
         # Locate the container item
         for child in treeData['items']:
-            if child['name'] != 'export':
+            if child['name'] != 'export' and child['name'] != 'surf-config' and child['name'] != 'temp':
                 docList = self._getDocumentList('Sites/%s/%s' % (siteId, child['name']))
                 if docList['totalRecords'] > 0:
                     print "Export %s" % (child['name'])
