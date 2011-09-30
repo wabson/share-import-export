@@ -142,7 +142,11 @@ def main(argv):
         if create_site:
             if sd['sitePreset'] == 'rm-site-dashboard':
                 print "Create RM site '%s'" % (siteId)
-                sc.createRmSite(sd)
+                try:
+                    sc.createRmSite(sd)
+                except alfresco.SurfRequestError, e:
+                    print "Could not create RM site. Check RM module is installed."
+                    sys.exit(1)
             else:
                 print "Create site '%s'" % (siteId)
                 sc.createSite(sd)
