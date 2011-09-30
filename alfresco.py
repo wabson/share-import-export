@@ -214,7 +214,12 @@ class ShareClient:
         # sitestore directly on the repository tier. As the queries are proxied through the web tier, 
         # this should still work even if the repository is running on a different server to Share.
         if getPages:
-            dashboardResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/site/%s/dashboard.xml' % (siteId))
+            try:
+                dashboardResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/site/%s/dashboard.xml' % (siteId))
+            except SurfRequestError, e:
+                # Try 4.0 method
+                if e.code == 500:
+                    dashboardResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/pages/site/%s/dashboard.xml' % (siteId))
             from xml.etree.ElementTree import XML
             dashboardTree = XML(dashboardResp.read())
             dashboardResp.close()
@@ -232,7 +237,12 @@ class ShareClient:
         dashboardId is the site or user ID
         """
         try:
-            dashboardResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % (urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
+            try:
+                dashboardResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % (urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
+            except SurfRequestError, e:
+                # Try 4.0 method
+                if e.code == 500:
+                    dashboardResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % (urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
             from xml.etree.ElementTree import XML
             dashboardTree = XML(dashboardResp.read())
             templateInstance = dashboardTree.findtext('template-instance')
@@ -242,7 +252,11 @@ class ShareClient:
                 for j in [ 1, 2, 3, 4 ]:
                     dashlet = { }
                     try:
-                        dashletResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
+                        try:
+                            dashletResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
+                        except SurfRequestError, e:
+                            if e.code == 500:
+                                dashletResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
                         dashletTree = XML(dashletResp.read())
                         dashboardResp.close()
                         dashlet['url'] = dashletTree.findtext('url')
