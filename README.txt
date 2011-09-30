@@ -125,7 +125,7 @@ Exporting users
 
 Run the following command from a terminal
 
-  python export-users.py siteid file.json --username=username --password=password --url=share-url
+  python export-users.py file.json --username=username --password=password --url=share-url
 
 Removing Content
 ================
