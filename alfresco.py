@@ -16,6 +16,7 @@ import urllib
 import urllib2
 
 GUID_REGEXP = re.compile('[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{8}')
+SHARE_CLIENT_USER_AGENT = 'ShareImportExport/1.0'
 
 class SurfRequest(urllib2.Request):
     """A request sent to a SpringSurf-based server. Adds support for additional method types in addition to GET and POST."""
@@ -74,7 +75,12 @@ class ShareClient:
         """Initialise the client"""
         from MultipartPostHandler import MultipartPostHandler
         cj = cookielib.CookieJar()
-        headers = [('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'), ('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'), ('Accept-Language', 'en-gb,en;q=0.5'), ('User-Agent', 'Mozilla/5.0 (X11; U; Linux i686; en-GB; rv:1.9.2.12) Gecko/20101027 Ubuntu/10.04 (lucid) Firefox/3.6.12')]
+        headers = [
+                   ('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'), 
+                   ('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'), 
+                   ('Accept-Language', 'en-gb,en;q=0.5'), 
+                   ('User-Agent', SHARE_CLIENT_USER_AGENT)
+        ]
         # Regular opener
         opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(cj))
         opener.addheaders = headers
