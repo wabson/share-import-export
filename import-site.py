@@ -38,6 +38,9 @@ file.json                   Name of the JSON file to import information from.
 
 --no-content                Do not import any content packages into the site
 
+--import-tags               Import tags for each site container (only if provided by 
+                            site data)
+
 -d                          Turn on debug mode
 
 -h                          Display this message
@@ -74,6 +77,8 @@ def main(argv):
     set_user_dashboards = True
     set_user_prefs = True
     siteContainers = [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]
+    importContent = True
+    importTags = False
     _debug = 0
     
     if len(argv) > 0:
@@ -90,7 +95,7 @@ def main(argv):
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "create-missing-members", "users-file=", "groups-file=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content"])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "create-missing-members", "users-file=", "groups-file=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content", "import-tags"])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -120,7 +125,9 @@ def main(argv):
         elif opt == '--containers':
             siteContainers = arg.split(',')
         elif opt == '--no-content':
-            siteContainers = []
+            importContent = False
+        elif opt == '--import-tags':
+            importTags = True
         elif opt == '--no-configuration':
             update_config = False
         elif opt == '--no-members':
@@ -198,14 +205,25 @@ def main(argv):
                         usc.doLogout()
                     
         # Import ACP files
-        for container in siteContainers:
-            acpFile = thisdir + os.sep + '%s-%s.acp' % (filenamenoext, container.replace(' ', '_'))
-            if os.path.isfile(acpFile):
-                print "Import %s content" % (container)
-                if siteId == 'rm' and container == 'documentLibrary':
-                    sc.importRmSiteContent(siteId, container, file(acpFile, 'rb'))
-                else:
-                    sc.importSiteContent(siteId, container, file(acpFile, 'rb'))
+        if importContent:
+            for container in siteContainers:
+                acpFile = thisdir + os.sep + '%s-%s.acp' % (filenamenoext, container.replace(' ', '_'))
+                if os.path.isfile(acpFile):
+                    print "Import %s content" % (container)
+                    if siteId == 'rm' and container == 'documentLibrary':
+                        sc.importRmSiteContent(siteId, container, file(acpFile, 'rb'))
+                    else:
+                        sc.importSiteContent(siteId, container, file(acpFile, 'rb'))
+                        
+        # Import site tags
+        if importTags:
+            for container in siteContainers:
+                jsonFile = thisdir + os.sep + '%s-%s-tags.json' % (filenamenoext, container.replace(' ', '_'))
+                if os.path.isfile(jsonFile):
+                    print "Import %s tags" % (container)
+                    items = json.loads(open(jsonFile).read())['items']
+                    sc.importSiteTags(siteId, items)
+                
     except alfresco.SurfRequestError, e:
         if e.description == "error.duplicateShortName":
             print "Site with short name '%s' already exists" % (siteId)

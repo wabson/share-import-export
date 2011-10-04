@@ -263,6 +263,8 @@ class ShareClient:
                         except SurfRequestError, e:
                             if e.code == 500:
                                 dashletResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
+                            else:
+                                raise e
                         dashletTree = XML(dashletResp.read())
                         dashboardResp.close()
                         dashlet['url'] = dashletTree.findtext('url')
@@ -290,6 +292,31 @@ class ShareClient:
             else:
                 raise e
         return dashboardConfig
+    
+    def getSiteTags(self, siteId, componentId=""):
+        """Get tagscope information on a site or site component"""
+        tagData = self.doJSONGet(('proxy/alfresco/api/tagscopes/site/%s/%s/tags' % (urllib.quote(str(siteId)), urllib.quote(str(componentId)))).replace('//', '/'))
+        return tagData
+    
+    def getSiteTagInfo(self, siteId, componentId=""):
+        """Get information on each tagged document in the site"""
+        nodeInfo = {}
+        tagData = self.getSiteTags(siteId, componentId)
+        tagName = ""
+        for tag in tagData['tags']:
+            tagName = tag['name']
+            # Return all items matching this tag
+            result = self.doJSONGet('proxy/alfresco/slingshot/search?site=%s&term=&tag=%s&maxResults=1000&sort=&query=&repo=false' % (urllib.quote(str(siteId)), urllib.quote(str(tagName))))
+            for item in result['items']:
+                if (item['container'] == componentId or componentId == "") and item['nodeRef'] not in nodeInfo:
+                    nodeInfo[item['nodeRef']] = { 
+                                                 'type': item['type'], 
+                                                 'name': item['name'], 
+                                                 'container': item['container'], 
+                                                 'path': 'path' in item and item['path'] or None, 
+                                                 'tags': item['tags']
+                                                 }
+        return nodeInfo.values()
     
     def createSite(self, siteData):
         """Create a Share site"""
@@ -462,11 +489,11 @@ class ShareClient:
             nodeRef = udata['nodeRef']
             # Try to set the mimetype - required by 4.0, which incorrectly guesses type as application/zip
             try:
-                self.doJSONPost('proxy/alfresco/api/node/%s/formprocessor' % (str(nodeRef).replace('://', '/')), {'prop_mimetype': 'application/acp'})
+                self.updateProperties(nodeRef, {'prop_mimetype': 'application/acp'})
             except SurfRequestError, e:
                 # Assume mimetype was not found, probably pre-4.0 instance
                 # Instead, we just need to update another property to get the ruleset to fire
-                self.doJSONPost('proxy/alfresco/api/node/%s/formprocessor' % (str(nodeRef).replace('://', '/')), {'prop_title': f.name})
+                self.updateProperties(nodeRef, {'prop_title': f.name})
             # Remove the rule definition
             self._deleteSpaceRuleset(tempContainerData['nodeRef'], rulesData['data']['id'])
             # Delete the ACP file
@@ -476,11 +503,56 @@ class ShareClient:
         else:
             raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
     
+    def importSiteTags(self, siteId, nodeInfo):
+        """Import tags into a site component"""
+        tagInfo = {}
+        persistedNodes = []
+        
+        """Retrieve a list of all the existing tags in the system
+        Items will be something like
+        {
+            "type": "cm:category",
+            "isContainer": false,
+            "name": "alfresco",
+            "title": "",
+            "description": "",
+            "modified": "2011-03-09T20:13:12.478Z",
+            "modifier": "admin",
+            "displayPath": "/categories/Tags",
+            "nodeRef": "workspace://SpacesStore/954968a8-6d9e-41cc-a3ab-b1edfe91ea44",
+            "selectable": true
+        
+        },"""
+        tagData = self.doJSONGet('proxy/alfresco/api/forms/picker/category/alfresco/category/root/children?selectableType=cm:category&size=1000&aspect=cm:taggable')
+        tagItems = tagData['data']['items']
+        for item in tagItems:
+            # Cache the noderefs of tags
+            tagInfo[item['name']] = { 'nodeRef': item['nodeRef'] }
+        for node in nodeInfo:
+            docResult = self._getNodeInfoByPath(siteId, node['container'], "%s/%s".replace('//', '/') % (node['path'] or '', node['name']))
+            docNodeRef = docResult['metadata']['parent']['nodeRef']
+            tagNodeRefs = []
+            for tagName in node['tags']:
+                if tagName not in tagInfo:
+                    # Add to repo via post, cache nodeRef
+                    tagResp = self.doJSONPost('proxy/alfresco/api/tag/workspace/SpacesStore', {'name': tagName})
+                    tagInfo[tagName] = { 'nodeRef': tagResp['nodeRef'] }
+                tagNodeRefs.append(tagInfo[tagName]['nodeRef'])
+            # Add tags to document
+            formResult = self.updateProperties(docNodeRef, {'prop_cm_taggable': ','.join(tagNodeRefs)})
+            persistedNodes.append(formResult['persistedObject'])
+            
+        return persistedNodes
+    
     def deleteFile(self, f):
         return self.doJSONPost('proxy/alfresco/slingshot/doclib/action/file/node/%s' % (f.replace('://', '/')), method="DELETE")
     
     def deleteFolder(self, f):
         return self.doJSONPost('proxy/alfresco/slingshot/doclib/action/folder/node/%s' % (f.replace('://', '/')), method="DELETE")
+    
+    def updateProperties(self, nodeRef, properties):
+        """Update the metadata properties of a repository item"""
+        return self.doJSONPost('proxy/alfresco/api/node/%s/formprocessor' % (urllib.quote(str(nodeRef).replace('://', '/'))), properties)
     
     def addUserGroups(self, user, groups):
         if isinstance(user, (dict)):
@@ -608,22 +680,27 @@ class ShareClient:
         }
         """
         
-    def exportAllSiteContent(self, siteId):
+    def exportAllSiteContent(self, siteId, containers=None):
         """Export an ACP file for each component in the site and store them in the repository"""
         # TODO Can we not just call proxy/alfresco/slingshot/doclib/treenode/node/alfresco/company/home/Sites/sitename ?
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(str(siteId))))
         siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
         treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
         results = { 'exportFiles': [] }
+        excludeContainers = ['export', 'surf-config', 'temp']
         # Locate the container item
         for child in treeData['items']:
-            if child['name'] != 'export' and child['name'] != 'surf-config' and child['name'] != 'temp':
+            if (containers is None or child['name'] in containers) and (child['name'] not in excludeContainers):
                 docList = self._getDocumentList('Sites/%s/%s' % (siteId, child['name']))
                 if docList['totalRecords'] > 0:
                     print "Export %s" % (child['name'])
                     self.exportSiteContent(siteId, child['name'])
                     results['exportFiles'].append(child['name'])
         return results
+    
+    def _getNodeInfoByPath(self, siteId, componentId, path):
+        """Return information on the specified node"""
+        return self.doJSONGet('proxy/alfresco/slingshot/doclib/doclist/all/node/alfresco/company/home/Sites/%s/%s/%s' % (urllib.quote(siteId), urllib.quote(componentId), urllib.quote(path)));
     
     def _getDocumentList(self, space):
         """Return a list of documents in the space identified by parameter space

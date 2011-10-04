@@ -27,7 +27,14 @@ file.json         Name of the file to export information to. Will be created if
 --export-content  Export content of each of the site components (in ACP format)
                   to disk, alongside the JSON file. Will be ignored if stdout
                   if specified for the output.
+                  
+--export-tags     Export tag information for each site component, in JSON 
+                  format. ACP content exports do not support tag information
+                  natively.
 
+--containers=list Comma-separated list of container names to export site
+                  content and tags for, e.g. documentLibrary,wiki
+                  
 -d                Turn on debug mode
 
 -h                Display this message
@@ -58,6 +65,8 @@ def main(argv):
     sitename = ""
     filename = ""
     exportContent = False
+    exportTags = False
+    siteContainers = [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]
     
     if len(argv) > 0:
         if argv[0] == "--help" or argv[0] == "-h":
@@ -71,7 +80,7 @@ def main(argv):
     
         if not argv[1].startswith('-'):
             try:
-                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url=", "export-content"])
+                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url=", "export-content", "export-tags", "containers"])
             except getopt.GetoptError, e:
                 usage()
                 sys.exit(1)
@@ -90,6 +99,10 @@ def main(argv):
                     url = arg
                 elif opt == '--export-content':
                     exportContent = True
+                elif opt == '--export-tags':
+                    exportTags = True
+                elif opt == '--containers':
+                    siteContainers = arg.split(',')
             
             idm = re.match('^(\w+)$', argv[0])
             urlm = re.match('^(https?\\://[\w\\-\\.\\:]+/share)/page/site/(\w+)/[\w\\-\\./]*$', argv[0])
@@ -139,10 +152,10 @@ def main(argv):
         if exportContent:
             if not filename == "-":
                 print "Export all site content"
-                results = sc.exportAllSiteContent(sitename)
+                results = sc.exportAllSiteContent(sitename, siteContainers)
                 
                 for component in results['exportFiles']:
-                    acpFileName = "%s-%s.acp" % (filename.replace('.json', ''), component)
+                    acpFileName = "%s-%s.acp" % (filename.replace('.json', ''), component.replace(' ', '_'))
                     print "Saving %s" % (acpFileName)
                     resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/Sites/%s/export/%s-%s.acp' % (sitename, sitename, component)))
                     acpfile = open(acpFileName, 'wb')
@@ -150,6 +163,20 @@ def main(argv):
                     acpfile.close()
                 
                 # TODO Delete the 'export' folder afterwards
+
+        if exportTags:
+            if not filename == "-":
+                print "Export site tag information"
+                
+                for container in siteContainers:
+                    tagsData = sc.getSiteTagInfo(sitename, container)
+                    if len(tagsData) > 0:
+                        tagFileName = "%s-%s-tags.json" % (filename.replace('.json', ''), container.replace(' ', '_'))
+                        print "Saving %s" % (tagFileName)
+                        tagsJson = json.dumps({"items": tagsData}, indent=4)
+                        tagsFile = open(tagFileName, 'w')
+                        tagsFile.write(tagsJson)
+                        tagsFile.close()
             
     finally:
         if not filename == "-":
