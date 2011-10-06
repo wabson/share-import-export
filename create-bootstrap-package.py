@@ -4,11 +4,13 @@
 """
 Import a site definition and site content from the local file system.
 
-Usage: python create-bootstrap-package.py file.jar [options]
+Usage: python create-bootstrap-package.py site-file.json package-file.jar [options]
 
 Options and arguments:
 
-file.jar                    Name of the JAR file to package information inside
+site-file.json              Name of the JSON file to read site data from
+
+package-file.jar            Name of the JAR file to package information inside
 
 --create-missing-members    Auto-create any members who do not exist in the 
                             repository
@@ -104,7 +106,8 @@ def usage():
 
 def main(argv):
 
-    filename = None
+    site_file = None
+    jar_file = None
     users_file = ''
     groups_file = ''
     users = None
@@ -112,7 +115,7 @@ def main(argv):
     includeContent = True
     _debug = 0
     
-    if len(argv) > 0:
+    if len(argv) > 1:
         if argv[0] == "--help" or argv[0] == "-h":
             usage()
             sys.exit()
@@ -120,13 +123,14 @@ def main(argv):
             usage()
             sys.exit(1)
         else:
-            filename = argv[0]
+            site_file = argv[0]
+            jar_file = argv[1]
     else:
         usage()
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "users-file=", "groups-file=", "site-file=", "containers=", "no-content"])
+        opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "users-file=", "groups-file=", "site-file=", "containers=", "no-content"])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -146,40 +150,52 @@ def main(argv):
         elif opt == '--no-content':
             includeContent = False
     
-    if filename is None:
+    if site_file is None:
         print "No site file specified"
         sys.exit(1)
     
-    filenamenoext = os.path.splitext(os.path.split(filename)[1])[0]
-    thisdir = os.path.dirname(filename)
+    filenamenoext = os.path.splitext(os.path.split(site_file)[1])[0]
+    thisdir = os.path.dirname(site_file)
     if thisdir == "":
         thisdir = "."
-    sd = json.loads(open(filename).read())
+    sd = json.loads(open(site_file).read())
     
     # Temp working locations
     temppath = tempfile.mkdtemp(prefix='site-bootstrap-tmp-')
     
-    # Generate the site ACP file - should generate ACP file in temppath
-    generateContentACP(sd, filename, temppath, includeContent, siteContainers)
+    baseName = os.path.splitext(os.path.basename(jar_file))[0]
     
-    # People ACP
+    # Generate the site ACP file - should generate ACP file in temppath
+    generateContentACP('%s-content.acp' % (baseName), sd, site_file, temppath, includeContent, siteContainers)
+    
+    # People files
     if users_file != '':
-        generatePeopleACP(sd, users_file, temppath, users)
-        generateUsersACP(sd, users_file, temppath, users)
-        generateGroupsData(sd, users_file, temppath, users)
+        generatePeopleACP('%s-people.acp' % (baseName), sd, users_file, temppath, users)
+        generateUsersACP('%s-users.acp' % (baseName), sd, users_file, temppath, users)
+        generateGroupsData('%s-groups.txt' % (baseName), sd, users_file, temppath, users)
     else:
-        print 'No user data supplied. Use --users-file=blah.json to include user info'
+        print 'WARNING: No user data supplied. Use --users-file=blah.json to include user info'
     
     # Build JAR file in current directory
-    # TODO Support custom names for JAR files from the command line
-    siteId = str(sd['shortName'])
-    jarFile = zipfile.ZipFile('%s.jar' % (filenamenoext), 'w')
+    jarFile = zipfile.ZipFile(jar_file, 'w')
     # Add files to the new JAR
-    for f in ['%s-content.acp' % siteId, '%s-people.acp' % siteId, '%s-users.acp' % siteId, '%s-groups.txt' % siteId]:
+    for f in ['%s-content.acp' % baseName, '%s-people.acp' % baseName, '%s-users.acp' % baseName, '%s-groups.txt' % baseName]:
         if os.path.exists(temppath + os.sep + f):
             # TODO Hard-coded package structure for now
-            jarFile.write(temppath + os.sep + f, '%s/%s' % ('alfresco/bootstrap/sample-sites', f))
-            # TODO Auto-generate Spring config?
+            jarFile.write(temppath + os.sep + f, 'alfresco/bootstrap/sample-sites/%s' % (f))
+    
+    # Copy sample Spring config
+    beanXMLPath = temppath + os.sep + ('sample-site-%s-context.xml') % (sd['shortName'])
+    beanXMLFile = open('sample-bootstrap-site.xml', 'r')
+    xmlText = beanXMLFile.read().replace('{siteName}', sd['shortName']).replace('{fileBase}', 'alfresco/bootstrap/sample-sites/%s' % (baseName))
+    beanXMLFile.close()
+    beanXMLFile = open(beanXMLPath, 'w')
+    beanXMLFile.write(xmlText)
+    beanXMLFile.close()
+    # Add XML file to JAR file
+    jarFile.write(beanXMLPath, 'alfresco/extension/sample-site-%s-context.xml' % (str(sd['shortName'])))
+    
+    # Close the JAR file
     jarFile.close()
     
     # Tidy up temp files
@@ -200,7 +216,7 @@ def getSiteUsers(siteData, usersFile, userNames=None):
                     users.append(u)
     return users
 
-def generatePeopleACP(siteData, usersFile, temppath, userNames=None):
+def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
     
     # Make the people ACP working directory
     extractpath = '%s/people' % (temppath)
@@ -208,7 +224,7 @@ def generatePeopleACP(siteData, usersFile, temppath, userNames=None):
     
     siteId = str(siteData['shortName'])
     # Base name for acp xml file and content folder
-    fileBase = '%s-people' % (siteId)
+    fileBase = os.path.splitext(fileName)[0]
     
     os.mkdir(extractpath + os.sep + fileBase)
     
@@ -333,7 +349,7 @@ def generatePersonXML(parent, userData):
     
     return person
 
-def generateUsersACP(siteData, usersFile, temppath, userNames=None):
+def generateUsersACP(fileName, siteData, usersFile, temppath, userNames=None):
     
     # Make the people ACP working directory
     extractpath = '%s/users' % (temppath)
@@ -341,7 +357,7 @@ def generateUsersACP(siteData, usersFile, temppath, userNames=None):
     
     siteId = str(siteData['shortName'])
     # Base name for acp xml file and content folder
-    fileBase = '%s-users' % (siteId)
+    fileBase = os.path.splitext(fileName)[0]
     
     os.mkdir(extractpath + os.sep + fileBase)
     
@@ -367,11 +383,11 @@ def generateUsersACP(siteData, usersFile, temppath, userNames=None):
         acpFile.write(extractpath + os.sep + f.replace('/', os.sep), f)
     acpFile.close()
 
-def generateGroupsData(siteData, usersFile, temppath, userNames=None):
+def generateGroupsData(fileName, siteData, usersFile, temppath, userNames=None):
     
     siteId = str(siteData['shortName'])
     # Base name for acp xml file and content folder
-    fileBase = '%s-groups' % (siteId)
+    fileBase = os.path.splitext(fileName)[0]
     
     users = getSiteUsers(siteData, usersFile, userNames)
     
@@ -416,7 +432,7 @@ def generateUserXML(parent, userData):
     generatePropertiesXML(user, properties)
     return user
 
-def generateContentACP(siteData, filename, temppath, includeContent, siteContainers):
+def generateContentACP(fileName, siteData, jsonFileName, temppath, includeContent, siteContainers):
     """Generate an ACP file containing all the site contents and metadata"""
     # TODO Override the st:site/view:properties/cm:tagScopeCache value
     
@@ -424,14 +440,14 @@ def generateContentACP(siteData, filename, temppath, includeContent, siteContain
     extractpath = '%s/acp' % (temppath)
     os.mkdir(extractpath)
     
-    filenamenoext = os.path.splitext(os.path.split(filename)[1])[0]
-    thisdir = os.path.dirname(filename)
+    filenamenoext = os.path.splitext(os.path.split(jsonFileName)[1])[0]
+    thisdir = os.path.dirname(jsonFileName)
     if thisdir == "":
         thisdir = "."
     
     siteId = str(siteData['shortName'])
     # Base name for acp xml file and content folder
-    fileBase = '%s-content' % (siteId)
+    fileBase = os.path.splitext(fileName)[0]
     
     siteXML = generateSiteXML(siteData)
     allfiles = []

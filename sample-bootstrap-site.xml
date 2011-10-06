@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<beans>
+    <!-- For importing whole sites -->
+    <bean id="patch.siteLoadPatch.{siteName}" class="org.alfresco.repo.admin.patch.impl.SiteLoadPatch" parent="basePatch">
+        <property name="id"><value>patch.siteLoadPatch.{siteName}</value></property>
+        <property name="description"><value>patch.siteLoadPatch.description</value></property>
+        <property name="fixesFromSchema"><value>0</value></property>
+        <property name="fixesToSchema"><value>${version.schema}</value></property>
+        <property name="targetSchema"><value>10000</value></property>
+        <property name="spacesBootstrap" ref="siteLoadBootstrap-Spaces" />
+        <property name="usersBootstrap" ref="siteLoadBootstrap-Users" />
+        <property name="siteService" ref="siteService" />
+        <property name="authorityService" ref="authorityService" />
+        <property name="behaviourFilter" ref="policyBehaviourFilter" />
+        <property name="siteName">
+            <value>{siteName}</value>
+        </property>
+        <property name="bootstrapViews">
+            <map>
+                <entry key="users">
+                    <props>
+                        <prop key="location">{fileBase}-users.acp</prop>
+                    </props>
+                </entry>
+                <entry key="people">
+                    <props>
+                        <prop key="location">{fileBase}-people.acp</prop>
+                    </props>
+                </entry>
+                <entry key="groups">
+                    <props>
+                        <prop key="location">{fileBase}-groups.txt</prop>
+                    </props>
+                </entry>
+                <entry key="contents">
+                    <props>
+                        <prop key="location">{fileBase}-content.acp</prop>
+                    </props>
+                </entry>
+            </map>
+        </property>
+    </bean>
+</beans>
