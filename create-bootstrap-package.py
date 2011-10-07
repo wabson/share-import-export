@@ -98,6 +98,16 @@ NSMAP = {
      'trx': 'http://www.alfresco.org/model/transfer/1.0'
 }
 
+global URI_CONTENT_1_0, URI_SYSTEM_1_0, URI_USER_1_0, URI_SITE_1_0, URI_REPOSITORY_1_0
+URI_CONTENT_1_0 = 'http://www.alfresco.org/model/content/1.0'
+URI_SYSTEM_1_0 = 'http://www.alfresco.org/model/system/1.0'
+URI_USER_1_0 = 'http://www.alfresco.org/model/user/1.0'
+URI_SITE_1_0 = 'http://www.alfresco.org/model/site/1.0'
+URI_REPOSITORY_1_0 = 'http://www.alfresco.org/view/repository/1.0'
+
+global DEFAULT_LOCALE
+DEFAULT_LOCALE = locale.getdefaultlocale(locale.LC_ALL)[0]
+
 # HTTP debugging flag
 global _debug
 
@@ -232,7 +242,7 @@ def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
     users = getSiteUsers(siteData, usersFile, userNames)
     
     # People ACP
-    viewEl = generateViewXML({'{http://www.alfresco.org/view/repository/1.0}exportOf': '/sys:system/sys:people'})
+    viewEl = generateViewXML({'{%s}exportOf' % (URI_REPOSITORY_1_0): '/sys:system/sys:people'})
     for u in users:
         personEl = generatePersonXML(viewEl, u)
         # User rich text description
@@ -242,7 +252,7 @@ def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
             userDescFile = open(extractpath + os.sep + userDescAcpPath.replace('/', os.sep), 'w')
             userDescFile.write(json.dumps(userDesc))
             userDescFile.close()
-            generatePropertyXML(personEl.find('view:properties', NSMAP), '{http://www.alfresco.org/model/content/1.0}persondescription', generateContentURL(userDescAcpPath, extractpath, mimetype='application/octet-stream'))
+            generatePropertyXML(personEl.find('view:properties', NSMAP), '{%s}persondescription' % (URI_CONTENT_1_0), generateContentURL(userDescAcpPath, extractpath, mimetype='application/octet-stream'))
             allfiles.append(userDescAcpPath)
         # Add JSON prefs
         userPrefs = u.get('preferences')
@@ -251,7 +261,7 @@ def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
             prefsFile = open(extractpath + os.sep + prefsAcpPath.replace('/', os.sep), 'w')
             prefsFile.write(json.dumps(userPrefs))
             prefsFile.close()
-            generatePropertyXML(personEl.find('view:properties', NSMAP), '{http://www.alfresco.org/model/content/1.0}preferenceValues', generateContentURL(prefsAcpPath, extractpath, mimetype='text/plain'))
+            generatePropertyXML(personEl.find('view:properties', NSMAP), '{%s}preferenceValues' % (URI_CONTENT_1_0), generateContentURL(prefsAcpPath, extractpath, mimetype='text/plain'))
             allfiles.append(prefsAcpPath)
         # Avatar
         usersFileDir = os.path.dirname(usersFile)
@@ -263,19 +273,19 @@ def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
             avatarAcpPath = fileBase + '/' +  avatarName
             allfiles.append(avatarAcpPath)
             # Add cm:preferenceImage assoc
-            preferenceImg = generateXMLElement(personEl.find('view:associations', NSMAP), '{http://www.alfresco.org/model/content/1.0}preferenceImage')
-            content = generateXMLElement(preferenceImg, '{http://www.alfresco.org/model/content/1.0}content', {'{http://www.alfresco.org/view/repository/1.0}childName': avatarName})
+            preferenceImg = generateXMLElement(personEl.find('view:associations', NSMAP), '{%s}preferenceImage' % (URI_CONTENT_1_0))
+            content = generateXMLElement(preferenceImg, '{%s}content' % (URI_CONTENT_1_0), {'{%s}childName' % (URI_REPOSITORY_1_0): avatarName})
             generateAspectsXML(content, [
-                '{http://www.alfresco.org/model/content/1.0}auditable', 
-                '{http://www.alfresco.org/model/system/1.0}referenceable', 
+                '{%s}auditable' % (URI_CONTENT_1_0), 
+                '{%s}referenceable' % (URI_SYSTEM_1_0), 
                 '{http://www.alfresco.org/model/rendition/1.0}renditioned'
             ])
             generatePropertiesXML(content, {
-                '{http://www.alfresco.org/model/content/1.0}name': avatarName,
-                '{http://www.alfresco.org/model/content/1.0}contentPropertyName': '{http://www.alfresco.org/model/content/1.0}content',
-                '{http://www.alfresco.org/model/content/1.0}content': generateContentURL(avatarAcpPath, extractpath)
+                '{%s}name' % (URI_CONTENT_1_0): avatarName,
+                '{%s}contentPropertyName' % (URI_CONTENT_1_0): '{%s}content' % (URI_CONTENT_1_0),
+                '{%s}content' % (URI_CONTENT_1_0): generateContentURL(avatarAcpPath, extractpath)
             })
-            generateReferenceXML(viewEl, 'cm:%s' % (u['userName']), ['cm:%s/cm:%s' % (u['userName'], avatarName)], '{http://www.alfresco.org/model/content/1.0}avatar')
+            generateReferenceXML(viewEl, 'cm:%s' % (u['userName']), ['cm:%s/cm:%s' % (u['userName'], avatarName)], '{%s}avatar' % (URI_CONTENT_1_0))
     
     # Output the XML
     xmlPath = extractpath + os.sep + '%s.xml' % (fileBase)
@@ -299,48 +309,48 @@ def generateContentURL(path, basePath, mimetype=None, size=None, encoding='UTF-8
     if size is None:
         size = os.path.getsize(basePath + os.sep + path.replace('/', os.sep))
     if clocale is None:
-        clocale = locale.getdefaultlocale(locale.LC_ALL)[0]
+        clocale = DEFAULT_LOCALE
     return 'contentUrl=%s|mimetype=%s|size=%s|encoding=%s|locale=%s_' % (path, mimetype, size, encoding, clocale)
 
 def generatePersonXML(parent, userData):
     userName = userData['userName']
-    person = generateXMLElement(parent, '{http://www.alfresco.org/model/content/1.0}person', attrs={'{http://www.alfresco.org/view/repository/1.0}childName': 'cm:%s' % (userName)})
+    person = generateXMLElement(parent, '{%s}person' % (URI_CONTENT_1_0), attrs={'{%s}childName' % (URI_REPOSITORY_1_0): 'cm:%s' % (userName)})
     aspects = [
-        '{http://www.alfresco.org/model/content/1.0}ownable', 
-        '{http://www.alfresco.org/model/system/1.0}referenceable', 
-        '{http://www.alfresco.org/model/content/1.0}preferences'
+        '{%s}ownable' % (URI_CONTENT_1_0), 
+        '{%s}referenceable' % (URI_SYSTEM_1_0), 
+        '{%s}preferences' % (URI_CONTENT_1_0)
     ]
     if userData['enabled']:
-        aspects.append('{http://www.alfresco.org/model/content/1.0}personDisabled')
+        aspects.append('{%s}personDisabled' % (URI_CONTENT_1_0))
     properties = {
-        '{http://www.alfresco.org/model/content/1.0}companyaddress1': userData['companyaddress1'],
-        '{http://www.alfresco.org/model/content/1.0}companyaddress2': userData['companyaddress2'],
-        '{http://www.alfresco.org/model/content/1.0}companyaddress3': userData['companyaddress3'],
-        '{http://www.alfresco.org/model/content/1.0}companyemail': userData['companyemail'],
-        '{http://www.alfresco.org/model/content/1.0}companyfax': userData['companyfax'],
-        '{http://www.alfresco.org/model/content/1.0}companypostcode': userData['companypostcode'],
-        '{http://www.alfresco.org/model/content/1.0}companytelephone': userData['companytelephone'],
-        '{http://www.alfresco.org/model/content/1.0}email': userData['email'],
-        '{http://www.alfresco.org/model/content/1.0}firstName': userData['firstName'],
-        '{http://www.alfresco.org/model/content/1.0}googleusername': userData['googleusername'],
-        '{http://www.alfresco.org/model/content/1.0}homeFolder': '/app:company_home/app:user_homes/cm:%s' % (userName),
-        '{http://www.alfresco.org/model/content/1.0}instantmsg': userData['instantmsg'],
-        '{http://www.alfresco.org/model/content/1.0}jobtitle': userData['jobtitle'],
-        '{http://www.alfresco.org/model/content/1.0}lastName': userData['lastName'],
-        '{http://www.alfresco.org/model/content/1.0}location': userData['location'],
-        '{http://www.alfresco.org/model/content/1.0}mobile': userData['mobile'],
-        '{http://www.alfresco.org/model/content/1.0}organization': userData['organization'],
-        '{http://www.alfresco.org/model/content/1.0}sizeCurrent': str(userData['sizeCurrent']),
-        '{http://www.alfresco.org/model/content/1.0}sizeQuota': str(userData['quota']),
-        '{http://www.alfresco.org/model/content/1.0}skype': userData['skype'],
-        '{http://www.alfresco.org/model/content/1.0}telephone': userData['telephone'],
-        '{http://www.alfresco.org/model/content/1.0}userName': userName,
+        '{%s}companyaddress1' % (URI_CONTENT_1_0): userData['companyaddress1'],
+        '{%s}companyaddress2' % (URI_CONTENT_1_0): userData['companyaddress2'],
+        '{%s}companyaddress3' % (URI_CONTENT_1_0): userData['companyaddress3'],
+        '{%s}companyemail' % (URI_CONTENT_1_0): userData['companyemail'],
+        '{%s}companyfax' % (URI_CONTENT_1_0): userData['companyfax'],
+        '{%s}companypostcode' % (URI_CONTENT_1_0): userData['companypostcode'],
+        '{%s}companytelephone' % (URI_CONTENT_1_0): userData['companytelephone'],
+        '{%s}email' % (URI_CONTENT_1_0): userData['email'],
+        '{%s}firstName' % (URI_CONTENT_1_0): userData['firstName'],
+        '{%s}googleusername' % (URI_CONTENT_1_0): userData['googleusername'],
+        '{%s}homeFolder' % (URI_CONTENT_1_0): '/app:company_home/app:user_homes/cm:%s' % (userName),
+        '{%s}instantmsg' % (URI_CONTENT_1_0): userData['instantmsg'],
+        '{%s}jobtitle' % (URI_CONTENT_1_0): userData['jobtitle'],
+        '{%s}lastName' % (URI_CONTENT_1_0): userData['lastName'],
+        '{%s}location' % (URI_CONTENT_1_0): userData['location'],
+        '{%s}mobile' % (URI_CONTENT_1_0): userData['mobile'],
+        '{%s}organization' % (URI_CONTENT_1_0): userData['organization'],
+        '{%s}owner' % (URI_CONTENT_1_0): userName,
+        '{%s}sizeCurrent' % (URI_CONTENT_1_0): str(userData['sizeCurrent']),
+        '{%s}sizeQuota' % (URI_CONTENT_1_0): str(userData['quota']),
+        '{%s}skype' % (URI_CONTENT_1_0): userData['skype'],
+        '{%s}telephone' % (URI_CONTENT_1_0): userData['telephone'],
+        '{%s}userName' % (URI_CONTENT_1_0): userName,
     }
     perms = [
         {'authority': userName, 'permission': 'All'},
         {'authority': 'ROLE_OWNER', 'permission': 'All'}
     ]
-    # TODO Set cm:preferenceValues and cm:persondescription
     
     generateACLXML(person, perms, True)
     generateAspectsXML(person, aspects)
@@ -365,7 +375,7 @@ def generateUsersACP(fileName, siteData, usersFile, temppath, userNames=None):
     users = getSiteUsers(siteData, usersFile, userNames)
     
     # Users ACP
-    viewEl = generateViewXML({'{http://www.alfresco.org/view/repository/1.0}exportOf': '/sys:system/sys:people'})
+    viewEl = generateViewXML({'{%s}exportOf' % (URI_REPOSITORY_1_0): '/sys:system/sys:people'})
     for u in users:
         userEl = generateUserXML(viewEl, u)
     
@@ -415,18 +425,19 @@ def generateUserXML(parent, userData):
     # Default to username if password not supplied
     password = userData.get('password') or userName
     md4hash = hashlib.new('md4', password.encode('utf-16le')).hexdigest()
-    user = generateXMLElement(parent, '{http://www.alfresco.org/model/content/1.0}user', attrs={'{http://www.alfresco.org/view/repository/1.0}childName': 'usr:%s' % (userName)})
+    user = generateXMLElement(parent, '{%s}user' % (URI_USER_1_0), attrs={'{%s}childName' % (URI_REPOSITORY_1_0): 'usr:%s' % (userName)})
     aspects = [
-        '{http://www.alfresco.org/model/system/1.0}referenceable'
+        '{%s}referenceable' % (URI_SYSTEM_1_0)
     ]
     properties = {
-        '{http://www.alfresco.org/model/user/1.0}enabled': str(userData['enabled']).lower(),
-        '{http://www.alfresco.org/model/user/1.0}password': str(md4hash),
-        '{http://www.alfresco.org/model/user/1.0}username': userData['userName'],
-        '{http://www.alfresco.org/model/user/1.0}salt': None,
-        '{http://www.alfresco.org/model/user/1.0}credentialsExpire': 'false',
-        '{http://www.alfresco.org/model/user/1.0}accountExpires': 'false',
-        '{http://www.alfresco.org/model/user/1.0}accountLocked': 'false'
+        '{%s}name' % (URI_CONTENT_1_0): userData['userName'],
+        '{%s}enabled' % (URI_USER_1_0): str(userData['enabled']).lower(),
+        '{%s}password' % (URI_USER_1_0): str(md4hash),
+        '{%s}username' % (URI_USER_1_0): userData['userName'],
+        '{%s}salt' % (URI_USER_1_0): None,
+        '{%s}credentialsExpire' % (URI_USER_1_0): 'false',
+        '{%s}accountExpires' % (URI_USER_1_0): 'false',
+        '{%s}accountLocked' % (URI_USER_1_0): 'false'
     }
     generateAspectsXML(user, aspects)
     generatePropertiesXML(user, properties)
@@ -437,7 +448,7 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
     # TODO Override the st:site/view:properties/cm:tagScopeCache value
     
     # Make the ACP working directory
-    extractpath = '%s/acp' % (temppath)
+    extractpath = temppath + os.sep + 'acp'
     os.mkdir(extractpath)
     
     filenamenoext = os.path.splitext(os.path.split(jsonFileName)[1])[0]
@@ -448,9 +459,11 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
     siteId = str(siteData['shortName'])
     # Base name for acp xml file and content folder
     fileBase = os.path.splitext(fileName)[0]
+    os.mkdir(extractpath + os.sep + fileBase)
     
     siteXML = generateSiteXML(siteData)
     allfiles = []
+    siteTagCounts = []
     # Extract component ACP files
     if includeContent:
         containsEl = siteXML.find('st:site/view:associations/cm:contains', NSMAP)
@@ -469,23 +482,24 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
                     acpContentDir = '%s' % (container.replace(' ', '_'))
                     acpZip.extract(acpXMLFile, extractpath)
                 containerEl = generateSiteContainerXML(containsEl, container)
+                containerContainsEl = containerEl.find('view:associations/cm:contains', NSMAP)
                 cviewEl = etree.parse('%s/%s' % (extractpath, acpXMLFile))
                 for el in list(cviewEl.getroot()):
-                    if not el.tag.startswith('{http://www.alfresco.org/view/repository/1.0}'):
-                        # Add component folder to cm:contains el in the new XML
-                        containerEl.append(el)
-                    elif el.tag == '{http://www.alfresco.org/view/repository/1.0}reference':
+                    if not el.tag.startswith('{%s}' % (URI_REPOSITORY_1_0)):
+                        # Add component folders to cm:contains el in the new XML
+                        containerContainsEl.append(el)
+                    elif el.tag == '{%s}reference' % (URI_REPOSITORY_1_0):
                         # Add to main file
                         # TODO Use generateReferenceXML, below
-                        refEl = etree.Element('{http://www.alfresco.org/view/repository/1.0}reference')
-                        fromref = el.get('{http://www.alfresco.org/view/repository/1.0}pathref')
+                        refEl = etree.Element('{%s}reference' % (URI_REPOSITORY_1_0))
+                        fromref = el.get('{%s}pathref' % (URI_REPOSITORY_1_0))
                         if fromref is not None:
-                            refEl.set('{http://www.alfresco.org/view/repository/1.0}pathref', fromref)
-                            associations = etree.SubElement(refEl, '{http://www.alfresco.org/view/repository/1.0}associations')
-                            references = etree.SubElement(associations, '{http://www.alfresco.org/model/content/1.0}references')
+                            refEl.set('{%s}pathref' % (URI_REPOSITORY_1_0), fromref)
+                            associations = etree.SubElement(refEl, '{%s}associations' % (URI_REPOSITORY_1_0))
+                            references = etree.SubElement(associations, '{%s}references' % (URI_CONTENT_1_0))
                             refs = el.findall('view:associations/cm:references/view:reference', NSMAP)
                             for r in refs:
-                                etree.SubElement(references, '{http://www.alfresco.org/view/repository/1.0}reference', {'{http://www.alfresco.org/view/repository/1.0}pathref': 'cm:%s/cm:%s/%s' % (siteId, container, r.get('{http://www.alfresco.org/view/repository/1.0}pathref'))})
+                                etree.SubElement(references, '{%s}reference' % (URI_REPOSITORY_1_0), {'{%s}pathref' % (URI_REPOSITORY_1_0): 'cm:%s/cm:%s/%s' % (siteId, container, r.get('{%s}pathref' % (URI_REPOSITORY_1_0)))})
                             siteXML.append(refEl)
                 
                 # Extract all files from the ACP file
@@ -499,6 +513,30 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
                 allfiles.extend(extractlist)
                 
                 acpZip.close()
+                
+                # Read component tags
+                jsonFile = thisdir + os.sep + '%s-%s-tags.json' % (filenamenoext, container.replace(' ', '_'))
+                tagCounts = []
+                if os.path.isfile(jsonFile):
+                    print "Import %s tags" % (container)
+                    tagCounts = nodesTagCount(json.loads(open(jsonFile).read())['items'])
+                # Add to site tag counts
+                siteTagCounts = addTagCounts(siteTagCounts, tagCounts)
+                tagScopePath = fileBase + '/' + '%s-tagScopeCache.bin' % (container.replace(' ', '_'))
+                tagScopeFile = open(extractpath + os.sep + tagScopePath.replace('/', os.sep), 'w')
+                tagScopeFile.write(generateTagScopeContent(tagCounts))
+                tagScopeFile.close()
+                generatePropertyXML(containerEl.find('view:properties', NSMAP), '{%s}tagScopeCache' % (URI_CONTENT_1_0), generateContentURL(tagScopePath, extractpath, mimetype='text/plain'))
+                allfiles.append(tagScopePath)
+        
+        # Add site tagscope
+        tagScopePath = fileBase + '/' + 'site-tagScopeCache.bin'
+        tagScopeFile = open(extractpath + os.sep + tagScopePath.replace('/', os.sep), 'w')
+        tagScopeFile.write(generateTagScopeContent(siteTagCounts))
+        tagScopeFile.close()
+        
+        generatePropertyXML(siteXML.find('st:site/view:properties', NSMAP), '{%s}tagScopeCache' % (URI_CONTENT_1_0), generateContentURL(tagScopePath, extractpath, mimetype='text/plain'))
+        allfiles.append(tagScopePath)
     
     # Output the XML
     siteXmlPath = extractpath + os.sep + '%s.xml' % (fileBase)
@@ -514,14 +552,38 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
         siteAcpFile.write('%s/%s' % (extractpath, f), f)
     siteAcpFile.close()
 
-def generateReferenceXML(parent, fromRef, toRefs, refType='{http://www.alfresco.org/model/content/1.0}references'):
-    refEl = etree.SubElement(parent, '{http://www.alfresco.org/view/repository/1.0}reference')
+def nodesTagCount(nodeInfo):
+    tagCounts = {}
+    for node in nodeInfo:
+        for tagName in node['tags']:
+            tagCounts[tagName] = tagCounts.get(tagName, 0) + 1
+    # Return array of tuples, ordered by tag count
+    return tagCounts.items().sort(cmp=lambda x,y: cmp(y[1], x[1]))
+
+def addTagCounts(count1, count2):
+    """Add tag count 2 to tag count 1 and return the result. Each are tuples of tagname, count pairs"""
+    tagCounts = {}
+    for tag1 in count1:
+        tagCounts[tag1[0]] = tagCounts.get(tag1[0], 0) + tag1[1]
+    for tag2 in count2:
+        tagCounts[tag2[0]] = tagCounts.get(tag2[0], 0) + tag2[2]
+    # Return array of tuples, ordered by tag count
+    return tagCounts.items().sort(cmp=lambda x,y: cmp(y[1], x[1])) or []
+
+def generateTagScopeContent(counts):
+    text = ''
+    for item in counts:
+        text = text + '%s|%d' % (item[0], item[1]) + "\n"
+    return text
+
+def generateReferenceXML(parent, fromRef, toRefs, refType='{%s}references' % (URI_CONTENT_1_0)):
+    refEl = etree.SubElement(parent, '{%s}reference' % (URI_REPOSITORY_1_0))
     if fromRef is not None and toRefs is not None:
-        refEl.set('{http://www.alfresco.org/view/repository/1.0}pathref', fromRef)
-        associations = etree.SubElement(refEl, '{http://www.alfresco.org/view/repository/1.0}associations')
+        refEl.set('{%s}pathref' % (URI_REPOSITORY_1_0), fromRef)
+        associations = etree.SubElement(refEl, '{%s}associations' % (URI_REPOSITORY_1_0))
         references = etree.SubElement(associations, refType)
         for ref in toRefs:
-            etree.SubElement(references, '{http://www.alfresco.org/view/repository/1.0}reference', {'{http://www.alfresco.org/view/repository/1.0}pathref': ref})
+            etree.SubElement(references, '{%s}reference' % (URI_REPOSITORY_1_0), {'{%s}pathref' % (URI_REPOSITORY_1_0): ref})
 
 def generateSiteXML(siteData):
     siteId = siteData['shortName']
@@ -529,15 +591,17 @@ def generateSiteXML(siteData):
     for (prefix, uri) in NSMAP.items():
         etree.register_namespace(prefix, uri)
     
-    view = generateViewXML({'{http://www.alfresco.org/view/repository/1.0}exportOf': '/app:company_home/st:sites/cm:%s' % (siteId)})
+    view = generateViewXML({'{%s}exportOf' % (URI_REPOSITORY_1_0): '/app:company_home/st:sites/cm:%s' % (siteId)})
     
-    site = generateXMLElement(view, '{http://www.alfresco.org/model/site/1.0}site')
+    site = generateXMLElement(view, '{%s}site' % (URI_SITE_1_0))
     associations = generateAssociationsXML(site)
     contains = generateAssociationsContainsXML(associations)
     
-    # Add aspects
-    generateAspectsXML(site, siteData['metadata']['aspects'])
-    #TODO Need to add '{http://www.alfresco.org/model/system/1.0}localized'?
+    # Add aspects including sys:localized if not already present
+    aspects = siteData['metadata']['aspects'] or []
+    if '{%s}localized' % (URI_SYSTEM_1_0) not in aspects:
+        aspects.append('{%s}localized' % (URI_SYSTEM_1_0))
+    generateAspectsXML(site, aspects)
     
     # ACL
     perms = []
@@ -549,13 +613,22 @@ def generateSiteXML(siteData):
     generateACLXML(site, perms, False)
     
     # Properties
-    generatePropertiesXML(site, siteData['metadata']['properties'])
+    props = siteData['metadata']['properties']
+    # Remove tagscope property from JSON, as we will populate this later
+    props.pop('{%s}tagScopeCache' % (URI_CONTENT_1_0), None)
+    props['{%s}tagScopeSummary' % (URI_CONTENT_1_0)] = []
+    # Set locale if not already set
+    props.setdefault('{%s}locale' % (URI_SYSTEM_1_0), '%s_' % (DEFAULT_LOCALE))
+    # Turn title and description into mltext props
+    props['{%s}title' % (URI_CONTENT_1_0)] = {DEFAULT_LOCALE: props.get('{%s}title' % (URI_CONTENT_1_0), '')}
+    props['{%s}description' % (URI_CONTENT_1_0)] = {DEFAULT_LOCALE: props.get('{%s}description' % (URI_CONTENT_1_0), '')}
+    generatePropertiesXML(site, props)
     
     return view
 
 def generateViewXML(metadata):
-    view = etree.Element('{http://www.alfresco.org/view/repository/1.0}view')
-    metadata = etree.SubElement(view, '{http://www.alfresco.org/view/repository/1.0}metadata')
+    view = etree.Element('{%s}view' % (URI_REPOSITORY_1_0))
+    metadata = etree.SubElement(view, '{%s}metadata' % (URI_REPOSITORY_1_0))
     for (k, v) in metadata.items():
         etree.SubElement(metadata, k).text = str(v)
     return view
@@ -564,77 +637,81 @@ def generateXMLElement(parent, tagName, attrs={}):
     return etree.SubElement(parent, tagName, attrs)
 
 def generateAssociationsXML(parent):
-    return generateXMLElement(parent, '{http://www.alfresco.org/view/repository/1.0}associations')
+    return generateXMLElement(parent, '{%s}associations' % (URI_REPOSITORY_1_0))
 
 def generateAssociationsContainsXML(parent):
-    return generateXMLElement(parent, '{http://www.alfresco.org/model/content/1.0}contains')
+    return generateXMLElement(parent, '{%s}contains' % (URI_CONTENT_1_0))
 
 def generateSiteContainerXML(parent, containerId):
-    containerEl = etree.SubElement(parent, '{http://www.alfresco.org/model/content/1.0}folder', attrib={'{http://www.alfresco.org/view/repository/1.0}childName': 'cm:%s' % (containerId)})
-    associations = etree.SubElement(containerEl, '{http://www.alfresco.org/view/repository/1.0}associations')
-    contains = etree.SubElement(associations, '{http://www.alfresco.org/model/content/1.0}contains')
+    containerEl = etree.SubElement(parent, '{%s}folder' % (URI_CONTENT_1_0), attrib={'{%s}childName' % (URI_REPOSITORY_1_0): 'cm:%s' % (containerId)})
+    associations = etree.SubElement(containerEl, '{%s}associations' % (URI_REPOSITORY_1_0))
+    contains = etree.SubElement(associations, '{%s}contains' % (URI_CONTENT_1_0))
     # Aspects
     generateAspectsXML(containerEl, [
-        '{http://www.alfresco.org/model/content/1.0}auditable', 
-        '{http://www.alfresco.org/model/content/1.0}ownable', 
-        '{http://www.alfresco.org/model/content/1.0}tagscope', 
-        '{http://www.alfresco.org/model/system/1.0}referenceable', 
-        '{http://www.alfresco.org/model/content/1.0}titled', 
-        '{http://www.alfresco.org/model/system/1.0}localized'
+        '{%s}auditable' % (URI_CONTENT_1_0), 
+        '{%s}ownable' % (URI_CONTENT_1_0), 
+        '{%s}tagscope' % (URI_CONTENT_1_0), 
+        '{%s}referenceable' % (URI_SYSTEM_1_0), 
+        '{%s}titled' % (URI_CONTENT_1_0), 
+        '{%s}localized' % (URI_SYSTEM_1_0)
     ])
     # Properties
     generatePropertiesXML(containerEl, {
-        '{http://www.alfresco.org/model/content/1.0}name': containerId,
-        '{http://www.alfresco.org/model/content/1.0}title': '',
-        '{http://www.alfresco.org/model/content/1.0}description': '',
-        '{http://www.alfresco.org/model/content/1.0}tagScopeCache': '',
-        '{http://www.alfresco.org/model/content/1.0}tagScopeSummary': [],
-        '{http://www.alfresco.org/model/site/1.0}componentId': containerId,
-        '{http://www.alfresco.org/model/system/1.0}locale': '%s_' % (locale.getdefaultlocale(locale.LC_ALL)[0]),
-        '{http://www.alfresco.org/model/content/1.0}owner': 'admin',
-        '{http://www.alfresco.org/model/content/1.0}tagScopeSummary': ''
+        '{%s}name' % (URI_CONTENT_1_0): containerId,
+        '{%s}title' % (URI_CONTENT_1_0): {DEFAULT_LOCALE: ''},
+        '{%s}description' % (URI_CONTENT_1_0): {DEFAULT_LOCALE: ''},
+        '{%s}componentId' % (URI_SITE_1_0): containerId,
+        '{%s}locale' % (URI_SYSTEM_1_0): '%s_' % (DEFAULT_LOCALE),
+        '{%s}tagScopeSummary' % (URI_CONTENT_1_0): []
     })
     return containerEl
 
 def generateAspectsXML(parent, aspects):
-    aspectsEl = etree.SubElement(parent, '{http://www.alfresco.org/view/repository/1.0}aspects')
+    aspectsEl = etree.SubElement(parent, '{%s}aspects' % (URI_REPOSITORY_1_0))
     for aname in aspects:
         etree.SubElement(aspectsEl, aname)
     return aspectsEl
 
 def generatePropertiesXML(parent, properties):
-    propertiesEl = etree.SubElement(parent, '{http://www.alfresco.org/view/repository/1.0}properties')
+    propertiesEl = etree.SubElement(parent, '{%s}properties' % (URI_REPOSITORY_1_0))
     for (k, v) in properties.items():
         generatePropertyXML(propertiesEl, k, v)
     return propertiesEl
 
 def generatePropertyXML(parent, key, value):
     propertyEl = etree.SubElement(parent, key)
-    if key in ['{http://www.alfresco.org/model/content/1.0}title', '{http://www.alfresco.org/model/content/1.0}description']:
-        etree.SubElement(propertyEl, 
-            '{http://www.alfresco.org/view/repository/1.0}locale',
-            {'{http://www.alfresco.org/view/repository/1.0}mlvalue': locale.getdefaultlocale(locale.LC_ALL)[0]}
-        ).text = unicode(value)
-    elif value is None:
-        valuesEl = etree.SubElement(propertyEl, '{http://www.alfresco.org/view/repository/1.0}value', {'{http://www.alfresco.org/view/repository/1.0}isNull': 'true'})
-    elif isinstance(value, list):
-        valuesEl = etree.SubElement(propertyEl, '{http://www.alfresco.org/view/repository/1.0}values')
-        for v in value:
-            etree.SubElement(propertyEl, '{http://www.alfresco.org/view/repository/1.0}value').text = str(v)
-    else:
-        propertyEl.text = unicode(value)
+    generatePropertyValueXML(propertyEl, value)
     return propertyEl
 
+def generatePropertyValueXML(parentEl, value):
+    if value is None:
+        valuesEl = etree.SubElement(parentEl, '{%s}value' % (URI_REPOSITORY_1_0), {'{%s}isNull' % (URI_REPOSITORY_1_0): 'true'})
+    elif isinstance(value, dict): # mltext
+        for (lkey, lval) in value.items():
+            etree.SubElement(parentEl, 
+                '{%s}locale' % (URI_REPOSITORY_1_0),
+                {'{%s}mlvalue' % (URI_REPOSITORY_1_0): lkey}
+            ).text = unicode(lval)
+    elif isinstance(value, list): # multi-value
+        valuesEl = etree.SubElement(parentEl, '{%s}values' % (URI_REPOSITORY_1_0))
+        for v in value:
+            generatePropertyValueXML(etree.SubElement(parentEl, '{%s}value' % (URI_REPOSITORY_1_0)), v)
+    elif isinstance(value, bool): # True or False
+        parentEl.text = str(value).lower()
+    else:
+        parentEl.text = unicode(value)
+    return parentEl
+
 def generateACLXML(parent, permissions, inherit=False):
-    aclEl = etree.SubElement(parent, '{http://www.alfresco.org/view/repository/1.0}acl', attrib={'{http://www.alfresco.org/view/repository/1.0}inherit': str(inherit).lower()})
+    aclEl = etree.SubElement(parent, '{%s}acl' % (URI_REPOSITORY_1_0), attrib={'{%s}inherit' % (URI_REPOSITORY_1_0): str(inherit).lower()})
     for p in permissions:
         generateACEXML(aclEl, p['authority'], p['permission'])
     return aclEl
 
 def generateACEXML(parent, authority, permission, access='ALLOWED'):
-    aceEl = etree.SubElement(parent, '{http://www.alfresco.org/view/repository/1.0}ace', attrib={'{http://www.alfresco.org/view/repository/1.0}access': access})
-    etree.SubElement(aceEl, '{http://www.alfresco.org/view/repository/1.0}authority').text = authority
-    etree.SubElement(aceEl, '{http://www.alfresco.org/view/repository/1.0}permission').text = permission
+    aceEl = etree.SubElement(parent, '{%s}ace' % (URI_REPOSITORY_1_0), attrib={'{%s}access' % (URI_REPOSITORY_1_0): access})
+    etree.SubElement(aceEl, '{%s}authority' % (URI_REPOSITORY_1_0)).text = authority
+    etree.SubElement(aceEl, '{%s}permission' % (URI_REPOSITORY_1_0)).text = permission
     return aceEl
 
 if __name__ == "__main__":
