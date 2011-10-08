@@ -519,7 +519,7 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
                 jsonFile = thisdir + os.sep + '%s-%s-tags.json' % (filenamenoext, container.replace(' ', '_'))
                 tagCounts = []
                 if os.path.isfile(jsonFile):
-                    print "Import %s tags" % (container)
+                    print "Add %s tags" % (container)
                     tagCounts = nodesTagCount(json.loads(open(jsonFile).read())['items'])
                 # Add to site tag counts
                 siteTagCounts = addTagCounts(siteTagCounts, tagCounts)
@@ -619,7 +619,9 @@ def nodesTagCount(nodeInfo):
         for tagName in node['tags']:
             tagCounts[tagName] = tagCounts.get(tagName, 0) + 1
     # Return array of tuples, ordered by tag count
-    return tagCounts.items().sort(cmp=lambda x,y: cmp(y[1], x[1]))
+    items = tagCounts.items()
+    items.sort(key=lambda item: item[1], reverse=True)
+    return items
 
 def addTagCounts(count1, count2):
     """Add tag count 2 to tag count 1 and return the result. Each are tuples of tagname, count pairs"""
@@ -627,9 +629,11 @@ def addTagCounts(count1, count2):
     for tag1 in count1:
         tagCounts[tag1[0]] = tagCounts.get(tag1[0], 0) + tag1[1]
     for tag2 in count2:
-        tagCounts[tag2[0]] = tagCounts.get(tag2[0], 0) + tag2[2]
+        tagCounts[tag2[0]] = tagCounts.get(tag2[0], 0) + tag2[1]
     # Return array of tuples, ordered by tag count
-    return tagCounts.items().sort(cmp=lambda x,y: cmp(y[1], x[1])) or []
+    items = tagCounts.items()
+    items.sort(key=lambda item: item[1], reverse=True)
+    return items
 
 def generateTagScopeContent(counts):
     text = ''
