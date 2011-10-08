@@ -49,6 +49,7 @@ import shutil
 import mimetypes
 import hashlib
 from xml.sax.saxutils import escape
+from datetime import datetime
 
 import alfresco
 
@@ -275,7 +276,7 @@ def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
             allfiles.append(avatarAcpPath)
             # Add cm:preferenceImage assoc
             preferenceImg = generateXMLElement(personEl.find('view:associations', NSMAP), '{%s}preferenceImage' % (URI_CONTENT_1_0))
-            content = generateXMLElement(preferenceImg, '{%s}content' % (URI_CONTENT_1_0), {'{%s}childName' % (URI_REPOSITORY_1_0): avatarName})
+            content = generateXMLElement(preferenceImg, '{%s}content' % (URI_CONTENT_1_0), {'{%s}childName' % (URI_REPOSITORY_1_0): 'cm:%s' % avatarName})
             generateAspectsXML(content, [
                 '{%s}auditable' % (URI_CONTENT_1_0), 
                 '{%s}referenceable' % (URI_SYSTEM_1_0), 
@@ -492,15 +493,16 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
                     elif el.tag == '{%s}reference' % (URI_REPOSITORY_1_0):
                         # Add to main file
                         # TODO Use generateReferenceXML, below
+                        refBase = 'cm:%s/cm:%s' % (siteId, container)
                         refEl = etree.Element('{%s}reference' % (URI_REPOSITORY_1_0))
                         fromref = el.get('{%s}pathref' % (URI_REPOSITORY_1_0))
                         if fromref is not None:
-                            refEl.set('{%s}pathref' % (URI_REPOSITORY_1_0), fromref)
+                            refEl.set('{%s}pathref' % (URI_REPOSITORY_1_0), '%s/%s' % (refBase, fromref))
                             associations = etree.SubElement(refEl, '{%s}associations' % (URI_REPOSITORY_1_0))
                             references = etree.SubElement(associations, '{%s}references' % (URI_CONTENT_1_0))
                             refs = el.findall('view:associations/cm:references/view:reference', NSMAP)
                             for r in refs:
-                                etree.SubElement(references, '{%s}reference' % (URI_REPOSITORY_1_0), {'{%s}pathref' % (URI_REPOSITORY_1_0): 'cm:%s/cm:%s/%s' % (siteId, container, r.get('{%s}pathref' % (URI_REPOSITORY_1_0)))})
+                                etree.SubElement(references, '{%s}reference' % (URI_REPOSITORY_1_0), {'{%s}pathref' % (URI_REPOSITORY_1_0): '%s/%s' % (refBase, r.get('{%s}pathref' % (URI_REPOSITORY_1_0)))})
                             siteXML.append(refEl)
                 
                 # Extract all files from the ACP file
@@ -657,16 +659,9 @@ def generateSiteXML(siteData):
         etree.register_namespace(prefix, uri)
     
     view = generateViewXML({'{%s}exportOf' % (URI_REPOSITORY_1_0): '/app:company_home/st:sites/cm:%s' % (siteId)})
-    
-    site = generateXMLElement(view, '{%s}site' % (URI_SITE_1_0))
-    associations = generateAssociationsXML(site)
-    contains = generateAssociationsContainsXML(associations)
-    
-    # Add aspects including sys:localized if not already present
-    aspects = siteData['metadata']['aspects'] or []
-    if '{%s}localized' % (URI_SYSTEM_1_0) not in aspects:
-        aspects.append('{%s}localized' % (URI_SYSTEM_1_0))
-    generateAspectsXML(site, aspects)
+    aspects = []
+    for aspect in siteData['metadata']['aspects'] or []:
+        aspects.append(str(aspect))
     
     # ACL
     perms = []
@@ -675,27 +670,40 @@ def generateSiteXML(siteData):
     if siteData['visibility'] == 'PUBLIC':
         perms.append({ 'authority': 'GROUP_EVERYONE', 'permission': 'ReadPermissions'})
         perms.append({ 'authority': 'GROUP_EVERYONE', 'permission': 'SiteConsumer'})
-    generateACLXML(site, perms, False)
     
     # Properties
-    props = siteData['metadata']['properties']
+    props = {}
+    for (k, v) in siteData['metadata']['properties'].items():
+        props[str(k)] = v
+    # Turn title and description into mltext
+    props['{%s}title' % (URI_CONTENT_1_0)] = {DEFAULT_LOCALE: props.get('{%s}title' % (URI_CONTENT_1_0), '')}
+    props['{%s}description' % (URI_CONTENT_1_0)] = {DEFAULT_LOCALE: props.get('{%s}description' % (URI_CONTENT_1_0), '')}
     # Remove tagscope property from JSON, as we will populate this later
     props.pop('{%s}tagScopeCache' % (URI_CONTENT_1_0), None)
     props['{%s}tagScopeSummary' % (URI_CONTENT_1_0)] = []
-    # Set locale if not already set
-    props.setdefault('{%s}locale' % (URI_SYSTEM_1_0), '%s_' % (DEFAULT_LOCALE))
-    # Turn title and description into mltext props
-    props['{%s}title' % (URI_CONTENT_1_0)] = {DEFAULT_LOCALE: props.get('{%s}title' % (URI_CONTENT_1_0), '')}
-    props['{%s}description' % (URI_CONTENT_1_0)] = {DEFAULT_LOCALE: props.get('{%s}description' % (URI_CONTENT_1_0), '')}
-    generatePropertiesXML(site, props)
+    # Convert dates
+    convertDateProperties(props)
     
+    site = generateFolderXML(view, siteId, '{%s}site' % (URI_SITE_1_0), aspects, props, perms, False)
     return view
+
+def convertDateProperties(props):
+    months = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6, 'Jul': 7, 
+              'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}
+    for (k, v) in props.items():
+        if isinstance(v, (str, unicode)):
+            m = re.match('(\w{3}) (\w{3}) (\d{1,2}) (\d+:\d+:\d+) (\w+) (\d{2,4})', str(v))
+            if m: # e.g. Tue Jul 13 13:06:40 EDT 2010
+                # Convert to 2011-02-15T20:16:27.080Z
+                # TODO intepret using strftime() and strptime() - http://docs.python.org/library/datetime.html#strftime-strptime-behavior
+                props[k] = '%04d-%02d-%02dT%s.000Z' % (int(str(m.group(6))), int(months[str(m.group(2))]), int(str(m.group(3))), str(m.group(4)))
+    return props
 
 def generateViewXML(metadata):
     view = etree.Element('{%s}view' % (URI_REPOSITORY_1_0))
-    metadata = etree.SubElement(view, '{%s}metadata' % (URI_REPOSITORY_1_0))
+    metadataEl = etree.SubElement(view, '{%s}metadata' % (URI_REPOSITORY_1_0))
     for (k, v) in metadata.items():
-        etree.SubElement(metadata, k).text = str(v)
+        etree.SubElement(metadataEl, str(k)).text = str(v)
     return view
 
 def generateFolderXML(parent, childName, type='{%s}folder' % (URI_CONTENT_1_0), addaspects=[], addprops={}, perms=[], inheritPerms=True, addAssocs=True, addContains=True):
@@ -711,19 +719,22 @@ def generateContentXML(parent, contentPath, childName=None, type='{%s}content' %
     return el
 
 def generateNodeXML(parent, childName, type, addaspects=[], addprops={}, perms=[], inheritPerms=True, addAssocs=True, addContains=True):
-    if parent.tag != '{%s}contains' % (URI_CONTENT_1_0):
+    if parent.tag not in ['{%s}contains' % (URI_CONTENT_1_0), '{%s}view' % (URI_REPOSITORY_1_0)]:
         parent = parent.find('view:associations/cm:contains', NSMAP)
+    if parent is None:
+        print "Error: could not find a suitable parent element"
+        exit(1)
     folderEl = etree.SubElement(parent, type, attrib={'{%s}childName' % (URI_REPOSITORY_1_0): 'cm:%s' % (childName)})
     generateACLXML(folderEl, perms, inheritPerms)
     # Core aspects
-    aspects = [
+    aspects = set([
         '{%s}auditable' % (URI_CONTENT_1_0), 
         '{%s}ownable' % (URI_CONTENT_1_0), 
         '{%s}referenceable' % (URI_SYSTEM_1_0), 
         '{%s}titled' % (URI_CONTENT_1_0), 
         '{%s}localized' % (URI_SYSTEM_1_0)
-    ]
-    aspects.extend(addaspects)
+    ])
+    aspects.union(addaspects)
     generateAspectsXML(folderEl, aspects)
     # Core properties
     props = {
@@ -788,8 +799,8 @@ def generatePropertyValueXML(parentEl, value):
     elif isinstance(value, dict): # mltext
         for (lkey, lval) in value.items():
             etree.SubElement(parentEl, 
-                '{%s}locale' % (URI_REPOSITORY_1_0),
-                {'{%s}mlvalue' % (URI_REPOSITORY_1_0): lkey}
+                '{%s}mlvalue' % (URI_REPOSITORY_1_0),
+                {'{%s}locale' % (URI_REPOSITORY_1_0): lkey}
             ).text = unicode(lval)
     elif isinstance(value, list): # multi-value
         valuesEl = etree.SubElement(parentEl, '{%s}values' % (URI_REPOSITORY_1_0))
