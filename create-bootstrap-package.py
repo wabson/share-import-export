@@ -48,6 +48,7 @@ import tempfile
 import shutil
 import mimetypes
 import hashlib
+from xml.sax.saxutils import escape
 
 import alfresco
 
@@ -303,7 +304,7 @@ def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
 
 def generateContentURL(path, basePath, mimetype=None, size=None, encoding='UTF-8', clocale=None):
     if mimetype is None:
-        mimetype = mimetypes.guess_type(path)[0]
+        mimetype = mimetypes.guess_type(path)[0] or 'application/octet-stream'
     if mimetype == 'image/pjpeg':
         mimetype = 'image/jpeg'
     if size is None:
@@ -522,21 +523,21 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
                     tagCounts = nodesTagCount(json.loads(open(jsonFile).read())['items'])
                 # Add to site tag counts
                 siteTagCounts = addTagCounts(siteTagCounts, tagCounts)
+                # Persist
                 tagScopePath = fileBase + '/' + '%s-tagScopeCache.bin' % (container.replace(' ', '_'))
-                tagScopeFile = open(extractpath + os.sep + tagScopePath.replace('/', os.sep), 'w')
-                tagScopeFile.write(generateTagScopeContent(tagCounts))
-                tagScopeFile.close()
+                persistContent(generateTagScopeContent(tagCounts), extractpath, tagScopePath)
                 generatePropertyXML(containerEl.find('view:properties', NSMAP), '{%s}tagScopeCache' % (URI_CONTENT_1_0), generateContentURL(tagScopePath, extractpath, mimetype='text/plain'))
                 allfiles.append(tagScopePath)
         
         # Add site tagscope
         tagScopePath = fileBase + '/' + 'site-tagScopeCache.bin'
-        tagScopeFile = open(extractpath + os.sep + tagScopePath.replace('/', os.sep), 'w')
-        tagScopeFile.write(generateTagScopeContent(siteTagCounts))
-        tagScopeFile.close()
+        persistContent(generateTagScopeContent(siteTagCounts), extractpath, tagScopePath)
         
         generatePropertyXML(siteXML.find('st:site/view:properties', NSMAP), '{%s}tagScopeCache' % (URI_CONTENT_1_0), generateContentURL(tagScopePath, extractpath, mimetype='text/plain'))
         allfiles.append(tagScopePath)
+        
+        # Add site configuration
+        allfiles.extend(generateSiteConfigXML(siteData, containsEl, extractpath, fileBase))
     
     # Output the XML
     siteXmlPath = extractpath + os.sep + '%s.xml' % (fileBase)
@@ -551,6 +552,66 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
     for f in allfiles:
         siteAcpFile.write('%s/%s' % (extractpath, f), f)
     siteAcpFile.close()
+
+def generateSiteConfigXML(siteData, containsEl, tempDir, fileBase):
+    # Return the list of files added
+    files = []
+    configEl = generateFolderXML(containsEl, 'surf-config')
+    siteEl = generateFolderXML(generateFolderXML(generateFolderXML(configEl, 'pages'), 'site'), siteData['shortName'])
+    componentsEl = generateFolderXML(configEl, 'components')
+    
+    # Generate site dashboard XML
+    dashboardXmlPath = fileBase + '/' + 'dashboard.xml'
+    persistDashboardXML(siteData, tempDir, dashboardXmlPath)
+    generateContentXML(siteEl, dashboardXmlPath, contentBasePath=tempDir)
+    files.append(dashboardXmlPath)
+    
+    # Generate site components XML
+    sourceId = siteData['dashboardConfig']['dashboardPage'] # e.g. site/branding/dashboard
+    scope = 'page'
+    for component in siteData['dashboardConfig']['dashlets']:
+        componentXmlPath = fileBase + '/' + str(component['regionId']) + '.xml'
+        persistComponentXML(component, sourceId, scope, tempDir, componentXmlPath)
+        generateContentXML(componentsEl, componentXmlPath, contentBasePath=tempDir)
+        files.append(componentXmlPath)
+        
+    return files
+
+def persistDashboardXML(siteData, baseDir, filePath):
+    persistContent(etree.tostring(generateDashboardXML(siteData), encoding='UTF-8'), baseDir, filePath)
+
+def persistComponentXML(component, sourceId, scope, baseDir, filePath):
+    persistContent(etree.tostring(generateComponentXML(component, sourceId, scope), encoding='UTF-8'), baseDir, filePath)
+
+def persistContent(content, baseDir, filePath):
+    xmlFile = open(baseDir + os.sep + filePath.replace('/', os.sep), 'w')
+    xmlFile.write(content)
+    xmlFile.close()
+
+def generateDashboardXML(siteData):
+    pageEl = etree.Element('page')
+    etree.SubElement(pageEl, 'title').text = 'Collaboration Site Dashboard'
+    etree.SubElement(pageEl, 'title-id').text = 'page.siteDashboard.title'
+    etree.SubElement(pageEl, 'description').text = 'Collaboration site\'s dashboard page'
+    etree.SubElement(pageEl, 'description-id').text = 'page.siteDashboard.description'
+    etree.SubElement(pageEl, 'authentication').text = 'user'
+    etree.SubElement(pageEl, 'template-instance').text = str(siteData['dashboardConfig']['templateId'])
+    etree.SubElement(pageEl, 'page-type-id').text = 'generic'
+    etree.SubElement(etree.SubElement(pageEl, 'properties'), 'site-pages').text = json.dumps(siteData['sitePages'])
+    return pageEl
+
+def generateComponentXML(component, sourceId, scope='page'):
+    guid = '%s.%s.%s' % (scope, component['regionId'], sourceId.replace('/', '~'))
+    cEl = etree.Element('component')
+    etree.SubElement(cEl, 'guid').text = guid
+    etree.SubElement(cEl, 'scope').text = scope
+    etree.SubElement(cEl, 'region-id').text = component['regionId']
+    etree.SubElement(cEl, 'source-id').text = sourceId
+    etree.SubElement(cEl, 'url').text = component['url']
+    propsEl = etree.SubElement(cEl, 'properties')
+    for (k, v) in component.get('config', {}).items():
+        etree.SubElement(propsEl, k).text = v
+    return cEl
 
 def nodesTagCount(nodeInfo):
     tagCounts = {}
@@ -633,6 +694,49 @@ def generateViewXML(metadata):
         etree.SubElement(metadata, k).text = str(v)
     return view
 
+def generateFolderXML(parent, childName, type='{%s}folder' % (URI_CONTENT_1_0), addaspects=[], addprops={}, perms=[], inheritPerms=True, addAssocs=True, addContains=True):
+    return generateNodeXML(parent, childName, type, addaspects, addprops, perms, inheritPerms, addAssocs, addContains)
+
+def generateContentXML(parent, contentPath, childName=None, type='{%s}content' % (URI_CONTENT_1_0), addaspects=[], addprops={}, perms=[], inheritPerms=True, addAssocs=False, addContains=False, contentBasePath='.'):
+    if childName is None:
+        childName = os.path.basename(contentPath)
+    el = generateNodeXML(parent, childName, type, addaspects, addprops, perms, inheritPerms, addAssocs, addContains)
+    if os.path.exists(contentBasePath + os.sep + contentPath.replace('/', os.sep)):
+        contentURL = generateContentURL(contentPath, contentBasePath)
+        generatePropertyXML(el, '{%s}content' % (URI_CONTENT_1_0), contentURL)
+    return el
+
+def generateNodeXML(parent, childName, type, addaspects=[], addprops={}, perms=[], inheritPerms=True, addAssocs=True, addContains=True):
+    if parent.tag != '{%s}contains' % (URI_CONTENT_1_0):
+        parent = parent.find('view:associations/cm:contains', NSMAP)
+    folderEl = etree.SubElement(parent, type, attrib={'{%s}childName' % (URI_REPOSITORY_1_0): 'cm:%s' % (childName)})
+    generateACLXML(folderEl, perms, inheritPerms)
+    # Core aspects
+    aspects = [
+        '{%s}auditable' % (URI_CONTENT_1_0), 
+        '{%s}ownable' % (URI_CONTENT_1_0), 
+        '{%s}referenceable' % (URI_SYSTEM_1_0), 
+        '{%s}titled' % (URI_CONTENT_1_0), 
+        '{%s}localized' % (URI_SYSTEM_1_0)
+    ]
+    aspects.extend(addaspects)
+    generateAspectsXML(folderEl, aspects)
+    # Core properties
+    props = {
+        '{%s}name' % (URI_CONTENT_1_0): childName,
+        '{%s}title' % (URI_CONTENT_1_0): {DEFAULT_LOCALE: ''},
+        '{%s}description' % (URI_CONTENT_1_0): {DEFAULT_LOCALE: ''},
+        '{%s}locale' % (URI_SYSTEM_1_0): '%s_' % (DEFAULT_LOCALE)
+    }
+    props.update(addprops)
+    generatePropertiesXML(folderEl, props)
+    # Contains assocs
+    if addAssocs:
+        associations = etree.SubElement(folderEl, '{%s}associations' % (URI_REPOSITORY_1_0))
+    if addContains:
+        contains = etree.SubElement(associations, '{%s}contains' % (URI_CONTENT_1_0))
+    return folderEl
+
 def generateXMLElement(parent, tagName, attrs={}):
     return etree.SubElement(parent, tagName, attrs)
 
@@ -643,28 +747,17 @@ def generateAssociationsContainsXML(parent):
     return generateXMLElement(parent, '{%s}contains' % (URI_CONTENT_1_0))
 
 def generateSiteContainerXML(parent, containerId):
-    containerEl = etree.SubElement(parent, '{%s}folder' % (URI_CONTENT_1_0), attrib={'{%s}childName' % (URI_REPOSITORY_1_0): 'cm:%s' % (containerId)})
-    associations = etree.SubElement(containerEl, '{%s}associations' % (URI_REPOSITORY_1_0))
-    contains = etree.SubElement(associations, '{%s}contains' % (URI_CONTENT_1_0))
-    # Aspects
-    generateAspectsXML(containerEl, [
-        '{%s}auditable' % (URI_CONTENT_1_0), 
-        '{%s}ownable' % (URI_CONTENT_1_0), 
-        '{%s}tagscope' % (URI_CONTENT_1_0), 
-        '{%s}referenceable' % (URI_SYSTEM_1_0), 
-        '{%s}titled' % (URI_CONTENT_1_0), 
-        '{%s}localized' % (URI_SYSTEM_1_0)
-    ])
-    # Properties
-    generatePropertiesXML(containerEl, {
-        '{%s}name' % (URI_CONTENT_1_0): containerId,
-        '{%s}title' % (URI_CONTENT_1_0): {DEFAULT_LOCALE: ''},
-        '{%s}description' % (URI_CONTENT_1_0): {DEFAULT_LOCALE: ''},
-        '{%s}componentId' % (URI_SITE_1_0): containerId,
-        '{%s}locale' % (URI_SYSTEM_1_0): '%s_' % (DEFAULT_LOCALE),
-        '{%s}tagScopeSummary' % (URI_CONTENT_1_0): []
-    })
-    return containerEl
+    return generateFolderXML(
+        parent, 
+        containerId, 
+        addaspects=[
+            '{%s}tagscope' % (URI_CONTENT_1_0)
+        ], 
+        addprops={
+            '{%s}componentId' % (URI_SITE_1_0): containerId,
+            '{%s}tagScopeSummary' % (URI_CONTENT_1_0): []
+        }
+    )
 
 def generateAspectsXML(parent, aspects):
     aspectsEl = etree.SubElement(parent, '{%s}aspects' % (URI_REPOSITORY_1_0))
@@ -679,6 +772,8 @@ def generatePropertiesXML(parent, properties):
     return propertiesEl
 
 def generatePropertyXML(parent, key, value):
+    if parent.tag != '{%s}properties' % (URI_REPOSITORY_1_0):
+        parent = parent.find('view:properties', NSMAP)
     propertyEl = etree.SubElement(parent, key)
     generatePropertyValueXML(propertyEl, value)
     return propertyEl
