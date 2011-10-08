@@ -1,0 +1,513 @@
+{
+    "items": [
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "light", 
+                "bulb"
+            ], 
+            "type": "document", 
+            "name": "bulb004.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "logo", 
+                "image", 
+                "recycle"
+            ], 
+            "type": "document", 
+            "name": "recycle005.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "windmill"
+            ], 
+            "type": "document", 
+            "name": "windmill003.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "background", 
+                "image"
+            ], 
+            "type": "document", 
+            "name": "background001.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "image", 
+                "recycle", 
+                "logo"
+            ], 
+            "type": "document", 
+            "name": "recycle003.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "bulb", 
+                "light"
+            ], 
+            "type": "document", 
+            "name": "bulb007.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "landscape", 
+                "photo"
+            ], 
+            "type": "document", 
+            "name": "landscape005.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "background", 
+                "photo"
+            ], 
+            "type": "document", 
+            "name": "background-004.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "background", 
+                "image"
+            ], 
+            "type": "document", 
+            "name": "background010.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "landscape", 
+                "photo"
+            ], 
+            "type": "document", 
+            "name": "landscape006.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "landscape", 
+                "photo"
+            ], 
+            "type": "document", 
+            "name": "landscape001.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "image", 
+                "logo", 
+                "recycle"
+            ], 
+            "type": "document", 
+            "name": "recycle002.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "sky", 
+                "sunset"
+            ], 
+            "type": "document", 
+            "name": "sunset002.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "background", 
+                "photo"
+            ], 
+            "type": "document", 
+            "name": "background002.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "background", 
+                "grass", 
+                "plant"
+            ], 
+            "type": "document", 
+            "name": "background008.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "image", 
+                "logo", 
+                "greenenergy"
+            ], 
+            "type": "document", 
+            "name": "greenenergy.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "landscape", 
+                "photo"
+            ], 
+            "type": "document", 
+            "name": "landscape008.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "landscape", 
+                "photo"
+            ], 
+            "type": "document", 
+            "name": "landscape007.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "background", 
+                "water"
+            ], 
+            "type": "document", 
+            "name": "water002.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "light", 
+                "bulb"
+            ], 
+            "type": "document", 
+            "name": "bulb005.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "sky", 
+                "cloud"
+            ], 
+            "type": "document", 
+            "name": "cloud003.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "sky", 
+                "sunset"
+            ], 
+            "type": "document", 
+            "name": "sunset001.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "windmill"
+            ], 
+            "type": "document", 
+            "name": "windmill001.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "background", 
+                "water"
+            ], 
+            "type": "document", 
+            "name": "water001.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "landscape", 
+                "photo"
+            ], 
+            "type": "document", 
+            "name": "landscape004.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "windmill"
+            ], 
+            "type": "document", 
+            "name": "windmill004.png", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "background", 
+                "grass", 
+                "plant"
+            ], 
+            "type": "document", 
+            "name": "background009.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "background", 
+                "plant"
+            ], 
+            "type": "document", 
+            "name": "background011.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "bulb", 
+                "photo", 
+                "light"
+            ], 
+            "type": "document", 
+            "name": "bulb003.png", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "sky", 
+                "sunset"
+            ], 
+            "type": "document", 
+            "name": "sunset003.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "logo", 
+                "image", 
+                "recycle"
+            ], 
+            "type": "document", 
+            "name": "recycle004.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "background", 
+                "photo"
+            ], 
+            "type": "document", 
+            "name": "background007.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "light", 
+                "bulb"
+            ], 
+            "type": "document", 
+            "name": "bulb002.png", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "light", 
+                "bulb"
+            ], 
+            "type": "document", 
+            "name": "bulb001.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "landscape", 
+                "photo"
+            ], 
+            "type": "document", 
+            "name": "landscape002.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "background", 
+                "photo", 
+                "paint"
+            ], 
+            "type": "document", 
+            "name": "redpaint001.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "solarcell"
+            ], 
+            "type": "document", 
+            "name": "solarcell001.png", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "background"
+            ], 
+            "type": "document", 
+            "name": "background006.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "landscape", 
+                "photo"
+            ], 
+            "type": "document", 
+            "name": "landscape003.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "background"
+            ], 
+            "type": "document", 
+            "name": "background003.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "sky", 
+                "cloud"
+            ], 
+            "type": "document", 
+            "name": "cloud001.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "light", 
+                "bulb"
+            ], 
+            "type": "document", 
+            "name": "bulb008.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "windmill"
+            ], 
+            "type": "document", 
+            "name": "windmill002.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "background"
+            ], 
+            "type": "document", 
+            "name": "background004.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "sky", 
+                "sunset"
+            ], 
+            "type": "document", 
+            "name": "sky001.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "image", 
+                "logo", 
+                "recycle"
+            ], 
+            "type": "document", 
+            "name": "recycle001.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "sky", 
+                "cloud"
+            ], 
+            "type": "document", 
+            "name": "cloud002.jpg", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "photo", 
+                "light", 
+                "bulb"
+            ], 
+            "type": "document", 
+            "name": "bulb006.jpg", 
+            "path": null
+        }
+    ]
+}

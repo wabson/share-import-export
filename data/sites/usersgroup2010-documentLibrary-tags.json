@@ -1,0 +1,144 @@
+{
+    "items": [
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "mit", 
+                "presentation"
+            ], 
+            "type": "document", 
+            "name": "CL - Better Use of the Earths Resources.ppt", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "presentation", 
+                "renewable energies"
+            ], 
+            "type": "document", 
+            "name": "JV - Energy for Free.ppt", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "hilton", 
+                "contract"
+            ], 
+            "type": "document", 
+            "name": "Contract - Hilton Chicago.doc", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "contract", 
+                "marriott"
+            ], 
+            "type": "document", 
+            "name": "Contract - Marriott Rome.doc", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "contract", 
+                "hilton"
+            ], 
+            "type": "document", 
+            "name": "Contract - Hilton London.doc", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "contract", 
+                "hyatt"
+            ], 
+            "type": "document", 
+            "name": "Contract - Hyatt San Fran.doc", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "contract", 
+                "marriott"
+            ], 
+            "type": "document", 
+            "name": "Contract - Marriott New York.doc", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "presentation", 
+                "green earth"
+            ], 
+            "type": "document", 
+            "name": "SP - Saving the Planet.ppt", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "presentation", 
+                "green earth"
+            ], 
+            "type": "document", 
+            "name": "GW - Saving the Planet.ppt", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "marriott", 
+                "contract"
+            ], 
+            "type": "document", 
+            "name": "Contract - Marriott Melbourne.doc", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "hyatt", 
+                "contract"
+            ], 
+            "type": "document", 
+            "name": "Contract - Hyatt Paris.doc", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "kings college", 
+                "presentation"
+            ], 
+            "type": "document", 
+            "name": "TT - Is Global Warming a Myth.ppt", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "contract", 
+                "hilton"
+            ], 
+            "type": "document", 
+            "name": "Contract - Hilton Munich.doc", 
+            "path": null
+        }, 
+        {
+            "container": "documentLibrary", 
+            "tags": [
+                "presentation", 
+                "green earth"
+            ], 
+            "type": "document", 
+            "name": "SP - Saving the Planet.ppt", 
+            "path": null
+        }
+    ]
+}
