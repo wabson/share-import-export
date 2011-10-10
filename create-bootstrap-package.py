@@ -190,7 +190,11 @@ def main(argv):
         print 'WARNING: No user data supplied. Use --users-file=blah.json to include user info'
     
     # Build JAR file in current directory
-    jarFile = zipfile.ZipFile(jar_file, 'w')
+    jarFile = zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED)
+    # Create directories (must be done explicitly)
+    jarFile.write(temppath, 'alfresco')
+    jarFile.write(temppath, 'alfresco/extension')
+    jarFile.write(temppath, 'alfresco/bootstrap')
     # Add files to the new JAR
     for f in ['%s-content.acp' % baseName, '%s-people.acp' % baseName, '%s-users.acp' % baseName, '%s-groups.txt' % baseName]:
         if os.path.exists(temppath + os.sep + f):
@@ -297,7 +301,7 @@ def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
     xmlFile.close()
     
     # Build ACP file
-    acpFile = zipfile.ZipFile(temppath + os.sep + '%s.acp' % (fileBase), 'w')
+    acpFile = zipfile.ZipFile(temppath + os.sep + '%s.acp' % (fileBase), 'w', zipfile.ZIP_DEFLATED)
     # Add files to the new ZIP
     acpFile.write(xmlPath, '%s.xml' % (fileBase))
     for f in allfiles:
@@ -389,7 +393,7 @@ def generateUsersACP(fileName, siteData, usersFile, temppath, userNames=None):
     xmlFile.close()
     
     # Build ACP file
-    acpFile = zipfile.ZipFile(temppath + os.sep + '%s.acp' % (fileBase), 'w')
+    acpFile = zipfile.ZipFile(temppath + os.sep + '%s.acp' % (fileBase), 'w', zipfile.ZIP_DEFLATED)
     # Add files to the new ZIP
     acpFile.write(xmlPath, '%s.xml' % (fileBase))
     for f in allfiles:
@@ -560,7 +564,7 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
     siteXmlFile.close()
     
     # Build ACP file
-    siteAcpFile = zipfile.ZipFile(temppath + os.sep + '%s.acp' % (fileBase), 'w')
+    siteAcpFile = zipfile.ZipFile(temppath + os.sep + '%s.acp' % (fileBase), 'w', zipfile.ZIP_DEFLATED)
     # Add files to the new ZIP
     siteAcpFile.write(siteXmlPath, '%s.xml' % (fileBase))
     for f in allfiles:
