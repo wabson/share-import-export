@@ -50,6 +50,7 @@ import mimetypes
 import hashlib
 from xml.sax.saxutils import escape
 from datetime import datetime
+import uuid
 
 import alfresco
 
@@ -257,14 +258,14 @@ def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
             generatePropertyXML(personEl.find('view:properties', NSMAP), '{%s}persondescription' % (URI_CONTENT_1_0), generateContentURL(userDescAcpPath, extractpath, mimetype='application/octet-stream'))
             allfiles.append(userDescAcpPath)
         # Add JSON prefs
-        userPrefs = u.get('preferences')
-        if userPrefs is not None and len(userPrefs) > 0:
-            prefsAcpPath = fileBase + '/' + '%s-preferenceValues.json' % (str(u['userName']))
-            prefsFile = open(extractpath + os.sep + prefsAcpPath.replace('/', os.sep), 'w')
-            prefsFile.write(json.dumps(userPrefs))
-            prefsFile.close()
-            generatePropertyXML(personEl.find('view:properties', NSMAP), '{%s}preferenceValues' % (URI_CONTENT_1_0), generateContentURL(prefsAcpPath, extractpath, mimetype='text/plain'))
-            allfiles.append(prefsAcpPath)
+        #userPrefs = u.get('preferences')
+        #if userPrefs is not None and len(userPrefs) > 0:
+        #    prefsAcpPath = fileBase + '/' + '%s-preferenceValues.json' % (str(u['userName']))
+        #    prefsFile = open(extractpath + os.sep + prefsAcpPath.replace('/', os.sep), 'w')
+        #    prefsFile.write(json.dumps(userPrefs))
+        #    prefsFile.close()
+        #    generatePropertyXML(personEl.find('view:properties', NSMAP), '{%s}preferenceValues' % (URI_CONTENT_1_0), generateContentURL(prefsAcpPath, extractpath, mimetype='text/plain'))
+        #    allfiles.append(prefsAcpPath)
         # Avatar
         usersFileDir = os.path.dirname(usersFile)
         avatarPath = str(u.get('avatar', ''))
@@ -431,15 +432,19 @@ def generateUserXML(parent, userData):
     aspects = [
         '{%s}referenceable' % (URI_SYSTEM_1_0)
     ]
+    uid = str(uuid.uuid1())
     properties = {
-        '{%s}name' % (URI_CONTENT_1_0): userData['userName'],
+        '{%s}name' % (URI_CONTENT_1_0): uid,
         '{%s}enabled' % (URI_USER_1_0): str(userData['enabled']).lower(),
         '{%s}password' % (URI_USER_1_0): str(md4hash),
         '{%s}username' % (URI_USER_1_0): userData['userName'],
         '{%s}salt' % (URI_USER_1_0): None,
         '{%s}credentialsExpire' % (URI_USER_1_0): 'false',
         '{%s}accountExpires' % (URI_USER_1_0): 'false',
-        '{%s}accountLocked' % (URI_USER_1_0): 'false'
+        '{%s}accountLocked' % (URI_USER_1_0): 'false',
+        '{%s}store-protocol' % (URI_SYSTEM_1_0): 'user',
+        '{%s}store-identifier' % (URI_USER_1_0): 'alfrescoUserStore',
+        '{%s}node-uuid' % (URI_USER_1_0): uid
     }
     generateAspectsXML(user, aspects)
     generatePropertiesXML(user, properties)
@@ -538,6 +543,13 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
         generatePropertyXML(siteXML.find('st:site/view:properties', NSMAP), '{%s}tagScopeCache' % (URI_CONTENT_1_0), generateContentURL(tagScopePath, extractpath, mimetype='text/plain'))
         allfiles.append(tagScopePath)
         
+        # Add page names if not specified, required for building site config
+        pageNames = {'documentlibrary': 'Document Library', 'wiki-page': 'Wiki', 'discussions-topiclist': 'Discussions',
+                     'blog-postlist': 'Blog', 'data-lists': 'Data Lists', 'links': 'Links', 'rmsearch': 'Saved Searches'}
+        for p in siteData['sitePages']:
+            if 'sitePageTitle' not in p:
+                p['sitePageTitle'] = pageNames.get(str(p['pageId']).lower(), p['pageId'])
+        
         # Add site configuration
         allfiles.extend(generateSiteConfigXML(siteData, containsEl, extractpath, fileBase))
     
@@ -569,14 +581,31 @@ def generateSiteConfigXML(siteData, containsEl, tempDir, fileBase):
     files.append(dashboardXmlPath)
     
     # Generate site components XML
+    regionIds = []
     sourceId = siteData['dashboardConfig']['dashboardPage'] # e.g. site/branding/dashboard
     scope = 'page'
     for component in siteData['dashboardConfig']['dashlets']:
-        componentXmlPath = fileBase + '/' + str(component['regionId']) + '.xml'
+        guid = '%s.%s.%s' % (scope, component['regionId'], sourceId.replace('/', '~'))
+        componentXmlPath = fileBase + '/' + guid + '.xml'
         persistComponentXML(component, sourceId, scope, tempDir, componentXmlPath)
         generateContentXML(componentsEl, componentXmlPath, contentBasePath=tempDir)
         files.append(componentXmlPath)
+        regionIds.append(component['regionId'])
         
+    mandatorycmpts = [('full-width-dashlet', '/components/dashlets/dynamic-welcome', {'dashboardType': 'site'}), 
+                      ('navigation', '/components/navigation/collaboration-navigation', {}),
+                      ('title', '/components/title/collaboration-title', {})]
+    
+    # Add mandatory regions where not yet added
+    for region in mandatorycmpts:
+        if region[0] not in regionIds:
+            guid = '%s.%s.%s' % (scope, region[0], sourceId.replace('/', '~'))
+            componentXmlPath = fileBase + '/' + guid + '.xml'
+            component = {'regionId': region[0], 'url': region[1], 'config': region[2]}
+            persistComponentXML(component, sourceId, scope, tempDir, componentXmlPath)
+            generateContentXML(componentsEl, componentXmlPath, contentBasePath=tempDir)
+            files.append(componentXmlPath)
+    
     return files
 
 def persistDashboardXML(siteData, baseDir, filePath):
@@ -599,7 +628,7 @@ def generateDashboardXML(siteData):
     etree.SubElement(pageEl, 'authentication').text = 'user'
     etree.SubElement(pageEl, 'template-instance').text = str(siteData['dashboardConfig']['templateId'])
     etree.SubElement(pageEl, 'page-type-id').text = 'generic'
-    etree.SubElement(etree.SubElement(pageEl, 'properties'), 'site-pages').text = json.dumps(siteData['sitePages'])
+    etree.SubElement(etree.SubElement(pageEl, 'properties'), 'sitePages').text = json.dumps(siteData['sitePages'])
     return pageEl
 
 def generateComponentXML(component, sourceId, scope='page'):
