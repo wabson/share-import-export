@@ -2,7 +2,13 @@
 # create-bootstrap-package.py
 
 """
-Import a site definition and site content from the local file system.
+Package up a site bootstrap package for installation directly on an Alfresco 
+server, using information from a local site definition. The package is 
+generated as as JAR file, complete with a Spring configuration file to declare
+appropriate beans to bootstrap the site definition when Alfresco is next started.
+
+Once generated, the JAR file can be placed in tomcat/shared/lib or tomcat/lib
+in your Alfresco installation.
 
 Usage: python create-bootstrap-package.py site-file.json package-file.jar [options]
 
@@ -15,20 +21,35 @@ package-file.jar            Name of the JAR file to package information inside
 --create-missing-members    Auto-create any members who do not exist in the 
                             repository
 
---groups-file               Local file name to read group information from in JSON
-                            format. Group information will be repackaged into text
-                            format before being placed inside the JAR.
+--site-file                 Local file name to read site information from in 
+                            JSON format. Site information and content will be 
+                            repackaged into a single ACP file.
 
---users-file                Local file name to read user information from in JSON
-                            format. User information will be repackaged into ACP
-                            format before being placed inside the JAR.
+--users-file=userfile.json  Local file name to read user information from in 
+                            JSON format. User information will be repackaged 
+                            into ACP format before being placed inside the JAR.
+                            (Required)
 
---site-file                 Local file name to read site information from in JSON
-                            format. Site information and content will be repackaged 
-                            into a single ACP file.
+--containers=list           Comma-separated list of container names to include
+                            in the site content, e.g. documentLibrary,wiki
 
---containers=list           Comma-separated list of container names to import site
-                            content into, e.g. documentLibrary,wiki
+--content-path              Path inside the JAR file where content files should
+                            be placed. Default is 'alfresco/bootstrap/
+                            sample-sites'.
+
+--no-content                Do not include site content in the content ACP, 
+                            just create the site container itself 
+
+--config-path               Path inside the JAR file to the auto-generated 
+                            Spring configuration file, used to bootstrap the 
+                            site on  first load. Default is 'alfresco/
+                            extension/sample-site-%(siteId)s-context.xml', 
+                            where standard Python string formatting is used to
+                            inject the site ID (or URL name) into the file 
+                            name.
+
+--no-config                 Do not generate Spring configuration to place in
+                            the JAR file
 
 -d                          Turn on debug mode
 
@@ -126,6 +147,9 @@ def main(argv):
     users = None
     siteContainers = [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]
     includeContent = True
+    includeConfig = True
+    configPath = 'alfresco/extension/sample-site-%(siteId)s-context.xml'
+    contentPath = 'alfresco/bootstrap/sample-sites'
     _debug = 0
     
     if len(argv) > 1:
@@ -143,7 +167,7 @@ def main(argv):
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "users-file=", "groups-file=", "site-file=", "containers=", "no-content"])
+        opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "users-file=", "groups-file=", "site-file=", "containers=", "no-content", "no-config" "config-path=" "content-path="])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -162,9 +186,19 @@ def main(argv):
             siteContainers = arg.split(',')
         elif opt == '--no-content':
             includeContent = False
+        elif opt == '--no-config':
+            includeConfig = False
+        elif opt == '--config-path':
+            configPath = arg
+        elif opt == '--content-path':
+            contentPath = arg
     
     if site_file is None:
         print "No site file specified"
+        sys.exit(1)
+    
+    if users_file == '':
+        print "No users file specified. Use --users-file=myfile.json to include user information."
         sys.exit(1)
     
     filenamenoext = os.path.splitext(os.path.split(site_file)[1])[0]
@@ -179,38 +213,39 @@ def main(argv):
     baseName = os.path.splitext(os.path.basename(jar_file))[0]
     
     # Generate the site ACP file - should generate ACP file in temppath
+    print 'Generating site structure and content'
     generateContentACP('%s-content.acp' % (baseName), sd, site_file, temppath, includeContent, siteContainers)
     
-    # People files
-    if users_file != '':
-        generatePeopleACP('%s-people.acp' % (baseName), sd, users_file, temppath, users)
-        generateUsersACP('%s-users.acp' % (baseName), sd, users_file, temppath, users)
-        generateGroupsData('%s-groups.txt' % (baseName), sd, users_file, temppath, users)
-    else:
-        print 'WARNING: No user data supplied. Use --users-file=blah.json to include user info'
+    # Person, user and group data
+    print 'Generating person, user and group data'
+    generatePeopleACP('%s-people.acp' % (baseName), sd, users_file, temppath, users)
+    generateUsersACP('%s-users.acp' % (baseName), sd, users_file, temppath, users)
+    generateGroupsData('%s-groups.txt' % (baseName), sd, users_file, temppath, users)
     
+    print 'Building final JAR file'
     # Build JAR file in current directory
     jarFile = zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED)
     # Create directories (must be done explicitly)
-    jarFile.write(temppath, 'alfresco')
-    jarFile.write(temppath, 'alfresco/extension')
-    jarFile.write(temppath, 'alfresco/bootstrap')
-    # Add files to the new JAR
+    for i in range(1, len(configPath.split('/'))):
+        jarFile.write(temppath, '/'.join(configPath.split('/')[0:i]))
+    for i in range(1, len(contentPath.split('/')) + 1):
+        jarFile.write(temppath, '/'.join(contentPath.split('/')[0:i]))
     for f in ['%s-content.acp' % baseName, '%s-people.acp' % baseName, '%s-users.acp' % baseName, '%s-groups.txt' % baseName]:
         if os.path.exists(temppath + os.sep + f):
-            # TODO Hard-coded package structure for now
-            jarFile.write(temppath + os.sep + f, 'alfresco/bootstrap/sample-sites/%s' % (f))
+            jarFile.write(temppath + os.sep + f, '%s/%s' % (contentPath, f))
     
     # Copy sample Spring config
-    beanXMLPath = temppath + os.sep + ('sample-site-%s-context.xml') % (sd['shortName'])
-    beanXMLFile = open('sample-bootstrap-site.xml', 'r')
-    xmlText = beanXMLFile.read().replace('{siteName}', sd['shortName']).replace('{fileBase}', 'alfresco/bootstrap/sample-sites/%s' % (baseName))
-    beanXMLFile.close()
-    beanXMLFile = open(beanXMLPath, 'w')
-    beanXMLFile.write(xmlText)
-    beanXMLFile.close()
-    # Add XML file to JAR file
-    jarFile.write(beanXMLPath, 'alfresco/extension/sample-site-%s-context.xml' % (str(sd['shortName'])))
+    if includeConfig:
+        print 'Adding Spring configuration into %s' % (configPath % {'siteId': str(sd['shortName'])})
+        beanXMLPath = temppath + os.sep + 'bootstrap-site-context.xml'
+        beanXMLFile = open('sample-bootstrap-site.xml', 'r')
+        xmlText = beanXMLFile.read() % {'siteId': sd['shortName'], 'contentBase': '%s/%s' % (contentPath, baseName)}
+        beanXMLFile.close()
+        beanXMLFile = open(beanXMLPath, 'w')
+        beanXMLFile.write(xmlText)
+        beanXMLFile.close()
+        # Add XML file to JAR file
+        jarFile.write(beanXMLPath, configPath % {'siteId': str(sd['shortName'])})
     
     # Close the JAR file
     jarFile.close()
@@ -218,7 +253,8 @@ def main(argv):
     # Tidy up temp files
     shutil.rmtree(temppath)
     
-    print('Done')
+    print('')
+    print('Built site package \'%s\' successfully. Drop this into tomcat/shared/lib in your Alfresco 4.0 instance and restart to import the site.' % (jar_file))
 
 def getSiteUsers(siteData, usersFile, userNames=None):
     users = []
@@ -476,15 +512,14 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
     allfiles = []
     siteTagCounts = []
     # Extract component ACP files
+    containsEl = siteXML.find('st:site/view:associations/cm:contains', NSMAP)
     if includeContent:
-        containsEl = siteXML.find('st:site/view:associations/cm:contains', NSMAP)
-        
         for container in siteContainers:
             acpFile = thisdir + os.sep + '%s-%s.acp' % (filenamenoext, container.replace(' ', '_'))
             acpXMLFile = '%s-%s.xml' % (filenamenoext, container.replace(' ', '_'))
             acpContentDir = '%s-%s' % (filenamenoext, container.replace(' ', '_'))
             if os.path.isfile(acpFile):
-                print "Extract %s content" % (container)
+                print "Adding %s content" % (container)
                 acpZip = zipfile.ZipFile(acpFile, 'r')
                 try:
                     acpZip.extract(acpXMLFile, extractpath)
@@ -530,7 +565,7 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
                 jsonFile = thisdir + os.sep + '%s-%s-tags.json' % (filenamenoext, container.replace(' ', '_'))
                 tagCounts = []
                 if os.path.isfile(jsonFile):
-                    print "Add %s tags" % (container)
+                    print "Adding %s tags" % (container)
                     tagCounts = nodesTagCount(json.loads(open(jsonFile).read())['items'])
                 # Add to site tag counts
                 siteTagCounts = addTagCounts(siteTagCounts, tagCounts)
@@ -547,15 +582,15 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
         generatePropertyXML(siteXML.find('st:site/view:properties', NSMAP), '{%s}tagScopeCache' % (URI_CONTENT_1_0), generateContentURL(tagScopePath, extractpath, mimetype='text/plain'))
         allfiles.append(tagScopePath)
         
-        # Add page names if not specified, required for building site config
-        pageNames = {'documentlibrary': 'Document Library', 'wiki-page': 'Wiki', 'discussions-topiclist': 'Discussions',
-                     'blog-postlist': 'Blog', 'data-lists': 'Data Lists', 'links': 'Links', 'rmsearch': 'Saved Searches'}
-        for p in siteData['sitePages']:
-            if 'sitePageTitle' not in p:
-                p['sitePageTitle'] = pageNames.get(str(p['pageId']).lower(), p['pageId'])
-        
-        # Add site configuration
-        allfiles.extend(generateSiteConfigXML(siteData, containsEl, extractpath, fileBase))
+    # Add page names if not specified in JSON, required for building site config
+    pageNames = {'documentlibrary': 'Document Library', 'wiki-page': 'Wiki', 'discussions-topiclist': 'Discussions',
+                 'blog-postlist': 'Blog', 'data-lists': 'Data Lists', 'links': 'Links', 'rmsearch': 'Saved Searches'}
+    for p in siteData['sitePages']:
+        if 'sitePageTitle' not in p:
+            p['sitePageTitle'] = pageNames.get(str(p['pageId']).lower(), p['pageId'])
+    
+    # Add site configuration
+    allfiles.extend(generateSiteConfigXML(siteData, containsEl, extractpath, fileBase))
     
     # Output the XML
     siteXmlPath = extractpath + os.sep + '%s.xml' % (fileBase)
