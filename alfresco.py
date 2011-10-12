@@ -255,6 +255,8 @@ class ShareClient:
                 # Try 4.0 method
                 if e.code == 500:
                     dashboardResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % (urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
+                else:
+                    raise e
             from xml.etree.ElementTree import XML
             dashboardTree = XML(dashboardResp.read())
             templateInstance = dashboardTree.findtext('template-instance')
