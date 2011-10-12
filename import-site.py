@@ -145,7 +145,7 @@ def main(argv):
         filenamenoext = os.path.splitext(os.path.split(filename)[1])[0]
         thisdir = os.path.dirname(filename)
         if thisdir == "":
-            thisdir = "."
+            thisdir = os.path.dirname(sys.argv[0])
         sd = json.loads(open(filename).read())
         siteId = str(sd['shortName'])
         if create_site:

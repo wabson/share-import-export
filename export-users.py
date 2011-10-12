@@ -126,6 +126,9 @@ def main(argv):
             userJson = json.dumps(export, sort_keys=True, indent=4)
             print userJson
         else:
+            thisdir = os.path.dirname(filename)
+            if thisdir == "":
+                thisdir = os.path.dirname(sys.argv[0])
             if not os.path.exists(os.path.dirname(filename)):
                 os.makedirs(os.path.dirname(filename))
             
@@ -134,8 +137,8 @@ def main(argv):
                 print "Download profile images"
                 for p in export['people']:
                     if 'avatar' in p:
-                        if not os.path.exists('%s/profile-images' % (os.path.dirname(filename))):
-                            os.makedirs('%s/profile-images' % (os.path.dirname(filename)))
+                        if not os.path.exists('%s/profile-images' % (thisdir)):
+                            os.makedirs('%s/profile-images' % (thisdir))
                         # Thumbnail will be something like
                         # /api/node/workspace/SpacesStore/259a1c59-d2db-4b3c-ba04-b4042de39821/content/thumbnails/avatar
                         # We want to download the original avatar, not the thumbnail
@@ -144,7 +147,7 @@ def main(argv):
                         imgext = mimetypes.guess_extension(resp.info().gettype())
                         if imgext == ".jpe":
                             imgext = ".jpg"
-                        imgfile = open('%s/profile-images/%s%s' % (os.path.dirname(filename), p['userName'], imgext), 'wb')
+                        imgfile = open('%s/profile-images/%s%s' % (thisdir, p['userName'], imgext), 'wb')
                         imgfile.write(resp.read())
                         resp.close()
                         imgfile.close()

@@ -204,7 +204,7 @@ def main(argv):
     filenamenoext = os.path.splitext(os.path.split(site_file)[1])[0]
     thisdir = os.path.dirname(site_file)
     if thisdir == "":
-        thisdir = "."
+        thisdir = os.path.dirname(sys.argv[0])
     sd = json.loads(open(site_file).read())
     
     # Temp working locations

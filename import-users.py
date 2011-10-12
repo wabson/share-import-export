@@ -167,34 +167,40 @@ def main(argv):
     
     #TODO Check if a profile image or dashboard config is available before logging in
     thisdir = os.path.dirname(filename)
+    if thisdir == "":
+        thisdir = os.path.dirname(sys.argv[0])
     for u in create_users:
         if set_avatars or update_profile or set_dashboards:
             print "Log in (%s)" % (u['userName'])
-            sc.doLogin(u['userName'], u['password'])
-            try:
-                # Add profile image
-                if set_avatars:
-                    print "Setting profile image for user '%s'" % (u['userName'])
-                    if 'avatar' in u:
-                        try:
-                            sc.setProfileImage(u['userName'], thisdir + os.sep + str(u['avatar']))
-                        except IOError, e:
-                            if e.errno == 2:
-                                # Ignore file not found errors
-                                pass
-                            else:
-                                raise e
-                # Update user profile
-                if update_profile:
-                    print "Updating profile information for user '%s'" % (u['userName'])
-                    sc.updateUserDetails(u)
-                # Update dashboard
-                if 'dashboardConfig' in u and set_dashboards:
-                    print "Updating dashboard configuration for user '%s'" % (u['userName'])
-                    sc.updateUserDashboardConfig(u)
-            finally:
-                print "Log out (%s)" % (u['userName'])
-                sc.doLogout()
+            login = sc.doLogin(u['userName'], u['password'])
+            if login['success']:
+                try:
+                    # Add profile image
+                    if set_avatars:
+                        print "Setting profile image for user '%s'" % (u['userName'])
+                        if 'avatar' in u:
+                            try:
+                                sc.setProfileImage(u['userName'], thisdir + os.sep + str(u['avatar']))
+                            except IOError, e:
+                                if e.errno == 2:
+                                    # Ignore file not found errors
+                                    pass
+                                else:
+                                    print e
+                                    raise e
+                    # Update user profile
+                    if update_profile:
+                        print "Updating profile information for user '%s'" % (u['userName'])
+                        sc.updateUserDetails(u)
+                    # Update dashboard
+                    if 'dashboardConfig' in u and set_dashboards:
+                        print "Updating dashboard configuration for user '%s'" % (u['userName'])
+                        sc.updateUserDashboardConfig(u)
+                finally:
+                    print "Log out (%s)" % (u['userName'])
+                    sc.doLogout()
+            else:
+                print 'Warning: Unable to log in as \'%s\'. Either set a correct password, or set the password to the same value as the username.' % (u['userName'])
 
 if __name__ == "__main__":
     main(sys.argv[1:])
