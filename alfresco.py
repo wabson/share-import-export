@@ -148,7 +148,11 @@ class ShareClient:
         """Log in to Share via the login servlet"""
         successurl = '/share/page/site-index'
         failureurl = '/share/page/type/login?error=true'
-        resp = self.doPost('page/dologin', urllib.urlencode({'username': username, 'password': password, 'success': successurl, 'failure': failureurl}))
+        try:
+            # Try 3.2 method first, which will fail on 3.3 and above
+            resp = self.doPost('login', urllib.urlencode({'username': username, 'password': password, 'success': successurl, 'failure': failureurl}))
+        except SurfRequestError, e:
+            resp = self.doPost('page/dologin', urllib.urlencode({'username': username, 'password': password, 'success': successurl, 'failure': failureurl}))
         if (resp.geturl() == '%s/page/user/%s/dashboard' % (self.url, username)):
             self._username = username
             resp.close()
