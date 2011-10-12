@@ -295,7 +295,7 @@ def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
             userDescFile = open(extractpath + os.sep + userDescAcpPath.replace('/', os.sep), 'w')
             userDescFile.write(json.dumps(userDesc))
             userDescFile.close()
-            generatePropertyXML(personEl.find('view:properties', NSMAP), '{%s}persondescription' % (URI_CONTENT_1_0), generateContentURL(userDescAcpPath, extractpath, mimetype='application/octet-stream'))
+            generatePropertyXML(personEl.find('{%s}properties' % (URI_REPOSITORY_1_0)), '{%s}persondescription' % (URI_CONTENT_1_0), generateContentURL(userDescAcpPath, extractpath, mimetype='application/octet-stream'))
             allfiles.append(userDescAcpPath)
         # Add JSON prefs
         #userPrefs = u.get('preferences')
@@ -304,7 +304,7 @@ def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
         #    prefsFile = open(extractpath + os.sep + prefsAcpPath.replace('/', os.sep), 'w')
         #    prefsFile.write(json.dumps(userPrefs))
         #    prefsFile.close()
-        #    generatePropertyXML(personEl.find('view:properties', NSMAP), '{%s}preferenceValues' % (URI_CONTENT_1_0), generateContentURL(prefsAcpPath, extractpath, mimetype='text/plain'))
+        #    generatePropertyXML(personEl.find('{%s}properties' % (URI_REPOSITORY_1_0)), '{%s}preferenceValues' % (URI_CONTENT_1_0), generateContentURL(prefsAcpPath, extractpath, mimetype='text/plain'))
         #    allfiles.append(prefsAcpPath)
         # Avatar
         usersFileDir = os.path.dirname(usersFile)
@@ -316,7 +316,7 @@ def generatePeopleACP(fileName, siteData, usersFile, temppath, userNames=None):
             avatarAcpPath = fileBase + '/' +  avatarName
             allfiles.append(avatarAcpPath)
             # Add cm:preferenceImage assoc
-            preferenceImg = generateXMLElement(personEl.find('view:associations', NSMAP), '{%s}preferenceImage' % (URI_CONTENT_1_0))
+            preferenceImg = generateXMLElement(personEl.find('{%s}associations' % (URI_REPOSITORY_1_0)), '{%s}preferenceImage' % (URI_CONTENT_1_0))
             content = generateXMLElement(preferenceImg, '{%s}content' % (URI_CONTENT_1_0), {'{%s}childName' % (URI_REPOSITORY_1_0): 'cm:%s' % avatarName})
             generateAspectsXML(content, [
                 '{%s}auditable' % (URI_CONTENT_1_0), 
@@ -512,7 +512,7 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
     allfiles = []
     siteTagCounts = []
     # Extract component ACP files
-    containsEl = siteXML.find('st:site/view:associations/cm:contains', NSMAP)
+    containsEl = siteXML.find('{%s}site/{%s}associations/{%s}contains' % (URI_SITE_1_0, URI_REPOSITORY_1_0, URI_CONTENT_1_0))
     if includeContent:
         for container in siteContainers:
             acpFile = thisdir + os.sep + '%s-%s.acp' % (filenamenoext, container.replace(' ', '_'))
@@ -528,7 +528,7 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
                     acpContentDir = '%s' % (container.replace(' ', '_'))
                     acpZip.extract(acpXMLFile, extractpath)
                 containerEl = generateSiteContainerXML(containsEl, container)
-                containerContainsEl = containerEl.find('view:associations/cm:contains', NSMAP)
+                containerContainsEl = containerEl.find('{%s}associations/{%s}contains' % (URI_REPOSITORY_1_0, URI_CONTENT_1_0))
                 cviewEl = etree.parse('%s/%s' % (extractpath, acpXMLFile))
                 for el in list(cviewEl.getroot()):
                     if not el.tag.startswith('{%s}' % (URI_REPOSITORY_1_0)):
@@ -544,7 +544,7 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
                             refEl.set('{%s}pathref' % (URI_REPOSITORY_1_0), '%s/%s' % (refBase, fromref))
                             associations = etree.SubElement(refEl, '{%s}associations' % (URI_REPOSITORY_1_0))
                             references = etree.SubElement(associations, '{%s}references' % (URI_CONTENT_1_0))
-                            refs = el.findall('view:associations/cm:references/view:reference', NSMAP)
+                            refs = el.findall('{%s}associations/{%s}references/{%s}reference' % (URI_REPOSITORY_1_0, URI_CONTENT_1_0, URI_REPOSITORY_1_0))
                             for r in refs:
                                 etree.SubElement(references, '{%s}reference' % (URI_REPOSITORY_1_0), {'{%s}pathref' % (URI_REPOSITORY_1_0): '%s/%s' % (refBase, r.get('{%s}pathref' % (URI_REPOSITORY_1_0)))})
                             siteXML.append(refEl)
@@ -572,14 +572,14 @@ def generateContentACP(fileName, siteData, jsonFileName, temppath, includeConten
                 # Persist
                 tagScopePath = fileBase + '/' + '%s-tagScopeCache.bin' % (container.replace(' ', '_'))
                 persistContent(generateTagScopeContent(tagCounts), extractpath, tagScopePath)
-                generatePropertyXML(containerEl.find('view:properties', NSMAP), '{%s}tagScopeCache' % (URI_CONTENT_1_0), generateContentURL(tagScopePath, extractpath, mimetype='text/plain'))
+                generatePropertyXML(containerEl.find('{%s}properties' % (URI_REPOSITORY_1_0)), '{%s}tagScopeCache' % (URI_CONTENT_1_0), generateContentURL(tagScopePath, extractpath, mimetype='text/plain'))
                 allfiles.append(tagScopePath)
         
         # Add site tagscope
         tagScopePath = fileBase + '/' + 'site-tagScopeCache.bin'
         persistContent(generateTagScopeContent(siteTagCounts), extractpath, tagScopePath)
         
-        generatePropertyXML(siteXML.find('st:site/view:properties', NSMAP), '{%s}tagScopeCache' % (URI_CONTENT_1_0), generateContentURL(tagScopePath, extractpath, mimetype='text/plain'))
+        generatePropertyXML(siteXML.find('{%s}site/{%s}properties' % (URI_SITE_1_0, URI_REPOSITORY_1_0)), '{%s}tagScopeCache' % (URI_CONTENT_1_0), generateContentURL(tagScopePath, extractpath, mimetype='text/plain'))
         allfiles.append(tagScopePath)
         
     # Add page names if not specified in JSON, required for building site config
@@ -723,8 +723,11 @@ def generateReferenceXML(parent, fromRef, toRefs, refType='{%s}references' % (UR
 def generateSiteXML(siteData):
     siteId = siteData['shortName']
     # Register namespaces
-    for (prefix, uri) in NSMAP.items():
-        etree.register_namespace(prefix, uri)
+    if hasattr(etree, 'register_namespace'):
+        for (prefix, uri) in NSMAP.items():
+            etree.register_namespace(prefix, uri)
+    else:
+        print 'Warning: Default XML namespaces will but be used, Python 2.7 is required for this'
     
     view = generateViewXML({'{%s}exportOf' % (URI_REPOSITORY_1_0): '/app:company_home/st:sites/cm:%s' % (siteId)})
     aspects = []
@@ -788,7 +791,7 @@ def generateContentXML(parent, contentPath, childName=None, type='{%s}content' %
 
 def generateNodeXML(parent, childName, type, addaspects=[], addprops={}, perms=[], inheritPerms=True, addAssocs=True, addContains=True):
     if parent.tag not in ['{%s}contains' % (URI_CONTENT_1_0), '{%s}view' % (URI_REPOSITORY_1_0)]:
-        parent = parent.find('view:associations/cm:contains', NSMAP)
+        parent = parent.find('{%s}associations/{%s}contains' % (URI_REPOSITORY_1_0, URI_CONTENT_1_0))
     if parent is None:
         print "Error: could not find a suitable parent element"
         exit(1)
@@ -856,7 +859,7 @@ def generatePropertiesXML(parent, properties):
 
 def generatePropertyXML(parent, key, value):
     if parent.tag != '{%s}properties' % (URI_REPOSITORY_1_0):
-        parent = parent.find('view:properties', NSMAP)
+        parent = parent.find('{%s}properties' % (URI_REPOSITORY_1_0))
     propertyEl = etree.SubElement(parent, key)
     generatePropertyValueXML(propertyEl, value)
     return propertyEl
