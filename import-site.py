@@ -79,6 +79,7 @@ def main(argv):
     siteContainers = [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]
     importContent = True
     importTags = False
+    deleteTempFiles = True
     _debug = 0
     
     if len(argv) > 0:
@@ -95,7 +96,7 @@ def main(argv):
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "create-missing-members", "users-file=", "groups-file=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content", "import-tags"])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "create-missing-members", "users-file=", "groups-file=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content", "import-tags", "no-delete"])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -134,6 +135,8 @@ def main(argv):
             add_members = False
         elif opt == '--no-dashboard':
             update_dashboard = False
+        elif opt == '--no-delete':
+            deleteTempFiles = False
     
     sc = alfresco.ShareClient(url=url, debug=_debug)
     print "Log in (%s)" % (username)
@@ -213,7 +216,7 @@ def main(argv):
                     if siteId == 'rm' and container == 'documentLibrary':
                         sc.importRmSiteContent(siteId, container, file(acpFile, 'rb'))
                     else:
-                        sc.importSiteContent(siteId, container, file(acpFile, 'rb'))
+                        sc.importSiteContent(siteId, container, file(acpFile, 'rb'), deleteTempFiles)
                         
         # Import site tags
         if importTags:

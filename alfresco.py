@@ -416,7 +416,7 @@ class ShareClient:
         """Set up rules on a space"""
         return self.doJSONPost('proxy/alfresco/api/node/%s/ruleset/rules/%s' % (nodeRef.replace('://', '/'), rulesetId), method="DELETE")
     
-    def importSiteContent(self, siteId, containerId, f):
+    def importSiteContent(self, siteId, containerId, f, delete=True):
         """Upload a content package into a collaboration site and extract it"""
         # Get the site metadata
         folderType = 'cm_folder'
@@ -466,7 +466,7 @@ class ShareClient:
                         "conditionDefinitionName":"compare-property-value",
                         "parameterValues": {
                             "operation":"ENDS",
-                            "value":".acp",
+                            "value":"-%s.acp" % (containerId),
                             "property":"cm:name"
                         }
                     }
@@ -495,19 +495,21 @@ class ShareClient:
         udata = json.loads(fr.read())
         if ('success' in udata and udata['success'] == true) or ('status' in udata and udata['status']['code'] == 200):
             nodeRef = udata['nodeRef']
-            # Try to set the mimetype - required by 4.0, which incorrectly guesses type as application/zip
+            # Try to set the mimetype - required by 4.0a, which incorrectly guesses type as application/zip
             try:
-                self.updateProperties(nodeRef, {'prop_mimetype': 'application/acp'})
+                self.updateProperties(nodeRef, {'prop_mimetype': 'application/acp', 'prop_cm_title': f.name})
             except SurfRequestError, e:
                 # Assume mimetype was not found, probably pre-4.0 instance
                 # Instead, we just need to update another property to get the ruleset to fire
-                self.updateProperties(nodeRef, {'prop_title': f.name})
-            # Remove the rule definition
-            self._deleteSpaceRuleset(tempContainerData['nodeRef'], rulesData['data']['id'])
-            # Delete the ACP file
-            self.deleteFile(nodeRef)
-            # Delete the temp upload container
-            self.deleteFolder(tempContainerData['nodeRef'])
+                self.updateProperties(nodeRef, {'prop_cm_title': f.name})
+                
+            if delete == True:
+                # Remove the rule definition
+                self._deleteSpaceRuleset(tempContainerData['nodeRef'], rulesData['data']['id'])
+                # Delete the ACP file
+                self.deleteFile(nodeRef)
+                # Delete the temp upload container
+                self.deleteFolder(tempContainerData['nodeRef'])
         else:
             raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
     
