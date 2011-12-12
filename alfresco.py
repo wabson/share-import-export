@@ -317,11 +317,15 @@ class ShareClient:
             result = self.doJSONGet('proxy/alfresco/slingshot/search?site=%s&term=&tag=%s&maxResults=1000&sort=&query=&repo=false' % (urllib.quote(str(siteId)), urllib.quote(str(tagName))))
             for item in result['items']:
                 if (item['container'] == componentId or componentId == "") and item['nodeRef'] not in nodeInfo:
+                    itemPath = None
+                    if 'path' not in item:
+                        nodeJson = self.doJSONGet('proxy/alfresco/slingshot/doclib/node/%s' % (item['nodeRef'].replace('://', '/')))
+                        itemPath = nodeJson['item']['location']['path'].strip('/')
                     nodeInfo[item['nodeRef']] = { 
                                                  'type': item['type'], 
                                                  'name': item['name'], 
                                                  'container': item['container'], 
-                                                 'path': 'path' in item and item['path'] or None, 
+                                                 'path': itemPath, 
                                                  'tags': item['tags']
                                                  }
         return nodeInfo.values()
@@ -710,7 +714,7 @@ class ShareClient:
     
     def _getNodeInfoByPath(self, siteId, componentId, path):
         """Return information on the specified node"""
-        return self.doJSONGet('proxy/alfresco/slingshot/doclib/doclist/all/node/alfresco/company/home/Sites/%s/%s/%s' % (urllib.quote(siteId), urllib.quote(componentId), urllib.quote(path)));
+        return self.doJSONGet('proxy/alfresco/slingshot/doclib/doclist/all/node/alfresco/company/home/Sites/%s/%s/%s' % (urllib2.quote(siteId), urllib2.quote(componentId), urllib2.quote(path.encode('utf-8'))))
     
     def _getDocumentList(self, space):
         """Return a list of documents in the space identified by parameter space
