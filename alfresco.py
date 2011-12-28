@@ -320,9 +320,13 @@ class ShareClient:
             for item in result['items']:
                 if (item['container'] == componentId or componentId == "") and item['nodeRef'] not in nodeInfo:
                     itemPath = None
-                    if 'path' not in item:
+                    if 'path' in item:
+                        itemPath = item['path']
+                    else:
                         nodeJson = self.doJSONGet('proxy/alfresco/slingshot/doclib/node/%s' % (item['nodeRef'].replace('://', '/')))
                         itemPath = nodeJson['item']['location']['path'].strip('/')
+                    if itemPath is None:
+                        raise Exception("Could not determine path for node %s" % (item['nodeRef']))
                     nodeInfo[item['nodeRef']] = { 
                                                  'type': item['type'], 
                                                  'name': item['name'], 
