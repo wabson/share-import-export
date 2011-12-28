@@ -230,8 +230,10 @@ class ShareClient:
                 dashboardResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/site/%s/dashboard.xml' % (siteId))
             except SurfRequestError, e:
                 # Try 4.0 method
-                if e.code == 500:
+                if e.code in (404, 500):
                     dashboardResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/pages/site/%s/dashboard.xml' % (siteId))
+                else:
+                    raise e
             from xml.etree.ElementTree import XML
             dashboardTree = XML(dashboardResp.read())
             dashboardResp.close()
@@ -253,7 +255,7 @@ class ShareClient:
                 dashboardResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % (urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
             except SurfRequestError, e:
                 # Try 4.0 method
-                if e.code == 500:
+                if e.code in (404, 500): # 4.0.a returns 500, 4.0.b returns 404
                     dashboardResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % (urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
                 else:
                     raise e
@@ -269,7 +271,7 @@ class ShareClient:
                         try:
                             dashletResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
                         except SurfRequestError, e:
-                            if e.code == 500:
+                            if e.code in (404, 500):
                                 dashletResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, urllib.quote(str(dashboardType)), urllib.quote(str(dashboardId))))
                             else:
                                 raise e
