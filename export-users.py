@@ -32,6 +32,9 @@ file.json         Name of the file to export information to. Will be created if
 
 --no-avatars      Do not download user profile images
 
+--avatar-thumbnail Name of the thumbnail to download (default is original 
+                  profile image that was uploaded)
+
 -d                Turn on debug mode
 
 -h                Display this message
@@ -60,6 +63,7 @@ def main(argv):
     include_users = None
     skip_users = [ 'System' ]
     downloadAvatars = True
+    avatarThumbnail = None
     _debug = 0
     
     if len(argv) > 0:
@@ -77,7 +81,7 @@ def main(argv):
         sys.exit(1)
     
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "users=", "skip-users=", "no-avatars"])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "users=", "skip-users=", "no-avatars", "avatar-thumbnail="])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -96,6 +100,8 @@ def main(argv):
             url = arg
         elif opt == "--no-avatars":
             downloadAvatars = False
+        elif opt == "--avatar-thumbnail":
+            avatarThumbnail = arg
         elif opt == "--users":
             include_users = arg.split(',')
         elif opt == "--skip-users":
@@ -142,7 +148,10 @@ def main(argv):
                         # Thumbnail will be something like
                         # /api/node/workspace/SpacesStore/259a1c59-d2db-4b3c-ba04-b4042de39821/content/thumbnails/avatar
                         # We want to download the original avatar, not the thumbnail
-                        resp = sc.doGet('proxy/alfresco/%s' % (p['avatar'].replace('/thumbnails/avatar', '')))
+                        avatarUrl = (p['avatar'].replace('/thumbnails/avatar', ''))
+                        if avatarThumbnail is not None:
+                            avatarUrl = "%s/thumbnails/%s" % (avatarUrl, avatarThumbnail)
+                        resp = sc.doGet('proxy/alfresco/%s' % (avatarUrl))
                         # Detect image type from Content-Type header and guess extension (includes leading dot)
                         imgext = mimetypes.guess_extension(resp.info().gettype())
                         if imgext == ".jpe":
