@@ -232,7 +232,7 @@ def main(argv):
             print "Site with short name '%s' already exists" % (siteId)
             sys.exit(1)
         else:
-            raise e
+            raise
     finally:
         print "Log out (%s)" % (username)
         sc.doLogout()

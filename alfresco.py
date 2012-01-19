@@ -549,18 +549,34 @@ class ShareClient:
             # Cache the noderefs of tags
             tagInfo[item['name']] = { 'nodeRef': item['nodeRef'] }
         for node in nodeInfo:
-            docResult = self._getNodeInfoByPath(siteId, node['container'], "%s/%s".replace('//', '/') % (node['path'] or '', node['name']))
-            docNodeRef = docResult['metadata']['parent']['nodeRef']
-            tagNodeRefs = []
-            for tagName in node['tags']:
-                if tagName not in tagInfo:
-                    # Add to repo via post, cache nodeRef
-                    tagResp = self.doJSONPost('proxy/alfresco/api/tag/workspace/SpacesStore', {'name': tagName})
-                    tagInfo[tagName] = { 'nodeRef': tagResp['nodeRef'] }
-                tagNodeRefs.append(tagInfo[tagName]['nodeRef'])
-            # Add tags to document
-            formResult = self.updateProperties(docNodeRef, {'prop_cm_taggable': ','.join(tagNodeRefs)})
-            persistedNodes.append(formResult['persistedObject'])
+            docResult = None
+            try:
+                docResult = self._getNodeInfoByPath(siteId, node['container'], "%s/%s".replace('//', '/') % (node['path'] or '', node['name']))
+            except Exception, e:
+                ename, edesc = e
+                if ename == 'file_not_found':
+                    print edesc
+                else:
+                    raise
+            if docResult is not None:
+                docNodeRef = docResult['node']['nodeRef'] if 'node' in docResult else docResult['metadata']['parent']['nodeRef']
+                tagNodeRefs = []
+                for tagName in node['tags']:
+                    if tagName not in tagInfo:
+                        # Add to repo via post, cache nodeRef
+                        tagResp = self.doJSONPost('proxy/alfresco/api/tag/workspace/SpacesStore', {'name': tagName})
+                        tagInfo[tagName] = { 'nodeRef': tagResp['nodeRef'] }
+                    tagNodeRefs.append(tagInfo[tagName]['nodeRef'])
+                # Add tags to document
+                try:
+                    formResult = self.updateProperties(docNodeRef, {'prop_cm_taggable': ','.join(tagNodeRefs)})
+                    persistedNodes.append(formResult['persistedObject'])
+                except SurfRequestError, e:
+                    if e.code == 500:
+                        print 'Failed to save tags %s for node %s' % (','.join(tagNodeRefs), docNodeRef)
+                        print e
+                    else:
+                        raise
             
         return persistedNodes
     
@@ -720,7 +736,18 @@ class ShareClient:
     
     def _getNodeInfoByPath(self, siteId, componentId, path):
         """Return information on the specified node"""
-        return self.doJSONGet('proxy/alfresco/slingshot/doclib/doclist/all/node/alfresco/company/home/Sites/%s/%s/%s' % (urllib2.quote(siteId), urllib2.quote(componentId), urllib2.quote(path.encode('utf-8'))))
+        try:
+            parentPath = path[0:path.rindex('/')]
+            dl2resp = self.doJSONGet('proxy/alfresco/slingshot/doclib2/doclist/space/site/%s/%s/%s' % (urllib2.quote(siteId), urllib2.quote(componentId), urllib2.quote(parentPath.encode('utf-8'))))
+            for item in dl2resp['items']:
+                if str(item['node']['properties']['cm:name']) == str(path[path.rindex('/') + 1:]):
+                    return item
+            raise Exception('file_not_found', 'Could not find file %s in component %s, parent folder %s' % (path[path.rindex('/') + 1:], componentId, parentPath))
+        except SurfRequestError, e:
+            if e.code == 404: # Pre-4.0 method
+                return self.doJSONGet('proxy/alfresco/slingshot/doclib/doclist/all/node/alfresco/company/home/Sites/%s/%s/%s' % (urllib2.quote(siteId), urllib2.quote(componentId), urllib2.quote(path.encode('utf-8'))))
+            else:
+                raise
     
     def _getDocumentList(self, space):
         """Return a list of documents in the space identified by parameter space
