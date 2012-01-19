@@ -80,7 +80,7 @@ def main(argv):
     
         if not argv[1].startswith('-'):
             try:
-                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url=", "export-content", "export-tags", "containers"])
+                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url=", "export-content", "export-tags", "containers="])
             except getopt.GetoptError, e:
                 usage()
                 sys.exit(1)
