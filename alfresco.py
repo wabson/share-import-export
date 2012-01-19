@@ -69,6 +69,11 @@ class SurfRequestError(urllib2.HTTPError):
             return 'Spring Surf Error %s (%s): "%s"' % (self.code, self.msg, self.description)
         else:
             return 'Spring Surf Error %s (%s)\n\n%s' % (self.code, self.msg, self.respData)
+        
+    def printCallStack(self):
+        if isinstance(self.callstack, list) :
+            for line in self.callstack:
+                print str(line)
 
 class ShareClient:
     """Access Alfresco Share progamatically via its RESTful API"""
@@ -552,6 +557,8 @@ class ShareClient:
             docResult = None
             try:
                 docResult = self._getNodeInfoByPath(siteId, node['container'], "%s/%s".replace('//', '/') % (node['path'] or '', node['name']))
+            except SurfRequestError, e:
+                raise
             except Exception, e:
                 ename, edesc = e
                 if ename == 'file_not_found':
@@ -575,6 +582,7 @@ class ShareClient:
                     if e.code == 500:
                         print 'Failed to save tags %s for node %s' % (','.join(tagNodeRefs), docNodeRef)
                         print e
+                        e.printCallStack()
                     else:
                         raise
             
