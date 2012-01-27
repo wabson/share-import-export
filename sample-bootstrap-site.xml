@@ -2,7 +2,8 @@
 <!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 <beans>
     <!-- For importing whole sites -->
-    <bean id="patch.siteLoadPatch.%(siteId)s" class="org.alfresco.repo.admin.patch.impl.SiteLoadPatch" parent="basePatch">
+    <bean id="patch.siteLoadPatch.%(siteId)s" class="org.alfresco.repo.admin.patch.impl.SiteLoadPatch" parent="basePatch"
+        depends-on="">
         <property name="id"><value>patch.siteLoadPatch.%(siteId)s</value></property>
         <property name="description"><value>patch.siteLoadPatch.description</value></property>
         <property name="fixesFromSchema"><value>0</value></property>

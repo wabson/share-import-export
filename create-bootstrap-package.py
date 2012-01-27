@@ -30,6 +30,9 @@ package-file.jar            Name of the JAR file to package information inside
                             into ACP format before being placed inside the JAR.
                             (Required)
 
+--users=list                Comma-separated list of user names to include
+                            in the user data, optional
+
 --containers=list           Comma-separated list of container names to include
                             in the site content, e.g. documentLibrary,wiki
 
@@ -50,6 +53,9 @@ package-file.jar            Name of the JAR file to package information inside
 
 --no-config                 Do not generate Spring configuration to place in
                             the JAR file
+
+--config-depends            Advanced parameter for setting Spring bean 
+                            dependencies
 
 -d                          Turn on debug mode
 
@@ -72,6 +78,7 @@ import hashlib
 from xml.sax.saxutils import escape
 from datetime import datetime
 import uuid
+from xml.sax.saxutils import escape
 
 import alfresco
 
@@ -149,6 +156,7 @@ def main(argv):
     includeContent = True
     includeConfig = True
     configPath = 'alfresco/extension/sample-site-%(siteId)s-context.xml'
+    configDepends = ''
     contentPath = 'alfresco/bootstrap/sample-sites'
     _debug = 0
     
@@ -167,7 +175,7 @@ def main(argv):
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "users-file=", "groups-file=", "site-file=", "containers=", "no-content", "no-config" "config-path=" "content-path="])
+        opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "users-file=", "users=", "groups-file=", "site-file=", "containers=", "no-content", "no-config", "config-path=", "config-depends=", "content-path="])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -180,6 +188,8 @@ def main(argv):
             _debug = 1
         elif opt == '--users-file':
             users_file = arg
+        elif opt == '--users':
+            users = arg.split(',')
         elif opt == '--groups-file':
             groups_file = arg
         elif opt == '--containers':
@@ -188,6 +198,8 @@ def main(argv):
             includeContent = False
         elif opt == '--no-config':
             includeConfig = False
+        elif opt == '--config-depends':
+            configDepends = arg.split(',')
         elif opt == '--config-path':
             configPath = arg
         elif opt == '--content-path':
@@ -220,7 +232,7 @@ def main(argv):
     print 'Generating person, user and group data'
     generatePeopleACP('%s-people.acp' % (baseName), sd, users_file, temppath, users)
     generateUsersACP('%s-users.acp' % (baseName), sd, users_file, temppath, users)
-    generateGroupsData('%s-groups.txt' % (baseName), sd, users_file, temppath, users)
+    generateGroupsData('%s-groups.txt' % (baseName), sd, users_file, temppath, None)
     
     print 'Building final JAR file'
     # Build JAR file in current directory
@@ -241,6 +253,13 @@ def main(argv):
         beanXMLFile = open('sample-bootstrap-site.xml', 'r')
         xmlText = beanXMLFile.read() % {'siteId': sd['shortName'], 'contentBase': '%s/%s' % (contentPath, baseName)}
         beanXMLFile.close()
+        # Add dependencies, if specified
+        if configDepends != '':
+            refsXml = ''
+            for dep in configDepends:
+                refsXml += '<ref bean="%s" />' % (escape(dep))
+            #xmlText = xmlText.replace('depends=""', 'depends="%s"' % (escape(configDepends)))
+            xmlText = xmlText.replace('</bean>', '<property name="dependsOn"><list>%s</list></property></bean>' % (refsXml))
         beanXMLFile = open(beanXMLPath, 'w')
         beanXMLFile.write(xmlText)
         beanXMLFile.close()
