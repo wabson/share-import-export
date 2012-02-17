@@ -78,9 +78,8 @@ class SurfRequestError(urllib2.HTTPError):
 class ShareClient:
     """Access Alfresco Share progamatically via its RESTful API"""
 
-    def __init__(self, url="http://localhost:8080/share", debug=0):
+    def __init__(self, url="http://localhost:8080/share", debug=0, mplib='MultipartPostHandler'):
         """Initialise the client"""
-        from MultipartPostHandler import MultipartPostHandler
         cj = cookielib.CookieJar()
         headers = [
                    ('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'), 
@@ -92,14 +91,24 @@ class ShareClient:
         opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(cj))
         opener.addheaders = headers
         # Multipart opener
-        #m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(cj))
-        m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPCookieProcessor(cj))
+        if mplib == 'MultipartPostHandler':
+            from MultipartPostHandler import MultipartPostHandler
+            #m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(cj))
+            m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPCookieProcessor(cj))
+        elif mplib == 'poster':
+            import poster.streaminghttp
+            m_opener = poster.streaminghttp.register_openers()
+            m_opener.add_handler(urllib2.HTTPCookieProcessor(cj))
+        else:
+            raise Exception('Bad multipart library %s' % (mplib))
         m_opener.addheaders = headers
+        
         self.url = url
         self.opener = opener
         self.m_opener = m_opener
         self.debug = debug
         self._username = None
+        self.mplib = mplib
 
     def doRequest(self, method, path, data=None, dataType=None):
         """Perform a general HTTP request against Share"""
@@ -145,7 +154,13 @@ class ShareClient:
     def doMultipartUpload(self, path, params):
         """Perform a multipart form upload against Share"""
         try:
-            return self.m_opener.open("%s/%s" % (self.url, path), params)
+            if self.mplib == 'MultipartPostHandler':
+                return self.m_opener.open("%s/%s" % (self.url, path), params)
+            elif self.mplib == 'poster':
+                import poster.encode
+                datagen, headers = poster.encode.multipart_encode(params)
+                request = urllib2.Request("%s/%s" % (self.url, path), datagen, headers)
+                return self.m_opener.open(request)
         except urllib2.HTTPError, e:
             raise SurfRequestError("POST", e.url, e.code, e.msg, e.hdrs, e.fp)
 

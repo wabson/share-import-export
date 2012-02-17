@@ -48,6 +48,10 @@ file.json                   Name of the JSON file to import information from.
 --import-tags               Import tags for each site container (only if provided by 
                             site data)
 
+--multipart-handler         Name of the multipart library to use to upload content.
+                            Advanced use only, choose between 'MultipartPostHandler'
+                            and 'poster'.
+
 -d                          Turn on debug mode
 
 -h                          Display this message
@@ -88,6 +92,7 @@ def main(argv):
     uploadContent = True
     importTags = False
     deleteTempFiles = True
+    mplib = 'MultipartPostHandler'
     _debug = 0
     
     if len(argv) > 0:
@@ -104,7 +109,7 @@ def main(argv):
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "create-missing-members", "users-file=", "groups-file=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content", "no-content-upload", "import-tags", "no-delete"])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "create-missing-members", "users-file=", "groups-file=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content", "no-content-upload", "import-tags", "no-delete", "multipart-handler="])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -147,8 +152,10 @@ def main(argv):
             update_dashboard = False
         elif opt == '--no-delete':
             deleteTempFiles = False
+        elif opt == '--multipart-handler':
+            mplib = arg
     
-    sc = alfresco.ShareClient(url=url, debug=_debug)
+    sc = alfresco.ShareClient(url=url, debug=_debug, mplib=mplib)
     print "Log in (%s)" % (username)
     loginres = sc.doLogin(username, password)
     if not loginres['success']:
