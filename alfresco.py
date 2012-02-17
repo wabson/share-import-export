@@ -441,7 +441,7 @@ class ShareClient:
         # Locate the container item
         containerData = None
         tempContainerData = None
-        tempContainerName = 'temp'
+        tempContainerName = '%s-temp' % (containerId)
         for child in treeData['items']:
             if child['name'].lower() == containerId.lower():
                 containerData = child

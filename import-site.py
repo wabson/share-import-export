@@ -38,6 +38,13 @@ file.json                   Name of the JSON file to import information from.
 
 --no-content                Do not import any content packages into the site
 
+--no-delete                 Do not delete upload directories and temporary files 
+                            created during content upload (for post-import debugging)
+
+--no-content-upload         Create the upload directories but do not actually upload
+                            the ACP files (for manual import). Implies --no-delete, 
+                            use with --containers to limit the containers created.
+
 --import-tags               Import tags for each site container (only if provided by 
                             site data)
 
@@ -214,9 +221,9 @@ def main(argv):
         if importContent:
             for container in siteContainers:
                 acpFile = thisdir + os.sep + '%s-%s.acp' % (filenamenoext, container.replace(' ', '_'))
-                if os.path.isfile(acpFile) else uploadContent === False:
+                if os.path.isfile(acpFile) or uploadContent == False:
                     print "Import %s content" % (container)
-                    fileobj = file(acpFile, 'rb') if uploadContent === True or None
+                    fileobj = file(acpFile, 'rb') if uploadContent == True else None
                     if siteId == 'rm' and container == 'documentLibrary':
                         sc.importRmSiteContent(siteId, container, fileobj)
                     else:
