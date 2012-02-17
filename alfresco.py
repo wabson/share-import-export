@@ -505,28 +505,29 @@ class ShareClient:
         rulesData = self._setSpaceRuleset(tempContainerData['nodeRef'], rulesetDef)
         
         # Now upload the file
-        uparams = { 'filedata' : f, 'siteid':siteId, 'containerid':tempContainerName, 'destination':'', 'username':'', 'updateNodeRef':'', 'uploadDirectory':'/', 'overwrite':'false', 'thumbnails':'', 'successCallback':'', 'successScope':'', 'failureCallback':'', 'failureScope':'', 'contentType':'cm:content', 'majorVersion':'false', 'description':'' }
-        fr = self.doMultipartUpload("proxy/alfresco/api/upload", uparams)
-        udata = json.loads(fr.read())
-        if ('success' in udata and udata['success'] == true) or ('status' in udata and udata['status']['code'] == 200):
-            nodeRef = udata['nodeRef']
-            # Try to set the mimetype - required by 4.0a, which incorrectly guesses type as application/zip
-            try:
-                self.updateProperties(nodeRef, {'prop_mimetype': 'application/acp', 'prop_cm_title': f.name})
-            except SurfRequestError, e:
-                # Assume mimetype was not found, probably pre-4.0 instance
-                # Instead, we just need to update another property to get the ruleset to fire
-                self.updateProperties(nodeRef, {'prop_cm_title': f.name})
-                
-            if delete == True:
-                # Remove the rule definition
-                self._deleteSpaceRuleset(tempContainerData['nodeRef'], rulesData['data']['id'])
-                # Delete the ACP file
-                self.deleteFile(nodeRef)
-                # Delete the temp upload container
-                self.deleteFolder(tempContainerData['nodeRef'])
-        else:
-            raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
+        if f is not None:
+            uparams = { 'filedata' : f, 'siteid':siteId, 'containerid':tempContainerName, 'destination':'', 'username':'', 'updateNodeRef':'', 'uploadDirectory':'/', 'overwrite':'false', 'thumbnails':'', 'successCallback':'', 'successScope':'', 'failureCallback':'', 'failureScope':'', 'contentType':'cm:content', 'majorVersion':'false', 'description':'' }
+            fr = self.doMultipartUpload("proxy/alfresco/api/upload", uparams)
+            udata = json.loads(fr.read())
+            if ('success' in udata and udata['success'] == true) or ('status' in udata and udata['status']['code'] == 200):
+                nodeRef = udata['nodeRef']
+                # Try to set the mimetype - required by 4.0a, which incorrectly guesses type as application/zip
+                try:
+                    self.updateProperties(nodeRef, {'prop_mimetype': 'application/acp', 'prop_cm_title': f.name})
+                except SurfRequestError, e:
+                    # Assume mimetype was not found, probably pre-4.0 instance
+                    # Instead, we just need to update another property to get the ruleset to fire
+                    self.updateProperties(nodeRef, {'prop_cm_title': f.name})
+                    
+                if delete == True:
+                    # Remove the rule definition
+                    self._deleteSpaceRuleset(tempContainerData['nodeRef'], rulesData['data']['id'])
+                    # Delete the ACP file
+                    self.deleteFile(nodeRef)
+                    # Delete the temp upload container
+                    self.deleteFolder(tempContainerData['nodeRef'])
+            else:
+                raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
     
     def importSiteTags(self, siteId, nodeInfo):
         """Import tags into a site component"""

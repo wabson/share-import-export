@@ -78,6 +78,7 @@ def main(argv):
     set_user_prefs = True
     siteContainers = [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]
     importContent = True
+    uploadContent = True
     importTags = False
     deleteTempFiles = True
     _debug = 0
@@ -96,7 +97,7 @@ def main(argv):
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "create-missing-members", "users-file=", "groups-file=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content", "import-tags", "no-delete"])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "create-missing-members", "users-file=", "groups-file=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content", "no-content-upload", "import-tags", "no-delete"])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -127,6 +128,8 @@ def main(argv):
             siteContainers = arg.split(',')
         elif opt == '--no-content':
             importContent = False
+        elif opt == '--no-content-upload':
+            uploadContent = False
         elif opt == '--import-tags':
             importTags = True
         elif opt == '--no-configuration':
@@ -211,12 +214,13 @@ def main(argv):
         if importContent:
             for container in siteContainers:
                 acpFile = thisdir + os.sep + '%s-%s.acp' % (filenamenoext, container.replace(' ', '_'))
-                if os.path.isfile(acpFile):
+                if os.path.isfile(acpFile) else uploadContent === False:
                     print "Import %s content" % (container)
+                    fileobj = file(acpFile, 'rb') if uploadContent === True or None
                     if siteId == 'rm' and container == 'documentLibrary':
-                        sc.importRmSiteContent(siteId, container, file(acpFile, 'rb'))
+                        sc.importRmSiteContent(siteId, container, fileobj)
                     else:
-                        sc.importSiteContent(siteId, container, file(acpFile, 'rb'), deleteTempFiles)
+                        sc.importSiteContent(siteId, container, fileobj, deleteTempFiles)
                         
         # Import site tags
         if importTags:
