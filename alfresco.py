@@ -78,7 +78,7 @@ class SurfRequestError(urllib2.HTTPError):
 class ShareClient:
     """Access Alfresco Share progamatically via its RESTful API"""
 
-    def __init__(self, url="http://localhost:8080/share", debug=0, mplib='MultipartPostHandler'):
+    def __init__(self, url="http://localhost:8080/share", tenant=None, debug=0, mplib='MultipartPostHandler'):
         """Initialise the client"""
         cj = cookielib.CookieJar()
         headers = [
@@ -104,6 +104,7 @@ class ShareClient:
         m_opener.addheaders = headers
         
         self.url = url
+        self.tenant = tenant
         self.opener = opener
         self.m_opener = m_opener
         self.debug = debug
@@ -112,7 +113,8 @@ class ShareClient:
 
     def doRequest(self, method, path, data=None, dataType=None):
         """Perform a general HTTP request against Share"""
-        req = SurfRequest(url="%s/%s" % (self.url, path), data=data, method=method)
+        reqbase = self.url if self.tenant is None else ("%s/%s" % (self.url, self.tenant))
+        req = SurfRequest(url="%s/%s" % (reqbase, path), data=data, method=method)
         if dataType is not None:
             req.add_header('Content-Type', dataType)
         try:
@@ -175,7 +177,7 @@ class ShareClient:
             resp = self.doPost('login', urllib.urlencode({'username': username, 'password': password, 'success': successurl, 'failure': failureurl}))
         except SurfRequestError, e:
             resp = self.doPost('page/dologin', urllib.urlencode({'username': username, 'password': password, 'success': successurl, 'failure': failureurl}))
-        if (resp.geturl() == '%s/page/user/%s/dashboard' % (self.url, username)):
+        if (resp.geturl().endswith('/dashboard')):
             self._username = username
             resp.close()
             return { 'success': True }
