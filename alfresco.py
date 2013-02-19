@@ -888,6 +888,26 @@ class ShareClient:
     
     def _documentListHasItem(self, list, itemName):
         return self._getDocumentListItem(list, itemName) is not None
+
+    def updateContentItem(self, nodeRef, content, majorVersion=False, description=''):
+        return self.doMultipartUpload("proxy/alfresco/api/upload", {
+            'filedata': content, 
+            'siteid': '', 
+            'containerid': '', 
+            'destination': '',
+            'username': '', 
+            'updateNodeRef': nodeRef, 
+            'uploadDirectory':'', 
+            'overwrite': 'false', 
+            'thumbnails': '',
+            'successCallback': '',
+            'successScope': '',
+            'failureCallback': '',
+            'failureScope': '',
+            'contentType': 'cm:content',
+            'majorVersion': str(majorVersion).lower(),
+            'description': description
+        })
     
     # Admin functions
     
