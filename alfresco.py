@@ -115,6 +115,8 @@ class ShareClient:
         """Perform a general HTTP request against Share"""
         reqbase = self.url if self.tenant is None else ("%s/%s" % (self.url, self.tenant))
         req = SurfRequest(url="%s/%s" % (reqbase, path), data=data, method=method)
+        if self.debug == 1:
+            print "%s %s/%s" % (method, reqbase, path)
         if dataType is not None:
             req.add_header('Content-Type', dataType)
         try:
@@ -155,13 +157,14 @@ class ShareClient:
     
     def doMultipartUpload(self, path, params):
         """Perform a multipart form upload against Share"""
+        reqbase = self.url if self.tenant is None else ("%s/%s" % (self.url, self.tenant))
         try:
             if self.mplib == 'MultipartPostHandler':
-                return self.m_opener.open("%s/%s" % (self.url, path), params)
+                return self.m_opener.open("%s/%s" % (reqbase, path), params)
             elif self.mplib == 'poster':
                 import poster.encode
                 datagen, headers = poster.encode.multipart_encode(params)
-                request = urllib2.Request("%s/%s" % (self.url, path), datagen, headers)
+                request = urllib2.Request("%s/%s" % (reqbase, path), datagen, headers)
                 return self.m_opener.open(request)
         except urllib2.HTTPError, e:
             raise SurfRequestError("POST", e.url, e.code, e.msg, e.hdrs, e.fp)
@@ -170,11 +173,14 @@ class ShareClient:
 
     def doLogin(self, username, password):
         """Log in to Share via the login servlet"""
-        successurl = '/share/page/site-index'
-        failureurl = '/share/page/type/login?error=true'
+        pp = ('-default-/' if self.tenant is not None else '') + 'page' # page prefix
+        successurl = '/share/%s/site-index' % (pp)
+        failureurl = '/share/%s/type/login?error=true' % (pp)
         try:
             # Try 3.2 method first, which will fail on 3.3 and above
             resp = self.doPost('login', urllib.urlencode({'username': username, 'password': password, 'success': successurl, 'failure': failureurl}))
+            if resp.geturl().endswith('/login'): # Cloud just returns the login page - need to try again
+                resp = self.doPost('page/dologin', urllib.urlencode({'username': username, 'password': password, 'success': successurl, 'failure': failureurl}))
         except SurfRequestError, e:
             resp = self.doPost('page/dologin', urllib.urlencode({'username': username, 'password': password, 'success': successurl, 'failure': failureurl}))
         if (resp.geturl().endswith('/dashboard')):

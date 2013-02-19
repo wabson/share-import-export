@@ -49,12 +49,13 @@ def main(argv):
     username = "admin"
     password = "admin"
     url = "http://localhost:8080/share"
+    tenant = None
     _debug = 0
     # timeout in seconds
     timeout = 10
     
     try:
-        opts, args = getopt.getopt(argv, "hdu:p:U:", ["help", "username=", "password=", "url="])
+        opts, args = getopt.getopt(argv, "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant="])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -71,12 +72,14 @@ def main(argv):
             password = arg
         elif opt in ("-U", "--url"):
             url = arg
+        elif opt == '--tenant':
+            tenant = arg
         elif opt == '--timeout':
             timeout = arg
     
     socket.setdefaulttimeout(timeout)
     
-    sc = alfresco.ShareClient(url, debug=_debug)
+    sc = alfresco.ShareClient(url, debug=_debug, tenant=tenant)
     print "Log in (%s)" % (username)
     loginres = sc.doLogin(username, password)
     if not loginres['success']:
