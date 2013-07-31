@@ -104,8 +104,8 @@ def main(argv):
                 elif opt == '--containers':
                     siteContainers = arg.split(',')
             
-            idm = re.match('^(\w+)$', argv[0])
-            urlm = re.match('^(https?\\://[\w\\-\\.\\:]+/share)/page/site/(\w+)/[\w\\-\\./]*$', argv[0])
+            idm = re.match('^([\-\w]+)$', argv[0])
+            urlm = re.match('^(https?\://[\w\-\.\:]+/share)/page/site/([\-\w]+)/[\w\-\./_]*$', argv[0])
             if idm is not None:
                 sitename = argv[0]
             elif urlm is not None:
