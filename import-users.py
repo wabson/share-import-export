@@ -168,7 +168,7 @@ def main(argv):
     #TODO Check if a profile image or dashboard config is available before logging in
     thisdir = os.path.dirname(filename)
     if thisdir == "":
-        thisdir = os.path.dirname(sys.argv[0])
+        thisdir = os.getcwd()
     for u in create_users:
         if set_avatars or update_profile or set_dashboards:
             print "Log in (%s)" % (u['userName'])
@@ -177,14 +177,14 @@ def main(argv):
                 try:
                     # Add profile image
                     if set_avatars:
-                        print "Setting profile image for user '%s'" % (u['userName'])
                         if 'avatar' in u:
+                            print "Setting profile image for user '%s'" % (u['userName'])
                             try:
                                 sc.setProfileImage(u['userName'], thisdir + os.sep + str(u['avatar']))
                             except IOError, e:
                                 if e.errno == 2:
-                                    # Ignore file not found errors
-                                    pass
+                                    # File not found errors
+                                    print "Warning: no avatar found for user %s" % (u['userName'])
                                 else:
                                     print e
                                     raise e

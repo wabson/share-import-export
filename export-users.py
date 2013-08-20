@@ -134,7 +134,7 @@ def main(argv):
         else:
             thisdir = os.path.dirname(filename)
             if thisdir == "":
-                thisdir = os.path.dirname(sys.argv[0])
+                thisdir = os.getcwd()
             if not os.path.exists(os.path.dirname(filename)):
                 os.makedirs(os.path.dirname(filename))
             
