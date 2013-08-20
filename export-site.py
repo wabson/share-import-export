@@ -34,6 +34,22 @@ file.json         Name of the file to export information to. Will be created if
 
 --containers=list Comma-separated list of container names to export site
                   content and tags for, e.g. documentLibrary,wiki
+
+--include-paths=list Comma-separated list of folders or content items to include 
+                  in the ACP file(s). This can be a list of absolute paths from 
+                  the store root (although anything not inside the site will be 
+                  ignored), or it can be relative to the site root. The path 
+                  should be forward slash-separated and path parts are the child
+                  assoc names, e.g. 'app:company_home'. If a prefix is not provided
+                  then 'cm:' is assumed.
+                  
+                  You do not need to explicitly include every node you wish to 
+                  export in the list, as all ancestor nodes and descendants of 
+                  each list item will be automatically included. Note that other 
+                  (non-child) associations are not followed.
+                  
+                  Note that specifying --include-paths=documentLibrary,wiki is
+                  equivalent to --containers=documentLibrary,wiki.
                   
 -d                Turn on debug mode
 
@@ -67,6 +83,7 @@ def main(argv):
     exportContent = False
     exportTags = False
     siteContainers = [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]
+    includePaths = None
     
     if len(argv) > 0:
         if argv[0] == "--help" or argv[0] == "-h":
@@ -80,7 +97,7 @@ def main(argv):
     
         if not argv[1].startswith('-'):
             try:
-                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url=", "export-content", "export-tags", "containers="])
+                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url=", "export-content", "export-tags", "containers=", "include-paths="])
             except getopt.GetoptError, e:
                 usage()
                 sys.exit(1)
@@ -103,6 +120,8 @@ def main(argv):
                     exportTags = True
                 elif opt == '--containers':
                     siteContainers = arg.split(',')
+                elif opt == '--include-paths':
+                    includePaths = arg.split(',')
             
             idm = re.match('^([\-\w]+)$', argv[0])
             urlm = re.match('^(https?\://[\w\-\.\:]+/share)/page/site/([\-\w]+)/[\w\-\./_]*$', argv[0])
@@ -152,7 +171,7 @@ def main(argv):
         if exportContent:
             if not filename == "-":
                 print "Export all site content"
-                results = sc.exportAllSiteContent(sitename, siteContainers)
+                results = sc.exportAllSiteContent(sitename, siteContainers, includePaths)
                 
                 for component in results['exportFiles']:
                     acpFileName = "%s-%s.acp" % (filename.replace('.json', ''), component.replace(' ', '_'))

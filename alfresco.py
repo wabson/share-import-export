@@ -685,7 +685,7 @@ class ShareClient:
         else:
             raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
 
-    def exportSiteContent(self, siteId, containerId):
+    def exportSiteContent(self, siteId, containerId, includePaths):
         """Export an ACP file of a specific site component and store it in the repository"""
         # Get the site metadata
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(str(siteId))))
@@ -734,6 +734,13 @@ class ShareClient:
                 "encoding": "UTF-8"
             }
         }
+        if (includePaths is not None and includePaths != ""):
+            # Add cm: prefix to path parts, if no prefix present
+            paths = ["/".join([ (part if part.find(":") > 0 else ("cm:%s" % (part))) for part in p.split("/") ]) for p in includePaths]
+            fullpaths = []
+            for p in paths:
+                fullpaths.append(p if p.startswith("/app:company_home") else "/app:company_home/st:sites/cm:%s/%s" % (siteId, p.strip("/")))
+            actionDef["parameterValues"]["include-paths"] = fullpaths
         self.doJSONPost('proxy/alfresco/api/actionQueue', json.dumps(actionDef))
         """
         Response is something like
@@ -748,7 +755,7 @@ class ShareClient:
         }
         """
         
-    def exportAllSiteContent(self, siteId, containers=None):
+    def exportAllSiteContent(self, siteId, containers=None, includePaths=None):
         """Export an ACP file for each component in the site and store them in the repository"""
         # TODO Can we not just call proxy/alfresco/slingshot/doclib/treenode/node/alfresco/company/home/Sites/sitename ?
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(str(siteId))))
@@ -762,7 +769,7 @@ class ShareClient:
                 docList = self._getDocumentList('Sites/%s/%s' % (siteId, child['name']))
                 if docList['totalRecords'] > 0:
                     print "Export %s" % (child['name'])
-                    self.exportSiteContent(siteId, child['name'])
+                    self.exportSiteContent(siteId, child['name'], includePaths)
                     results['exportFiles'].append(child['name'])
         return results
     
