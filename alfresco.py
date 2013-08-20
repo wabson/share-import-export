@@ -103,7 +103,7 @@ class ShareClient:
             raise Exception('Bad multipart library %s' % (mplib))
         m_opener.addheaders = headers
         
-        self.url = url
+        self.url = url.rstrip('/')
         self.tenant = tenant
         self.opener = opener
         self.m_opener = m_opener
