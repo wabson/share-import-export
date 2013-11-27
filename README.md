@@ -40,7 +40,9 @@ What is not imported/exported?
 Requirements
 ------------
 
-The scripts work with fully with versions 3.3, 3.4 and 4.0 of Alfresco, with additional limited support for previous versions of 3.x. No additional customisations are needed in Alfresco or Share, so you can export data from existing systems without any fuss.
+The scripts work with fully with versions 3.3, 3.4 and 4.x of Alfresco, with additional limited support for previous versions of 3.x. No additional customisations are needed in Alfresco or Share, so you can export data from existing systems without any fuss.
+
+*Note: in Alfresco 4.2 and greater the new CSRF filter blocks some of the requests made by the tools and must be temporarily disabled - see Troubleshooting, below, for details of how to do this.*
 
 [Python](http://www.python.org/) 2.6 or greater is required to run the scripts, with Python 2.7 recommended for packaging site bootstrap packages. At present Python 3.x is **not supported**. 
 
@@ -133,7 +135,7 @@ Finally it will import the site content from any associated ACP files.
 
 Run the following command from a terminal
 
-  python export-site.py siteid file.json --username=username --password=password --url=share-url
+    python export-site.py siteid file.json --username=username --password=password --url=<share-url>
 
 The `siteid` argument is the URL name of the site in Share. If you are not sure what this means
 you can use the full URL of the site dashboard page instead.
@@ -166,20 +168,34 @@ page.
 
 This will remove ALL the users specified in the local file `users-file.json` from Alfresco. Use this with extreme caution!
 
-    python purge-users.py users-file.json --username=username --password=password --url=share-url
+    python purge-users.py users-file.json --username=username --password=password --url=<share-url>
 
 To remove only a few selected users, add the `--users=user1,user2` flag to the command.
 
 Troubleshooting
 ---------------
 
-### When I try to import a site I see the following error reported:
+### ServletException: Possible CSRF attack noted when comparing token in session and request header
+
+The CSRF filter [introduced in Alfresco 4.2](http://blogs.alfresco.com/wp/ewinlof/2013/03/11/introducing-the-new-csrf-filter-in-alfresco-share/) blocks some of the web scripts used by the scripts. It must be disabled so that the scripts can be used, by uncommenting or adding the following config in your `share-config-custom.xml` file.
+
+    <config evaluator="string-compare" condition="CSRFPolicy" replace="true">
+       <filter/>
+    </config>
+    
+Once you have completed the import/export you should remove this configuration to re-enable the filter.
+
+### The authority with name xxxxx could not be found
+
+When you try to import a site you see the following error reported in the console:
 
     alfresco.SurfRequestError: Spring Surf Error 400 (Bad Request): "The authority with name xxxxx could not be found."
 
 This means that one of the members of the site could not be found in the destination system, and therefore they could not be added to the site. Either add the missing users, or add the `--skip-missing-members` flag to your command to suppress the errors.
 
-### When I try to import a site I see the following error reported:
+### Association name {http://www.alfresco.org/model/content/1.0}thumbnails is not valid
+
+When you try to import a site you see the following error reported in the console:
 
     alfresco.SurfRequestError: Spring Surf Error 500 (Internal Server Error): "Failed to import package at line 128; column 34 due to error: Association name {http://www.alfresco.org/model/content/1.0}thumbnails is not valid; cannot find in Repository dictionary"
 
