@@ -181,7 +181,11 @@ def main(argv):
                     acpfile.write(resp.read())
                     acpfile.close()
                 
-                # TODO Delete the 'export' folder afterwards
+                # Delete the 'export' folder afterwards
+                tempContainerName = 'export'
+                exportFolder = sc._getDocumentList('Sites/%s/%s' % (sitename, tempContainerName))
+                if exportFolder is not None:
+                    sc.deleteFolder(exportFolder['metadata']['parent']['nodeRef'])
 
         if exportTags:
             if not filename == "-":
