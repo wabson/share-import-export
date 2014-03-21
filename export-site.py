@@ -174,7 +174,7 @@ def main(argv):
                 results = sc.exportAllSiteContent(sitename, siteContainers, includePaths)
                 
                 for component in results['exportFiles']:
-                    acpFileName = "%s-%s.acp" % (filename.replace('.json', ''), component.replace(' ', '_'))
+                    acpFileName = "%s-%s.acp" % (os.path.splitext(filename)[0], component.replace(' ', '_'))
                     print "Saving %s" % (acpFileName)
                     resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/Sites/%s/export/%s-%s.acp' % (sitename, sitename, component)))
                     acpfile = open(acpFileName, 'wb')
