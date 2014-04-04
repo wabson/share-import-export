@@ -77,6 +77,7 @@ def main(argv):
     username = "admin"
     password = "admin"
     url = "http://localhost:8080/share"
+    tenant = None
     _debug = 0
     sitename = ""
     filename = ""
@@ -124,12 +125,14 @@ def main(argv):
                     includePaths = arg.split(',')
             
             idm = re.match('^([\-\w]+)$', argv[0])
-            urlm = re.match('^(https?\://[\w\-\.\:]+/share)/page/site/([\-\w]+)/[\w\-\./_]*$', argv[0])
+            urlm = re.match('^(https?\://[\w\-\.\:]+/share)/([\w\-\./_]+/)?page/site/([\-\w]+)/[\w\-\./_]*$', argv[0])
             if idm is not None:
                 sitename = argv[0]
             elif urlm is not None:
                 url = urlm.group(1)
-                sitename = urlm.group(2)
+                sitename = urlm.group(3)
+                if (urlm.group(2) is not None):
+                    tenant = urlm.group(2).strip('/')
             else:
                 raise Exception("Not a valid site URL or ID (%s)" % (argv[0]))
             
@@ -141,7 +144,7 @@ def main(argv):
         usage()
         sys.exit(1)
     
-    sc = alfresco.ShareClient(url, debug=_debug)
+    sc = alfresco.ShareClient(url, tenant=tenant, debug=_debug)
     if not filename == "-":
         print "Log in (%s)" % (username)
     loginres = sc.doLogin(username, password)
