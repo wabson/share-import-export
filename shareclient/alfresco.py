@@ -713,6 +713,8 @@ class ShareClient:
                 if e.code == 404:
                     # 4.0 syntax
                     createData = self.doJSONPost('proxy/alfresco/api/type/%s/formprocessor' % (urllib.quote('cm:folder')), json.dumps(folderData))
+                else:
+                    raise e
             tempContainerData = { 'nodeRef': createData['persistedObject'], 'name' : tempContainerName }
         else:
             # Does the ACP file exist in the export container already?
