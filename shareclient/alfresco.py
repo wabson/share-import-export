@@ -80,7 +80,7 @@ class ShareClient:
 
     def __init__(self, url="http://localhost:8080/share", tenant=None, debug=0, mplib='MultipartPostHandler'):
         """Initialise the client"""
-        cj = cookielib.CookieJar()
+        self.cj = cookielib.CookieJar()
         headers = [
                    ('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'), 
                    ('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'), 
@@ -88,17 +88,17 @@ class ShareClient:
                    ('User-Agent', SHARE_CLIENT_USER_AGENT)
         ]
         # Regular opener
-        opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(cj))
+        opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj))
         opener.addheaders = headers
         # Multipart opener
         if mplib == 'MultipartPostHandler':
             from MultipartPostHandler import MultipartPostHandler
-            #m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(cj))
-            m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPCookieProcessor(cj))
+            #m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj))
+            m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPCookieProcessor(self.cj))
         elif mplib == 'poster':
             import poster.streaminghttp
             m_opener = poster.streaminghttp.register_openers()
-            m_opener.add_handler(urllib2.HTTPCookieProcessor(cj))
+            m_opener.add_handler(urllib2.HTTPCookieProcessor(self.cj))
         else:
             raise Exception('Bad multipart library %s' % (mplib))
         m_opener.addheaders = headers
@@ -119,6 +119,11 @@ class ShareClient:
             print "%s %s/%s" % (method, reqbase, path)
         if dataType is not None:
             req.add_header('Content-Type', dataType)
+        if method != 'GET':
+            for cookie in self.cj:
+                if cookie.name == 'Alfresco-CSRFToken':
+                    print 'Adding Alfresco-CSRFToken %s' % (urllib.unquote(cookie.value))
+                    req.add_header('Alfresco-CSRF-Token', urllib.unquote(cookie.value))
         try:
             return self.opener.open(req)
         except urllib2.HTTPError, e:
