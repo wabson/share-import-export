@@ -32,6 +32,14 @@ file.json         Name of the file to export information to. Will be created if
                   format. ACP content exports do not support tag information
                   natively.
 
+--no-metadata     Do not include basic site metadata in the site data
+
+--no-memberships  Do not include site memberships in the site data
+
+--no-pages        Do not include site pages in the site data
+
+--no-dashboard    Do not include dashboard configuration in the site data
+
 --containers=list Comma-separated list of container names to export site
                   content and tags for, e.g. documentLibrary,wiki
 
@@ -85,6 +93,11 @@ def main(argv):
     exportTags = False
     siteContainers = [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]
     includePaths = None
+    # Type of site metadata to get
+    getMetaData = True
+    getMemberships = True
+    getPages = True
+    getDashboardConfig = True
     
     if len(argv) > 0:
         if argv[0] == "--help" or argv[0] == "-h":
@@ -98,7 +111,8 @@ def main(argv):
     
         if not argv[1].startswith('-'):
             try:
-                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url=", "export-content", "export-tags", "containers=", "include-paths="])
+                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", 
+                    ["help", "username=", "password=", "url=", "export-content", "export-tags", "containers=", "include-paths=", "no-metadata", "no-memberships", "no-pages", "no-dashboard"])
             except getopt.GetoptError, e:
                 usage()
                 sys.exit(1)
@@ -123,6 +137,14 @@ def main(argv):
                     siteContainers = arg.split(',')
                 elif opt == '--include-paths':
                     includePaths = arg.split(',')
+                elif opt == '--no-metadata':
+                    getMetaData = False
+                elif opt == '--no-memberships':
+                    getMemberships = False
+                elif opt == '--no-pages':
+                    getPages = False
+                elif opt == '--no-dashboard':
+                    getDashboardConfig = False
             
             idm = re.match('^([\-\w]+)$', argv[0])
             urlm = re.match('^(https?\://[\w\-\.\:]+/share)/([\w\-\./_]+/)?page/site/([\-\w]+)/[\w\-\./_]*$', argv[0])
@@ -154,7 +176,7 @@ def main(argv):
     try:
         if not filename == "-":
             print "Get site information"
-        sdata = sc.getSiteInfo(sitename, True, True, True, True)
+        sdata = sc.getSiteInfo(sitename, getMetaData, getMemberships, getPages, getDashboardConfig)
         
         if filename == '-':
             siteJson = json.dumps(sdata, sort_keys=True, indent=4)
