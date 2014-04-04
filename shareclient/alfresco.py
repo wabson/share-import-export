@@ -689,7 +689,7 @@ class ShareClient:
         """Export an ACP file of a specific site component and store it in the repository"""
         # Get the site metadata
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(str(siteId))))
-        siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
+        siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('node/', '').replace('/', '://', 1)
         treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
         acpFile = "%s-%s" % (siteId, containerId)
         # Locate the container item
@@ -759,7 +759,7 @@ class ShareClient:
         """Export an ACP file for each component in the site and store them in the repository"""
         # TODO Can we not just call proxy/alfresco/slingshot/doclib/treenode/node/alfresco/company/home/Sites/sitename ?
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(str(siteId))))
-        siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('/', '://', 1)
+        siteNodeRef = '/'.join(siteData['node'].split('/')[5:]).replace('node/', '').replace('/', '://', 1)
         treeData = self.doJSONGet('proxy/alfresco/slingshot/doclib/treenode/node/%s' % (siteNodeRef.replace('://', '/')))
         results = { 'exportFiles': [] }
         excludeContainers = ['export', 'surf-config', 'temp']
