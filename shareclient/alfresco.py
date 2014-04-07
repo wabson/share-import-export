@@ -88,12 +88,12 @@ class ShareClient:
                    ('User-Agent', SHARE_CLIENT_USER_AGENT)
         ]
         # Regular opener
-        opener = urllib2.build_opener(urllib2.HTTPSHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj))
+        opener = urllib2.build_opener(urllib2.HTTPSHandler(debuglevel=debug), urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj))
         opener.addheaders = headers
         # Multipart opener
         if mplib == 'MultipartPostHandler':
             from MultipartPostHandler import MultipartPostHandler
-            #m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPSHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj))
+            #m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPSHandler(debuglevel=debug), urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj))
             m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPCookieProcessor(self.cj))
         elif mplib == 'poster':
             import poster.streaminghttp
