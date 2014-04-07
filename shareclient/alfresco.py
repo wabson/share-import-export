@@ -19,6 +19,7 @@ import sys
 GUID_REGEXP = re.compile('[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{8}')
 SHARE_CLIENT_USER_AGENT = 'ShareImportExport/1.0'
 SIE_VERSION = 'Share Import-Export 1.3.0'
+CSRF_TOKEN_NAME = 'Alfresco-CSRFToken'
 
 class SurfRequest(urllib2.Request):
     """A request sent to a SpringSurf-based server. Adds support for additional method types in addition to GET and POST."""
@@ -122,9 +123,8 @@ class ShareClient:
             req.add_header('Content-Type', dataType)
         if method != 'GET':
             for cookie in self.cj:
-                if cookie.name == 'Alfresco-CSRFToken':
-                    print 'Adding Alfresco-CSRFToken %s' % (urllib.unquote(cookie.value))
-                    req.add_header('Alfresco-CSRFToken', urllib.unquote(cookie.value))
+                if cookie.name == CSRF_TOKEN_NAME:
+                    req.add_header(CSRF_TOKEN_NAME, urllib.unquote(cookie.value))
         try:
             return self.opener.open(req, timeout=self.timeout)
         except urllib2.HTTPError, e:
