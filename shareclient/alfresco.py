@@ -123,7 +123,7 @@ class ShareClient:
             for cookie in self.cj:
                 if cookie.name == 'Alfresco-CSRFToken':
                     print 'Adding Alfresco-CSRFToken %s' % (urllib.unquote(cookie.value))
-                    req.add_header('Alfresco-CSRF-Token', urllib.unquote(cookie.value))
+                    req.add_header('Alfresco-CSRFToken', urllib.unquote(cookie.value))
         try:
             return self.opener.open(req)
         except urllib2.HTTPError, e:
