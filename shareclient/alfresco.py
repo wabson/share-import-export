@@ -78,7 +78,7 @@ class SurfRequestError(urllib2.HTTPError):
 class ShareClient:
     """Access Alfresco Share progamatically via its RESTful API"""
 
-    def __init__(self, url="http://localhost:8080/share", tenant=None, debug=0, mplib='MultipartPostHandler'):
+    def __init__(self, url="http://localhost:8080/share", tenant=None, debug=0, mplib='MultipartPostHandler', timeout=300):
         """Initialise the client"""
         self.cj = cookielib.CookieJar()
         headers = [
@@ -110,6 +110,7 @@ class ShareClient:
         self.debug = debug
         self._username = None
         self.mplib = mplib
+        self.timeout = timeout
 
     def doRequest(self, method, path, data=None, dataType=None):
         """Perform a general HTTP request against Share"""
@@ -125,7 +126,7 @@ class ShareClient:
                     print 'Adding Alfresco-CSRFToken %s' % (urllib.unquote(cookie.value))
                     req.add_header('Alfresco-CSRFToken', urllib.unquote(cookie.value))
         try:
-            return self.opener.open(req)
+            return self.opener.open(req, timeout=self.timeout)
         except urllib2.HTTPError, e:
             raise SurfRequestError(method, e.url, e.code, e.msg, e.hdrs, e.fp)
 
