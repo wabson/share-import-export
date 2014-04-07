@@ -70,6 +70,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib
 
 import alfresco
@@ -196,18 +197,18 @@ def main(argv):
         if exportContent:
             if not filename == "-":
                 print "Export all site content"
-                results = sc.exportAllSiteContent(sitename, siteContainers, includePaths)
+                tempContainerName = 'export-%s' % (int(time.time()))
+                results = sc.exportAllSiteContent(sitename, siteContainers, includePaths, tempContainerName)
                 
                 for component in results['exportFiles']:
                     acpFileName = "%s-%s.acp" % (os.path.splitext(filename)[0], component.replace(' ', '_'))
                     print "Saving %s" % (acpFileName)
-                    resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/Sites/%s/export/%s-%s.acp' % (sitename, sitename, component)))
+                    resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/Sites/%s/%s/%s-%s.acp' % (sitename, tempContainerName, sitename, component)))
                     acpfile = open(acpFileName, 'wb')
                     acpfile.write(resp.read())
                     acpfile.close()
                 
                 # Delete the 'export' folder afterwards
-                tempContainerName = 'export'
                 exportFolder = sc._getDocumentList('Sites/%s/%s' % (sitename, tempContainerName))
                 if exportFolder is not None:
                     sc.deleteFolder(exportFolder['metadata']['parent']['nodeRef'])

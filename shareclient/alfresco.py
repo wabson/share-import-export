@@ -691,7 +691,7 @@ class ShareClient:
         else:
             raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
 
-    def exportSiteContent(self, siteId, containerId, includePaths):
+    def exportSiteContent(self, siteId, containerId, includePaths, tempContainerName='export'):
         """Export an ACP file of a specific site component and store it in the repository"""
         # Get the site metadata
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(str(siteId))))
@@ -701,7 +701,6 @@ class ShareClient:
         # Locate the container item
         containerData = None
         tempContainerData = None
-        tempContainerName = 'export'
         for child in treeData['items']:
             if child['name'].lower() == containerId.lower():
                 containerData = child
@@ -763,7 +762,7 @@ class ShareClient:
         }
         """
         
-    def exportAllSiteContent(self, siteId, containers=None, includePaths=None):
+    def exportAllSiteContent(self, siteId, containers=None, includePaths=None, tempContainerName='export'):
         """Export an ACP file for each component in the site and store them in the repository"""
         # TODO Can we not just call proxy/alfresco/slingshot/doclib/treenode/node/alfresco/company/home/Sites/sitename ?
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(str(siteId))))
@@ -773,11 +772,11 @@ class ShareClient:
         excludeContainers = ['export', 'surf-config', 'temp']
         # Locate the container item
         for child in treeData['items']:
-            if (containers is None or child['name'] in containers) and (child['name'] not in excludeContainers):
+            if (containers is None or child['name'] in containers) and (child['name'] not in excludeContainers) and not child['name'].startswith('export-'):
                 docList = self._getDocumentList('Sites/%s/%s' % (siteId, child['name']))
                 if docList['totalRecords'] > 0:
                     print "Export %s" % (child['name'])
-                    self.exportSiteContent(siteId, child['name'], includePaths)
+                    self.exportSiteContent(siteId, child['name'], includePaths, tempContainerName)
                     results['exportFiles'].append(child['name'])
         return results
     
