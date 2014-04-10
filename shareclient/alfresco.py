@@ -773,8 +773,15 @@ class ShareClient:
         # Locate the container item
         for child in treeData['items']:
             if (containers is None or child['name'] in containers) and (child['name'] not in excludeContainers) and not child['name'].startswith('export-'):
-                docList = self._getDocumentList('Sites/%s/%s' % (siteId, child['name']))
-                if docList['totalRecords'] > 0:
+                # treenode webscript does not return any discussion items, need to use posts web script instead
+                if child['name'] != 'discussions':
+                    docList = self._getDocumentList('Sites/%s/%s' % (siteId, child['name']))
+                    totalRecords = docList['totalRecords']
+                else:
+                    postList = self.doJSONGet('service/components/forum/site/%s/discussions/posts?contentLength=8&page=1&pageSize=10&startIndex=0' % (siteId))
+                    totalRecords = postList['total']
+
+                if totalRecords > 0:
                     print "Export %s" % (child['name'])
                     self.exportSiteContent(siteId, child['name'], includePaths, tempContainerName)
                     results['exportFiles'].append(child['name'])
