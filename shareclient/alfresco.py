@@ -941,8 +941,39 @@ class ShareClient:
         getGroups adds 'groups' and 'mutability' objects. Implies getFullDetails=True.
         """
         pdata = self.doJSONGet('proxy/alfresco/api/people')
+        self._extendUserInfo(pdata['people'], getFullDetails, getDashboardConfig, getPreferences, getGroups)
+        return pdata
+        
+    def getCloudUsers(self, getFullDetails=False, getDashboardConfig=False, getPreferences=False, getGroups=False):
+        """Fetch information on all the person objects in the current tenant
+        
+        getFullDetails adds 'capabilities' object to the user object with booleans
+        isMutable, isGuest and isAdmin
+        
+        getGroups adds 'groups' and 'mutability' objects. Implies getFullDetails=True.
+        """
+        pdata = { 'people': [] }
+        skipCount = 0
+        pageSize = 100
+        while True:
+            newData = self.doJSONGet('proxy/alfresco/internal/cloud/people?sortBy=userName&skipCount=%s&maxItems=%s' % (skipCount, pageSize))
+            self._extendUserInfo(newData['data'], getFullDetails, getDashboardConfig, getPreferences, getGroups)
+            pdata['people'].extend(newData['data'])
+            skipCount += pageSize
+            if skipCount >= newData['paging']['totalItems']:
+                break
+        return pdata
+        
+    def _extendUserInfo(self, users, getFullDetails=False, getDashboardConfig=False, getPreferences=False, getGroups=False):
+        """Fetch information on all the person objects in the repository
+        
+        getFullDetails adds 'capabilities' object to the user object with booleans
+        isMutable, isGuest and isAdmin
+        
+        getGroups adds 'groups' and 'mutability' objects. Implies getFullDetails=True.
+        """
         if getFullDetails or getDashboardConfig or getPreferences:
-            for p in pdata['people']:
+            for p in users:
                 if getGroups:
                     p.update(self.doJSONGet('proxy/alfresco/api/people/%s?groups=true' % (urllib.quote(unicode(p['userName'])))))
                     # Remove site groups and those with a GUID in them (e.g. RM security groups)
@@ -959,8 +990,6 @@ class ShareClient:
                         p['dashboardConfig'] = dc
                 if getPreferences:
                     p['preferences'] = self.doJSONGet('proxy/alfresco/api/people/%s/preferences' % (urllib.quote(unicode(p['userName']))))
-                    
-        return pdata
         
     def createUser(self, user, defaultPassword=None):
         """Create a person object in the repository"""

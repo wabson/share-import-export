@@ -67,6 +67,7 @@ def main(argv):
     skip_users = [ 'System' ]
     downloadAvatars = True
     avatarThumbnail = None
+    isCloud = False
     _debug = 0
     
     if len(argv) > 0:
@@ -84,7 +85,7 @@ def main(argv):
         sys.exit(1)
     
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant=", "users=", "skip-users=", "no-avatars", "avatar-thumbnail="])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant=", "users=", "skip-users=", "no-avatars", "avatar-thumbnail=", "cloud"])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -111,6 +112,8 @@ def main(argv):
             include_users = arg.split(',')
         elif opt == "--skip-users":
             skip_users = arg.split(',')
+        elif opt == "--cloud":
+            isCloud = True
     
     sc = alfresco.ShareClient(url, tenant=tenant, debug=_debug)
     if not filename == "-":
@@ -122,7 +125,10 @@ def main(argv):
     try:
         if not filename == "-":
             print "Get user information"
-        pdata = sc.getAllUsers(getFullDetails=True, getDashboardConfig=True, getPreferences=True, getGroups=True)
+        if not isCloud:
+            pdata = sc.getAllUsers(getFullDetails=True, getDashboardConfig=True, getPreferences=False, getGroups=True)
+        else:
+            pdata = sc.getCloudUsers(getFullDetails=True, getDashboardConfig=False, getPreferences=False, getGroups=True)
         export_users = []
         
         # Filter the users
