@@ -143,6 +143,8 @@ class ShareClient:
         resp = self.doGet(path)
         respJson = json.loads(resp.read())
         resp.close()
+        if 'status' in respJson and 'code' in respJson['status'] and respJson['status']['code'] > 399: # An error occurred
+            raise SurfRequestError('GET', path, respJson['status']['code'], respJson['message'], [], None)
         return respJson
 
     def doJSONPost(self, path, data="", method="POST"):
