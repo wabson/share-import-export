@@ -20,6 +20,8 @@ siteurl|siteid    URL name of the site to remove, alternatively the full site
 -U url            The URL of the Share web application, e.g. 
 --url=url         http://alfresco.test.com/share
 
+--tenant          Name of the tenant or Alfresco Cloud network to connect to
+
 -d                Turn on debug mode
 
 -h                Display this message
@@ -43,6 +45,7 @@ def main(argv):
     username = "admin"
     password = "admin"
     url = "http://localhost:8080/share"
+    tenant = None
     _debug = 0
     sitename = ""
     
@@ -58,7 +61,7 @@ def main(argv):
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url="])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant="])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -75,6 +78,8 @@ def main(argv):
             password = arg
         elif opt in ("-U", "--url"):
             url = arg
+        elif opt == "--tenant":
+            tenant = arg
     
     if len(argv) > 0:
         siteurl = argv[0];
@@ -91,7 +96,7 @@ def main(argv):
         usage()
         sys.exit(1)
     
-    sc = alfresco.ShareClient(url, debug=_debug)
+    sc = alfresco.ShareClient(url, tenant=tenant, debug=_debug)
     print "Log in (%s)" % (username)
     loginres = sc.doLogin(username, password)
     if not loginres['success']:

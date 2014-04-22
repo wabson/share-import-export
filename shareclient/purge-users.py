@@ -19,6 +19,8 @@ file.json         Name of the JSON file to load user details from
 -U url            The URL of the Share web application, e.g. 
 --url=url         http://alfresco.test.com/share
 
+--tenant          Name of the tenant or Alfresco Cloud network to connect to
+
 --users=arg       Comma-separated list of user names to remove. Users in the
                   JSON file whose user names do not exactly match one of the 
                   values will be skipped and not deleted.
@@ -49,6 +51,7 @@ def main(argv):
     username = "admin"
     password = "admin"
     url = "http://localhost:8080/share"
+    tenant = None
     include_users = None
     skip_users = [ 'System', 'admin', 'guest' ]
     _debug = 0
@@ -68,7 +71,7 @@ def main(argv):
         sys.exit(1)
     
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "users=", "skip-users="])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant=", "users=", "skip-users="])
     except getopt.GetoptError, e:
         print e
         usage()
@@ -86,12 +89,14 @@ def main(argv):
             password = arg
         elif opt in ("-U", "--url"):
             url = arg
+        elif opt == "--tenant":
+            tenant = arg
         elif opt == "--users":
             include_users = arg.split(',')
         elif opt == "--skip-users":
             skip_users = arg.split(',')
     
-    sc = alfresco.ShareClient(url, debug=_debug)
+    sc = alfresco.ShareClient(url, tenant=tenant, debug=_debug)
     print "Log in (%s)" % (username)
     loginres = sc.doLogin(username, password)
     if not loginres['success']:

@@ -20,6 +20,8 @@ file.json           Name of the JSON file to import user information from.
 -U url              The URL of the Share web application, e.g. 
 --url=url           http://alfresco.test.com/share
 
+--tenant          Name of the tenant or Alfresco Cloud network to connect to
+
 --users=arg         Comma-separated list of user names to import. Users in the
                     JSON file whose user names do not exactly match one of the 
                     values will be skipped and not created.
@@ -71,6 +73,7 @@ def main(argv):
     username = "admin"
     password = "admin"
     url = "http://localhost:8080/share"
+    tenant = None
     include_users = None
     skip_users = [ 'System' ]
     set_dashboards = True
@@ -96,7 +99,7 @@ def main(argv):
         sys.exit(1)
     
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "users=", "skip-users=", "no-dashboards", "no-preferences", "update-profile", "no-avatars", "create-only", "default-password="])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant=", "users=", "skip-users=", "no-dashboards", "no-preferences", "update-profile", "no-avatars", "create-only", "default-password="])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -113,6 +116,8 @@ def main(argv):
             password = arg
         elif opt in ("-U", "--url"):
             url = arg
+        elif opt == "--tenant":
+            tenant = arg
         elif opt == "--users":
             include_users = arg.split(',')
         elif opt == "--skip-users":
@@ -133,7 +138,7 @@ def main(argv):
         elif opt == '--default-password':
             default_password = arg
     
-    sc = alfresco.ShareClient(url, debug=_debug)
+    sc = alfresco.ShareClient(url, tenant=tenant, debug=_debug)
     print "Log in (%s)" % (username)
     loginres = sc.doLogin(username, password)
     if not loginres['success']:

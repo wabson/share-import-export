@@ -24,6 +24,8 @@ file.json         Name of the file to export information to. Will be created if
 -U url            The URL of the Share web application, e.g. 
 --url=url         http://alfresco.test.com/share
 
+--tenant          Name of the tenant or Alfresco Cloud network to connect to
+
 --export-content  Export content of each of the site components (in ACP format)
                   to disk, alongside the JSON file. Will be ignored if stdout
                   if specified for the output.
@@ -113,7 +115,7 @@ def main(argv):
         if not argv[1].startswith('-'):
             try:
                 opts, args = getopt.getopt(argv[2:], "hdu:p:U:", 
-                    ["help", "username=", "password=", "url=", "export-content", "export-tags", "containers=", "include-paths=", "no-metadata", "no-memberships", "no-pages", "no-dashboard"])
+                    ["help", "username=", "password=", "url=", "tenant=", "export-content", "export-tags", "containers=", "include-paths=", "no-metadata", "no-memberships", "no-pages", "no-dashboard"])
             except getopt.GetoptError, e:
                 usage()
                 sys.exit(1)
@@ -130,6 +132,8 @@ def main(argv):
                     password = arg
                 elif opt in ("-U", "--url"):
                     url = arg
+                elif opt == "--tenant":
+                    tenant = arg
                 elif opt == '--export-content':
                     exportContent = True
                 elif opt == '--export-tags':
@@ -154,8 +158,12 @@ def main(argv):
             elif urlm is not None:
                 url = urlm.group(1)
                 sitename = urlm.group(3)
-                if (urlm.group(2) is not None):
-                    tenant = urlm.group(2).strip('/')
+                if urlm.group(2) is not None
+                    if tenant is None or tenant == urlm.group(2).strip('/'):
+                        tenant = urlm.group(2).strip('/')
+                    else:
+                        raise Exception("Site URL '%s' is not compatible with given tenant ID '%s'" % (argv[0]), tenant)
+
             else:
                 raise Exception("Not a valid site URL or ID (%s)" % (argv[0]))
             

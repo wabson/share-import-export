@@ -24,6 +24,8 @@ file.json                   Name of the JSON file to import information from.
 -U url                      The URL of the Share web application, e.g. 
 --url=url                   http://alfresco.test.com/share
 
+--tenant                    Name of the tenant or Alfresco Cloud network to connect to
+
 --create-missing-members    Auto-create any members who do not exist in the 
                             repository
 
@@ -76,6 +78,7 @@ def main(argv):
     username = "admin"
     password = "admin"
     url = "http://localhost:8080/share"
+    tenant = None
     create_missing_members = False
     users_file = None
     groups_file = None
@@ -109,7 +112,7 @@ def main(argv):
         sys.exit(1)
         
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "create-missing-members", "users-file=", "groups-file=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content", "no-content-upload", "import-tags", "no-delete", "multipart-handler="])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant=", "create-missing-members", "users-file=", "groups-file=", "skip-missing-members", "no-members", "no-create", "no-configuration", "no-dashboard", "containers=", "no-content", "no-content-upload", "import-tags", "no-delete", "multipart-handler="])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -126,6 +129,8 @@ def main(argv):
             password = arg
         elif opt in ("-U", "--url"):
             url = arg
+        elif opt == "--tenant":
+            tenant = arg
         elif opt == '--create-missing-members':
             create_missing_members = True
         elif opt == '--skip-missing-members':
@@ -155,7 +160,7 @@ def main(argv):
         elif opt == '--multipart-handler':
             mplib = arg
     
-    sc = alfresco.ShareClient(url=url, debug=_debug, mplib=mplib)
+    sc = alfresco.ShareClient(url=url, tenant=tenant, debug=_debug, mplib=mplib)
     print "Log in (%s)" % (username)
     loginres = sc.doLogin(username, password)
     if not loginres['success']:

@@ -23,6 +23,8 @@ file.json         Name of the file to export information to. Will be created if
 -U url            The URL of the Share web application, e.g. 
 --url=url         http://alfresco.test.com/share
 
+--tenant          Name of the tenant or Alfresco Cloud network to connect to
+
 --users=arg       Comma-separated list of user names to export. Users in the
                   whose user names do not exactly match one of the values will 
                   be skipped and not exported.
@@ -60,6 +62,7 @@ def main(argv):
     username = "admin"
     password = "admin"
     url = "http://localhost:8080/share"
+    tenant = None
     include_users = None
     skip_users = [ 'System' ]
     downloadAvatars = True
@@ -81,7 +84,7 @@ def main(argv):
         sys.exit(1)
     
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "users=", "skip-users=", "no-avatars", "avatar-thumbnail="])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant=", "users=", "skip-users=", "no-avatars", "avatar-thumbnail="])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -98,6 +101,8 @@ def main(argv):
             password = arg
         elif opt in ("-U", "--url"):
             url = arg
+        elif opt == "--tenant":
+            tenant = arg
         elif opt == "--no-avatars":
             downloadAvatars = False
         elif opt == "--avatar-thumbnail":
@@ -107,7 +112,7 @@ def main(argv):
         elif opt == "--skip-users":
             skip_users = arg.split(',')
     
-    sc = alfresco.ShareClient(url, debug=_debug)
+    sc = alfresco.ShareClient(url, tenant=tenant, debug=_debug)
     if not filename == "-":
         print "Log in (%s)" % (username)
     loginres = sc.doLogin(username, password)
