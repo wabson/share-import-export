@@ -22,6 +22,8 @@ Options and arguments:
 -U url            The URL of the Share web application, e.g. 
 --url=url         http://alfresco.test.com/share
 
+--tenant          Name of the tenant or Alfresco Cloud network to connect to
+
 --timeout         Timeout value to set in seconds
 
 -d                Turn on debug mode

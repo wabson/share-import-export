@@ -24,6 +24,8 @@ file.json         Name of the file to export information to. Will be created if
 -U url            The URL of the Share web application, e.g. 
 --url=url         http://alfresco.test.com/share
 
+--tenant          Name of the tenant or Alfresco Cloud network to connect to
+
 --export-content  Export content of each of the site components (in ACP format)
                   to disk, alongside the JSON file. Will be ignored if stdout
                   if specified for the output.
@@ -31,6 +33,14 @@ file.json         Name of the file to export information to. Will be created if
 --export-tags     Export tag information for each site component, in JSON 
                   format. ACP content exports do not support tag information
                   natively.
+
+--no-metadata     Do not include basic site metadata in the site data
+
+--no-memberships  Do not include site memberships in the site data
+
+--no-pages        Do not include site pages in the site data
+
+--no-dashboard    Do not include dashboard configuration in the site data
 
 --containers=list Comma-separated list of container names to export site
                   content and tags for, e.g. documentLibrary,wiki
@@ -62,6 +72,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib
 
 import alfresco
@@ -77,6 +88,7 @@ def main(argv):
     username = "admin"
     password = "admin"
     url = "http://localhost:8080/share"
+    tenant = None
     _debug = 0
     sitename = ""
     filename = ""
@@ -84,6 +96,11 @@ def main(argv):
     exportTags = False
     siteContainers = [ 'documentLibrary', 'wiki', 'blog', 'calendar', 'discussions', 'links', 'dataLists', 'Saved Searches' ]
     includePaths = None
+    # Type of site metadata to get
+    getMetaData = True
+    getMemberships = True
+    getPages = True
+    getDashboardConfig = True
     
     if len(argv) > 0:
         if argv[0] == "--help" or argv[0] == "-h":
@@ -97,7 +114,8 @@ def main(argv):
     
         if not argv[1].startswith('-'):
             try:
-                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", ["help", "username=", "password=", "url=", "export-content", "export-tags", "containers=", "include-paths="])
+                opts, args = getopt.getopt(argv[2:], "hdu:p:U:", 
+                    ["help", "username=", "password=", "url=", "tenant=", "export-content", "export-tags", "containers=", "include-paths=", "no-metadata", "no-memberships", "no-pages", "no-dashboard"])
             except getopt.GetoptError, e:
                 usage()
                 sys.exit(1)
@@ -114,6 +132,8 @@ def main(argv):
                     password = arg
                 elif opt in ("-U", "--url"):
                     url = arg
+                elif opt == "--tenant":
+                    tenant = arg
                 elif opt == '--export-content':
                     exportContent = True
                 elif opt == '--export-tags':
@@ -122,14 +142,28 @@ def main(argv):
                     siteContainers = arg.split(',')
                 elif opt == '--include-paths':
                     includePaths = arg.split(',')
+                elif opt == '--no-metadata':
+                    getMetaData = False
+                elif opt == '--no-memberships':
+                    getMemberships = False
+                elif opt == '--no-pages':
+                    getPages = False
+                elif opt == '--no-dashboard':
+                    getDashboardConfig = False
             
             idm = re.match('^([\-\w]+)$', argv[0])
-            urlm = re.match('^(https?\://[\w\-\.\:]+/share)/page/site/([\-\w]+)/[\w\-\./_]*$', argv[0])
+            urlm = re.match('^(https?\://[\w\-\.\:]+/share)/([\w\-\./_]+/)?page/site/([\-\w]+)/[\w\-\./_]*$', argv[0])
             if idm is not None:
                 sitename = argv[0]
             elif urlm is not None:
                 url = urlm.group(1)
-                sitename = urlm.group(2)
+                sitename = urlm.group(3)
+                if urlm.group(2) is not None
+                    if tenant is None or tenant == urlm.group(2).strip('/'):
+                        tenant = urlm.group(2).strip('/')
+                    else:
+                        raise Exception("Site URL '%s' is not compatible with given tenant ID '%s'" % (argv[0]), tenant)
+
             else:
                 raise Exception("Not a valid site URL or ID (%s)" % (argv[0]))
             
@@ -141,7 +175,7 @@ def main(argv):
         usage()
         sys.exit(1)
     
-    sc = alfresco.ShareClient(url, debug=_debug)
+    sc = alfresco.ShareClient(url, tenant=tenant, debug=_debug)
     if not filename == "-":
         print "Log in (%s)" % (username)
     loginres = sc.doLogin(username, password)
@@ -151,7 +185,7 @@ def main(argv):
     try:
         if not filename == "-":
             print "Get site information"
-        sdata = sc.getSiteInfo(sitename, True, True, True, True)
+        sdata = sc.getSiteInfo(sitename, getMetaData, getMemberships, getPages, getDashboardConfig)
         
         if filename == '-':
             siteJson = json.dumps(sdata, sort_keys=True, indent=4)
@@ -171,18 +205,18 @@ def main(argv):
         if exportContent:
             if not filename == "-":
                 print "Export all site content"
-                results = sc.exportAllSiteContent(sitename, siteContainers, includePaths)
+                tempContainerName = 'export-%s' % (int(time.time()))
+                results = sc.exportAllSiteContent(sitename, siteContainers, includePaths, tempContainerName)
                 
                 for component in results['exportFiles']:
                     acpFileName = "%s-%s.acp" % (os.path.splitext(filename)[0], component.replace(' ', '_'))
                     print "Saving %s" % (acpFileName)
-                    resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/Sites/%s/export/%s-%s.acp' % (sitename, sitename, component)))
+                    resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/Sites/%s/%s/%s-%s.acp' % (sitename, tempContainerName, sitename, component)))
                     acpfile = open(acpFileName, 'wb')
                     acpfile.write(resp.read())
                     acpfile.close()
                 
                 # Delete the 'export' folder afterwards
-                tempContainerName = 'export'
                 exportFolder = sc._getDocumentList('Sites/%s/%s' % (sitename, tempContainerName))
                 if exportFolder is not None:
                     sc.deleteFolder(exportFolder['metadata']['parent']['nodeRef'])
