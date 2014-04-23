@@ -158,7 +158,7 @@ def main(argv):
             elif urlm is not None:
                 url = urlm.group(1)
                 sitename = urlm.group(3)
-                if urlm.group(2) is not None
+                if urlm.group(2) is not None:
                     if tenant is None or tenant == urlm.group(2).strip('/'):
                         tenant = urlm.group(2).strip('/')
                     else:
