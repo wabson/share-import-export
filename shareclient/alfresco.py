@@ -94,8 +94,7 @@ class ShareClient:
         # Multipart opener
         if mplib == 'MultipartPostHandler':
             from MultipartPostHandler import MultipartPostHandler
-            #m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPSHandler(debuglevel=debug), urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj))
-            m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPCookieProcessor(self.cj))
+            m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPSHandler(debuglevel=debug), urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj))
         elif mplib == 'poster':
             import poster.streaminghttp
             m_opener = poster.streaminghttp.register_openers()
@@ -121,10 +120,11 @@ class ShareClient:
             print "%s %s/%s" % (method, reqbase, path)
         if dataType is not None:
             req.add_header('Content-Type', dataType)
+        # Add CSRF token for non-GETs
         if method != 'GET':
-            for cookie in self.cj:
-                if cookie.name == CSRF_TOKEN_NAME:
-                    req.add_header(CSRF_TOKEN_NAME, urllib.unquote(cookie.value))
+            csrfToken = self._getCSRFToken()
+            if csrfToken != '':
+                req.add_header(CSRF_TOKEN_NAME, csrfToken)
         try:
             return self.opener.open(req, timeout=self.timeout)
         except urllib2.HTTPError, e:
@@ -166,16 +166,25 @@ class ShareClient:
     def doMultipartUpload(self, path, params):
         """Perform a multipart form upload against Share"""
         reqbase = self.url if self.tenant is None else ("%s/%s" % (self.url, self.tenant))
+        requrl = "%s/%s?%s=%s" % (reqbase, path, CSRF_TOKEN_NAME, urllib.quote(self._getCSRFToken()))
         try:
             if self.mplib == 'MultipartPostHandler':
-                return self.m_opener.open("%s/%s" % (reqbase, path), params)
+                return self.m_opener.open(requrl, params)
             elif self.mplib == 'poster':
                 import poster.encode
                 datagen, headers = poster.encode.multipart_encode(params)
-                request = urllib2.Request("%s/%s" % (reqbase, path), datagen, headers)
+                request = urllib2.Request(requrl, datagen, headers)
                 return self.m_opener.open(request)
         except urllib2.HTTPError, e:
             raise SurfRequestError("POST", e.url, e.code, e.msg, e.hdrs, e.fp)
+
+    def _getCSRFToken(self):
+        """Return the latest CSRF token for this session, from cookie data. Returns an empty string if no value is found."""
+        for cookie in self.cj:
+            if cookie.name == CSRF_TOKEN_NAME:
+                return urllib.unquote(cookie.value)
+        return ''
+
 
     # Session functions
 

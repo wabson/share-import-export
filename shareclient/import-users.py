@@ -33,6 +33,10 @@ file.json           Name of the JSON file to import user information from.
 
 --no-preferences    Do not set user preferences
 
+--no-create         Do not create users, just update the existing users'
+                    information. All users must already exist, but you can
+                    use --users= and --skip-users= to restirct the list.
+
 --update-profile    Update profile information after creation. This will send 
                     a request to the edit user profile form handler to update 
                     values for existing users and for new users to set any 
@@ -48,6 +52,11 @@ file.json           Name of the JSON file to import user information from.
 
 --default-password  Password value to use for new users if no password is 
                     specified
+
+--cloud             Use this to import users into the Alfresco Cloud service
+                    instead of an on-premise install. This will use the 
+                    private 'invite' web script to create users instead of
+                    the normal admin scripts which are disabled in Cloud.
 
 -d                  Turn on debug mode
 
@@ -76,11 +85,13 @@ def main(argv):
     tenant = None
     include_users = None
     skip_users = [ 'System' ]
+    create = True
     set_dashboards = True
     set_prefs = True
     update_profile = False
     set_avatars = True
     default_password = None
+    isCloud = False
     _debug = 0
     
     if len(argv) > 0:
@@ -99,7 +110,7 @@ def main(argv):
         sys.exit(1)
     
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant=", "users=", "skip-users=", "no-dashboards", "no-preferences", "update-profile", "no-avatars", "create-only", "default-password="])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant=", "users=", "skip-users=", "no-create", "no-dashboards", "no-preferences", "update-profile", "no-avatars", "create-only", "default-password=", "cloud"])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -122,6 +133,8 @@ def main(argv):
             include_users = arg.split(',')
         elif opt == "--skip-users":
             skip_users = arg.split(',')
+        elif opt == '--no-create':
+            create = False
         elif opt == '--no-dashboards':
             set_dashboards = False
         elif opt == '--no-preferences':
@@ -137,6 +150,8 @@ def main(argv):
             set_avatars = False
         elif opt == '--default-password':
             default_password = arg
+        elif opt == "--cloud":
+            isCloud = True
     
     sc = alfresco.ShareClient(url, tenant=tenant, debug=_debug)
     print "Log in (%s)" % (username)
@@ -156,19 +171,44 @@ def main(argv):
         # Set password to be the same as the username if not specified
         if 'password' not in u:
             u['password'] = u['userName']
+        if isCloud:
+            u['password'] = u['userName']
+            u['userName'] = u['email']
             
-    try:
-        print "Create %s user(s)" % (len(create_users))
-        sc.createUsers(create_users, skip_users=skip_users, default_password=default_password)
-        
-        # Set user preferences
-        for u in create_users:
-            if 'preferences' in u and len(u['preferences']) > 0 and set_prefs:
-                print "Setting preferences for user '%s'" % (u['userName'])
-                sc.setUserPreferences(u['userName'], u['preferences'])
-    finally:
-        print "Log out (%s)" % (username)
-        sc.doLogout()
+    if create:
+        try:
+            print "Create %s user(s)" % (len(create_users))
+            if not isCloud:
+                sc.createUsers(create_users, skip_users=skip_users, default_password=default_password)
+            else:
+                ssc = alfresco.ShareClient(url=url, tenant="-system-", debug=_debug)
+                sscloginres = ssc.doLogin(username, password)
+                if not sscloginres['success']:
+                    print "Could not log in using specified credentials"
+                    sys.exit(1)
+
+                for u in create_users:
+                    try:
+                        qd = ssc.doJSONPost("proxy/alfresco/internal/cloud/accounts/signupqueue", {'email': u['email'], 'source': 'test-share-signup-page'})
+                    finally:
+                        pass
+
+                    usc = alfresco.ShareClient(url=url, tenant='-default-', debug=_debug)
+                    try:
+                        if (qd['registration']['key'] is not None and qd['registration']['id'] is not None):
+                            ud = usc.doJSONPost('proxy/alfresco-noauth/internal/cloud/account-activations', {'key': str(qd['registration']['key']), 'id': str(qd['registration']['id']), 'firstName': u['firstName'], 'lastName': u['lastName'], 'password': u['password']})
+                    finally:
+                        pass
+                ssc.doLogout()
+            
+            # Set user preferences
+            for u in create_users:
+                if 'preferences' in u and len(u['preferences']) > 0 and set_prefs:
+                    print "Setting preferences for user '%s'" % (u['userName'])
+                    sc.setUserPreferences(u['userName'], u['preferences'])
+        finally:
+            print "Log out (%s)" % (username)
+            sc.doLogout()
     
     #TODO Check if a profile image or dashboard config is available before logging in
     thisdir = os.path.dirname(filename)
