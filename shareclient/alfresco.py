@@ -110,7 +110,7 @@ class ShareClient:
         self.debug = debug
         self._username = None
         self.mplib = mplib
-        self.sitesContainer = 'Sites'
+        self.sitesContainer = None
         self.timeout = timeout
 
     def doRequest(self, method, path, data=None, dataType=None):
@@ -215,7 +215,7 @@ class ShareClient:
         resp.close()
         self._username = None
     
-    def getSitesContainerName():
+    def getSitesContainerName(self):
         if self.sitesContainer is None:
             json = self._getDocumentList('')
             for item in json['items']:
