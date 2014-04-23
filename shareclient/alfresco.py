@@ -110,6 +110,7 @@ class ShareClient:
         self.debug = debug
         self._username = None
         self.mplib = mplib
+        self.sitesContainer = 'Sites'
 
     def doRequest(self, method, path, data=None, dataType=None):
         """Perform a general HTTP request against Share"""
@@ -197,6 +198,14 @@ class ShareClient:
         resp.close()
         self._username = None
     
+    def getSitesContainerName():
+        if self.sitesContainer is None:
+            json = self._getDocumentList('')
+            for item in json['items']:
+                if 'nodeType' in item and item['nodeType'] == 'st:sites':
+                    self.sitesContainer = item['fileName']
+        return self.sitesContainer
+
     def updateDashboardConfig(self, configData):
         """Update a Share dashboard configuration"""
         result = {}
@@ -716,7 +725,7 @@ class ShareClient:
             tempContainerData = { 'nodeRef': createData['persistedObject'], 'name' : tempContainerName }
         else:
             # Does the ACP file exist in the export container already?
-            docList = self._getDocumentList('Sites/%s/%s' % (siteId, tempContainerName))
+            docList = self._getDocumentList('%s/%s/%s' % (self.getSitesContainerName(), siteId, tempContainerName))
             acp = self._getDocumentListItem(docList, '%s.acp' % (acpFile))
             if acp is not None:
                 self.deleteFile(acp['nodeRef'])
@@ -766,7 +775,7 @@ class ShareClient:
         # Locate the container item
         for child in treeData['items']:
             if (containers is None or child['name'] in containers) and (child['name'] not in excludeContainers):
-                docList = self._getDocumentList('Sites/%s/%s' % (siteId, child['name']))
+                docList = self._getDocumentList('%s/%s/%s' % (self.getSitesContainerName(), siteId, child['name']))
                 if docList['totalRecords'] > 0:
                     print "Export %s" % (child['name'])
                     self.exportSiteContent(siteId, child['name'], includePaths)
@@ -784,7 +793,7 @@ class ShareClient:
             raise Exception('file_not_found', 'Could not find file %s in component %s, parent folder %s' % (path[path.rindex('/') + 1:], componentId, parentPath))
         except SurfRequestError, e:
             if e.code == 404: # Pre-4.0 method
-                return self.doJSONGet('proxy/alfresco/slingshot/doclib/doclist/all/node/alfresco/company/home/Sites/%s/%s/%s' % (urllib2.quote(siteId), urllib2.quote(componentId), urllib2.quote(path.encode('utf-8'))))
+                return self.doJSONGet('proxy/alfresco/slingshot/doclib/doclist/all/node/alfresco/company/home/%s/%s/%s/%s' % (urllib2.quote(self.getSitesContainerName()), urllib2.quote(siteId), urllib2.quote(componentId), urllib2.quote(path.encode('utf-8'))))
             else:
                 raise
     
