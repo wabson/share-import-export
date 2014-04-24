@@ -45,6 +45,8 @@ file.json         Name of the file to export information to. Will be created if
 --containers=list Comma-separated list of container names to export site
                   content and tags for, e.g. documentLibrary,wiki
 
+--async           Generate ACP files asyncronously, for use with --export-content
+
 --include-paths=list Comma-separated list of folders or content items to include 
                   in the ACP file(s). This can be a list of absolute paths from 
                   the store root (although anything not inside the site will be 
@@ -101,6 +103,7 @@ def main(argv):
     getMemberships = True
     getPages = True
     getDashboardConfig = True
+    async = False
     
     if len(argv) > 0:
         if argv[0] == "--help" or argv[0] == "-h":
@@ -115,7 +118,7 @@ def main(argv):
         if not argv[1].startswith('-'):
             try:
                 opts, args = getopt.getopt(argv[2:], "hdu:p:U:", 
-                    ["help", "username=", "password=", "url=", "tenant=", "export-content", "export-tags", "containers=", "include-paths=", "no-metadata", "no-memberships", "no-pages", "no-dashboard"])
+                    ["help", "username=", "password=", "url=", "tenant=", "export-content", "async", "export-tags", "containers=", "include-paths=", "no-metadata", "no-memberships", "no-pages", "no-dashboard"])
             except getopt.GetoptError, e:
                 usage()
                 sys.exit(1)
@@ -136,6 +139,8 @@ def main(argv):
                     tenant = arg
                 elif opt == '--export-content':
                     exportContent = True
+                elif opt == '--async':
+                    async = True
                 elif opt == '--export-tags':
                     exportTags = True
                 elif opt == '--containers':
@@ -206,20 +211,25 @@ def main(argv):
             if not filename == "-":
                 print "Export all site content"
                 tempContainerName = 'export-%s' % (int(time.time()))
-                results = sc.exportAllSiteContent(sitename, siteContainers, includePaths, tempContainerName)
+                results = sc.exportAllSiteContent(sitename, siteContainers, includePaths, tempContainerName, async)
                 
-                for component in results['exportFiles']:
-                    acpFileName = "%s-%s.acp" % (os.path.splitext(filename)[0], component.replace(' ', '_'))
-                    print "Saving %s" % (acpFileName)
-                    resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/%s/%s/%s/%s-%s.acp' % (sc.getSitesContainerName(), sitename, tempContainerName, sitename, component)))
-                    acpfile = open(acpFileName, 'wb')
-                    acpfile.write(resp.read())
-                    acpfile.close()
-                
-                # Delete the 'export' folder afterwards
-                exportFolder = sc._getDocumentList('%s/%s/%s' % (sc.getSitesContainerName(), sitename, tempContainerName))
-                if exportFolder is not None:
-                    sc.deleteFolder(exportFolder['metadata']['parent']['nodeRef'])
+                if not async:
+                    for component in results['exportFiles']:
+                        acpFileName = "%s-%s.acp" % (os.path.splitext(filename)[0], component.replace(' ', '_'))
+                        print "Saving %s" % (acpFileName)
+                        resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/%s/%s/%s/%s-%s.acp' % (sc.getSitesContainerName(), sitename, tempContainerName, sitename, component)))
+                        acpfile = open(acpFileName, 'wb')
+                        acpfile.write(resp.read())
+                        acpfile.close()
+                    
+                    # Delete the 'export' folder afterwards
+                    exportFolder = sc._getDocumentList('%s/%s/%s' % (sc.getSitesContainerName(), sitename, tempContainerName))
+                    if exportFolder is not None:
+                        sc.deleteFolder(exportFolder['metadata']['parent']['nodeRef'])
+                else:
+                    print '** ACP files will be generated asyncronously and will be available to download with a web browser using the following URLs **'
+                    for component in results['exportFiles']:
+                        print '%s/%s' % (sc.getRequestBase(), urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/%s/%s/%s/%s-%s.acp' % (sc.getSitesContainerName(), sitename, tempContainerName, sitename, component)))
 
         if exportTags:
             if not filename == "-":

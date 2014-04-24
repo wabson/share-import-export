@@ -115,7 +115,7 @@ class ShareClient:
 
     def doRequest(self, method, path, data=None, dataType=None):
         """Perform a general HTTP request against Share"""
-        reqbase = self.url if self.tenant is None else ("%s/%s" % (self.url, self.tenant))
+        reqbase = self.getRequestBase()
         req = SurfRequest(url="%s/%s" % (reqbase, path), data=data, method=method)
         if self.debug == 1:
             print "%s %s/%s" % (method, reqbase, path)
@@ -130,6 +130,10 @@ class ShareClient:
             return self.opener.open(req, timeout=self.timeout)
         except urllib2.HTTPError, e:
             raise SurfRequestError(method, e.url, e.code, e.msg, e.hdrs, e.fp)
+
+    def getRequestBase(self):
+        """Return the base URL of the Share application"""
+        return self.url if self.tenant is None else ("%s/%s" % (self.url, self.tenant))
 
     def doGet(self, path):
         """Perform a HTTP GET request against Share"""
@@ -711,7 +715,7 @@ class ShareClient:
         else:
             raise Exception("Could not upload file (got response %s)" % (json.dumps(udata)))
 
-    def exportSiteContent(self, siteId, containerId, includePaths, tempContainerName='export'):
+    def exportSiteContent(self, siteId, containerId, includePaths, tempContainerName='export', async=False):
         """Export an ACP file of a specific site component and store it in the repository"""
         # Get the site metadata
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(unicode(siteId))))
@@ -768,7 +772,7 @@ class ShareClient:
             for p in paths:
                 fullpaths.append(p if p.startswith("/app:company_home") else "/app:company_home/st:sites/cm:%s/%s" % (siteId, p.strip("/")))
             actionDef["parameterValues"]["include-paths"] = fullpaths
-        self.doJSONPost('proxy/alfresco/api/actionQueue', json.dumps(actionDef))
+        self.doJSONPost('proxy/alfresco/api/actionQueue?async=%s' % (str(async).lower()), json.dumps(actionDef))
         """
         Response is something like
         {
@@ -782,7 +786,7 @@ class ShareClient:
         }
         """
         
-    def exportAllSiteContent(self, siteId, containers=None, includePaths=None, tempContainerName='export'):
+    def exportAllSiteContent(self, siteId, containers=None, includePaths=None, tempContainerName='export', async=False):
         """Export an ACP file for each component in the site and store them in the repository"""
         # TODO Can we not just call proxy/alfresco/slingshot/doclib/treenode/node/alfresco/company/home/Sites/sitename ?
         siteData = self.doJSONGet('proxy/alfresco/api/sites/%s' % (urllib.quote(unicode(siteId))))
@@ -803,7 +807,7 @@ class ShareClient:
 
                 if totalRecords > 0:
                     print "Export %s" % (child['name'])
-                    self.exportSiteContent(siteId, child['name'], includePaths, tempContainerName)
+                    self.exportSiteContent(siteId, child['name'], includePaths, tempContainerName, async)
                     results['exportFiles'].append(child['name'])
         return results
     
