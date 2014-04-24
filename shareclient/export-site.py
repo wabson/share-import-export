@@ -211,13 +211,13 @@ def main(argv):
                 for component in results['exportFiles']:
                     acpFileName = "%s-%s.acp" % (os.path.splitext(filename)[0], component.replace(' ', '_'))
                     print "Saving %s" % (acpFileName)
-                    resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/Sites/%s/%s/%s-%s.acp' % (sitename, tempContainerName, sitename, component)))
+                    resp = sc.doGet(urllib.quote('proxy/alfresco/api/path/content/workspace/SpacesStore/Company Home/%s/%s/%s/%s-%s.acp' % (sc.getSitesContainerName(), sitename, tempContainerName, sitename, component)))
                     acpfile = open(acpFileName, 'wb')
                     acpfile.write(resp.read())
                     acpfile.close()
                 
                 # Delete the 'export' folder afterwards
-                exportFolder = sc._getDocumentList('Sites/%s/%s' % (sitename, tempContainerName))
+                exportFolder = sc._getDocumentList('%s/%s/%s' % (sc.getSitesContainerName(), sitename, tempContainerName))
                 if exportFolder is not None:
                     sc.deleteFolder(exportFolder['metadata']['parent']['nodeRef'])
 
