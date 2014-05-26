@@ -309,12 +309,14 @@ class ShareClient:
         dashboardId is the site or user ID
         """
         try:
+            isMethod40 = False
             try:
                 dashboardResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % (urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId))))
             except SurfRequestError, e:
                 # Try 4.0 method
                 if e.code in (404, 500): # 4.0.a returns 500, 4.0.b returns 404
                     dashboardResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % (urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId))))
+                    isMethod40 = true
                 else:
                     raise e
             from xml.etree.ElementTree import XML
@@ -326,13 +328,10 @@ class ShareClient:
                 for j in [ 1, 2, 3, 4 ]:
                     dashlet = { }
                     try:
-                        try:
+                        if isMethod40 == False:
                             dashletResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId))))
-                        except SurfRequestError, e:
-                            if e.code in (404, 500):
-                                dashletResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId))))
-                            else:
-                                raise e
+                        else:
+                            dashletResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId))))
                         dashletTree = XML(dashletResp.read())
                         dashboardResp.close()
                         dashlet['url'] = dashletTree.findtext('url')
