@@ -248,7 +248,10 @@ def main(argv):
     finally:
         if not filename == "-":
             print "Log out (%s)" % (username)
-        sc.doLogout()
+        try:
+            sc.doLogout()
+        except Exception, e:
+            pass
 
 if __name__ == "__main__":
     main(sys.argv[1:])

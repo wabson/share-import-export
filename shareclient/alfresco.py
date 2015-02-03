@@ -346,7 +346,11 @@ class ShareClient:
 
     def doLogout(self):
         """Log the current user out of Share using the logout servlet"""
-        resp = self.doGet('page/dologout')
+        try:
+            resp = self.doGet('page/dologout')
+        except SurfRequestError, e:
+            if e.code == 405: # GET Method not allowed, must use POST for newer versions of Alfresco
+                resp = self.doPost('page/dologout')
         resp.close()
         self._username = None
     
