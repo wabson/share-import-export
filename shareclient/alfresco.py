@@ -16,6 +16,8 @@ import urllib
 import urllib2
 import sys
 
+from xml.etree.ElementTree import XML
+
 GUID_REGEXP = re.compile('[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{8}')
 SHARE_CLIENT_USER_AGENT = 'ShareImportExport/1.0'
 SIE_VERSION = 'Share Import-Export 1.3.0'
@@ -76,6 +78,139 @@ class SurfRequestError(urllib2.HTTPError):
             for line in self.callstack:
                 print str(line)
 
+class ShareInstance:
+    """Represents a running Alfresco Share application instance, identified by a URL"""
+
+    def __init__(self, url):
+        self.url = url.rstrip('/')
+
+    def get_base_url(self):
+        return self.url
+
+    def get_url(self, path):
+        return "%s/%s" % (self.get_base_url(), path)
+
+class ShareTenant(ShareInstance):
+    """Represents a particular tenant within a MT-enabled Share application"""
+
+    def __init__(self, url, tenant):
+        self.url = url.rstrip('/')
+        self.tenant = tenant
+
+    def get_base_url(self):
+        return "%s/%s" % (self.url, self.tenant)
+
+class ShareResponse:
+    """Representation of a response received back from the Share application, may contain HTML or JSON or other data"""
+
+    def __init__(self, response):
+        """Create a new instance from urllib2 response data.
+
+        The response can be a urllib2.HttpResponse or any file-like object (to facilitate testing)"""
+        self.response = response
+        self.status = None
+        self.text = self.response.read()
+        response.close()
+
+    def __len__(self):
+        return len(self.text)
+
+    def get_text():
+        return self.text
+
+class JsonResponse(ShareResponse):
+    """A JSON-format response received back from Share"""
+
+    def __init__(self, response):
+        ShareResponse.__init__(self, response)
+        self.data = json.loads(self.text)
+
+    def get_data(self):
+        return self.data
+
+class XmlResponse(ShareResponse):
+    """A XML-format response received back from Share"""
+
+    def __init__(self, response):
+        ShareResponse.__init__(self, response)
+        self.data = XML(self.text)
+
+    def get_data(self):
+        return self.data
+
+class DashboardPageResponse(XmlResponse):
+    """Reponse containing information on a Share dashboard, in XML format"""
+
+    def get_site_pages(self):
+        return json.loads(self.data.findtext('properties/sitePages', '[]'))
+
+    def get_template_instance(self):
+        return self.data.findtext('template-instance')
+
+class DashletResponse(XmlResponse):
+    """Reponse containing information on a Share dashlet, in XML format"""
+
+    def dict(self):
+        dashlet = {}
+        dashlet['url'] = self.data.findtext('url')
+        dashlet['regionId'] = self.data.findtext('region-id')
+        
+        p = self.data.find('properties')
+        if p is not None:
+            props = p.getchildren()
+            if props:
+                dprops = {}
+                for p in props:
+                    dprops[p.tag] = str(p.text)
+                dashlet['config'] = dprops
+        return dashlet
+
+class ShareRequest:
+    """Encapsulate a user request made to a Share instance"""
+
+    def __init__(self, instance, path, data=None, dataType=None, method='GET', debug=0, timeout=300):
+        self.instance = instance
+        self.path = path
+        self.data = data
+        self.dataType = dataType
+        self.method = method
+        self.debug = debug
+        self.timeout = timeout
+
+    def execute(self, opener, resp_class=ShareResponse):
+        """Execute the request using the given opener and return the response, wrapped within a ShareResponse object, 
+        or an instance of the class specified.
+
+        If a custom class is specified then this must implement an __init__ method which takes the response object from urllib.open() as an argument
+        """
+        req = SurfRequest(url=self.instance.get_url(self.path), data=self.data, method=self.method)
+        if self.debug == 1:
+            print "%s %s/%s" % (self.method, instance.get_url(), self.path)
+        if self.dataType is not None:
+            req.add_header('Content-Type', self.dataType)
+        try:
+            return resp_class(opener.open(req, timeout=self.timeout))
+        except urllib2.HTTPError, e:
+            raise SurfRequestError(self.method, e.url, e.code, e.msg, e.hdrs, e.fp)
+
+class CSRFTokenHandler(urllib2.BaseHandler):
+    """Adds the Alfresco-CSRFToken header to the requests for non-idempotent requests, if a value can be found in the cookie jar"""
+
+    def __init__(self, cj):
+        self.cj = cj or cookielib.CookieJar()
+
+    def __get_token(self):
+        for cookie in self.cj:
+            if cookie.name == CSRF_TOKEN_NAME:
+                return urllib.unquote(cookie.value)
+
+    def http_request(self, req):
+        if req.get_method() != 'GET':
+            token = self.__get_token()
+            if token is not None:
+                req.add_header(CSRF_TOKEN_NAME, token)
+        return req
+
 class ShareClient:
     """Access Alfresco Share progamatically via its RESTful API"""
 
@@ -89,12 +224,12 @@ class ShareClient:
                    ('User-Agent', SHARE_CLIENT_USER_AGENT)
         ]
         # Regular opener
-        opener = urllib2.build_opener(urllib2.HTTPSHandler(debuglevel=debug), urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj))
+        opener = urllib2.build_opener(urllib2.HTTPSHandler(debuglevel=debug), urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj), CSRFTokenHandler(self.cj))
         opener.addheaders = headers
         # Multipart opener
         if mplib == 'MultipartPostHandler':
             from MultipartPostHandler import MultipartPostHandler
-            m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPSHandler(debuglevel=debug), urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj))
+            m_opener = urllib2.build_opener(MultipartPostHandler, urllib2.HTTPSHandler(debuglevel=debug), urllib2.HTTPHandler(debuglevel=debug), urllib2.HTTPCookieProcessor(self.cj), CSRFTokenHandler(self.cj))
         elif mplib == 'poster':
             import poster.streaminghttp
             m_opener = poster.streaminghttp.register_openers()
@@ -112,6 +247,7 @@ class ShareClient:
         self.mplib = mplib
         self.sitesContainer = None
         self.timeout = timeout
+        self.instance = self.tenant and ShareTenant(self.url, self.tenant) or ShareInstance(self.url)
 
     def doRequest(self, method, path, data=None, dataType=None):
         """Perform a general HTTP request against Share"""
@@ -121,11 +257,6 @@ class ShareClient:
             print "%s %s/%s" % (method, reqbase, path)
         if dataType is not None:
             req.add_header('Content-Type', dataType)
-        # Add CSRF token for non-GETs
-        if method != 'GET':
-            csrfToken = self._getCSRFToken()
-            if csrfToken != '':
-                req.add_header(CSRF_TOKEN_NAME, csrfToken)
         try:
             return self.opener.open(req, timeout=self.timeout)
         except urllib2.HTTPError, e:
@@ -285,18 +416,16 @@ class ShareClient:
         # this should still work even if the repository is running on a different server to Share.
         if getPages:
             try:
-                dashboardResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/site/%s/dashboard.xml' % (siteId))
+                dashboardResp = ShareRequest(self.instance, 'proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/site/%s/dashboard.xml' % (siteId)) \
+                    .execute(self.opener, DashboardPageResponse)
             except SurfRequestError, e:
                 # Try 4.0 method
                 if e.code in (404, 500):
-                    dashboardResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/pages/site/%s/dashboard.xml' % (siteId))
+                    dashboardResp = ShareRequest(self.instance, 'proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/pages/site/%s/dashboard.xml' % (siteId)) \
+                        .execute(self.opener, DashboardPageResponse)
                 else:
                     raise e
-            from xml.etree.ElementTree import XML
-            dashboardTree = XML(dashboardResp.read())
-            dashboardResp.close()
-            sitePages = json.loads(dashboardTree.findtext('properties/sitePages', '[]'))
-            siteData['sitePages'] = sitePages
+            siteData['sitePages'] = dashboardResp.get_site_pages()
         if getDashboardConfig:
             siteData['dashboardConfig'] = self.getDashboardConfig('site', siteId)
         return siteData
@@ -310,44 +439,34 @@ class ShareClient:
         """
         try:
             try:
-                dashboardResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % (urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId))))
+                dashboardResp = ShareRequest(self.instance, 'proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % \
+                    (urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId)))) \
+                    .execute(self.opener, DashboardPageResponse)
             except SurfRequestError, e:
                 # Try 4.0 method
                 if e.code in (404, 500): # 4.0.a returns 500, 4.0.b returns 404
-                    dashboardResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % (urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId))))
+                    dashboardResp = ShareRequest(self.instance, 'proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/pages/%s/%s/dashboard.xml' % \
+                        (urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId)))) \
+                        .execute(self.opener, DashboardPageResponse)
                 else:
                     raise e
-            from xml.etree.ElementTree import XML
-            dashboardTree = XML(dashboardResp.read())
-            templateInstance = dashboardTree.findtext('template-instance')
+            templateInstance = dashboardResp.get_template_instance()
             dashlets = []
+            urltmpl = 'proxy/alfresco/%s/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml'
             # Iterate through dashboard components
             for i in [ 1, 2, 3 ]:
                 for j in [ 1, 2, 3, 4 ]:
-                    dashlet = { }
                     try:
                         try:
-                            dashletResp = self.doGet('proxy/alfresco/remotestore/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId))))
+                            dashletResp = ShareRequest(self.instance, urltmpl % ('remotestore', i, j, urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId)))) \
+                                .execute(self.opener, DashletResponse)
                         except SurfRequestError, e:
                             if e.code in (404, 500):
-                                dashletResp = self.doGet('proxy/alfresco/remoteadm/get/s/sitestore/alfresco/site-data/components/page.component-%s-%s.%s~%s~dashboard.xml' % (i, j, urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId))))
+                                dashletResp = ShareRequest(self.instance, urltmpl % ('remoteadm', i, j, urllib.quote(unicode(dashboardType)), urllib.quote(unicode(dashboardId)))) \
+                                    .execute(self.opener, DashletResponse)
                             else:
                                 raise e
-                        dashletTree = XML(dashletResp.read())
-                        dashboardResp.close()
-                        dashlet['url'] = dashletTree.findtext('url')
-                        dashlet['regionId'] = dashletTree.findtext('region-id')
-                        
-                        p = dashletTree.find('properties')
-                        if p is not None:
-                            props = p.getchildren()
-                            if props:
-                                dprops = {}
-                                for p in props:
-                                    dprops[p.tag] = str(p.text)
-                                dashlet['config'] = dprops
-                        
-                        dashlets.append(dashlet)
+                        dashlets.append(dashletResp.dict())
                     except SurfRequestError, e:
                         if e.code == 404:
                             pass
