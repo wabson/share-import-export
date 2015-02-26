@@ -252,7 +252,8 @@ class ShareClient:
     def doRequest(self, method, path, data=None, dataType=None):
         """Perform a general HTTP request against Share"""
         reqbase = self.getRequestBase()
-        req = SurfRequest(url="%s/%s" % (reqbase, path), data=data, method=method)
+        url = "%s/%s" % (reqbase, path)
+        req = SurfRequest(url=url, data=data, method=method)
         if self.debug == 1:
             print "%s %s/%s" % (method, reqbase, path)
         if dataType is not None:
@@ -348,10 +349,18 @@ class ShareClient:
         """Log the current user out of Share using the logout servlet"""
         try:
             resp = self.doGet('page/dologout')
+            resp.close()
         except SurfRequestError, e:
             if e.code == 405: # GET Method not allowed, must use POST for newer versions of Alfresco
-                resp = self.doPost('page/dologout')
-        resp.close()
+            	try:
+                    resp = self.doPost('page/dologout')
+                except SurfRequestError, e:
+                	if e.code == 401: # POST Method return not authorized, must use POST for newer versions of Alfresco
+                		print "Logged out"
+                	else:
+                		print "Unknown error on logout, HTTP response: %s error: %s" % e.code, e.description
+				resp.close()
+        
         self._username = None
     
     def getSitesContainerName(self):
@@ -643,7 +652,14 @@ class ShareClient:
         if tempContainerData is None:
             # Create upload container if it doesn't exist
             folderData = { 'alf_destination': siteNodeRef, 'prop_cm_name': tempContainerName, 'prop_cm_title': tempContainerName, 'prop_cm_description': '' }
-            createData = self.doJSONPost('proxy/alfresco/api/type/%s/formprocessor' % (urllib.quote(unicode(folderType))), json.dumps(folderData))
+            try:
+                createData = self.doJSONPost('proxy/alfresco/api/type/%s/formprocessor' % (urllib.quote(unicode(folderType))), json.dumps(folderData))
+            except SurfRequestError, e:
+                if e.code == 404:
+                    folderType = 'cm:folder'
+                    createData = self.doJSONPost('proxy/alfresco/api/type/%s/formprocessor' % (urllib.quote(unicode(folderType))), json.dumps(folderData))
+                else:
+                    raise e
             tempContainerData = { 'nodeRef': createData['persistedObject'], 'name' : tempContainerName }
             
         # First apply a ruleset to the temp folder
@@ -1241,7 +1257,7 @@ class ShareClient:
     
     def getCategories(self, path):
         """Fetch a list of child categories at the given location, in a recursive structure"""
-        categories = self.doJSONGet('proxy/alfresco/slingshot/doclib/categorynode/node/%s' % (urllib.quote(path)))['items']
+        categories = self.doJSONGet('proxy/alfresco/slingshot/doclib/categorynode/node/%s' % (urllib.quote(path.encode('utf-8'))))['items']
         # Recursively call the function on each child to find child categories
         for c in categories:
             c['children'] = self.getCategories('%s/%s' % (path, c['name']))

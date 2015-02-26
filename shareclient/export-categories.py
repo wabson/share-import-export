@@ -101,8 +101,10 @@ def main(argv):
             categoryJson = json.dumps(cdata, sort_keys=True, indent=4)
             print categoryJson
         else:
-            if not os.path.exists(os.path.dirname(filename)):
-                os.makedirs(os.path.dirname(filename))
+            directory = os.path.dirname(filename)
+            if not os.path.exists(directory):
+                if not '' == directory:
+                    os.makedirs(os.path.dirname(filename))
             
             # Write user data to a file
             categoryJson = json.dumps(cdata, sort_keys=True, indent=4)

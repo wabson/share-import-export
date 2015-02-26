@@ -83,9 +83,10 @@ def main(argv):
     
     if len(argv) > 0:
         siteurl = argv[0];
-        idm = re.match('^(\w+)$', siteurl)
+        idm = re.match('^[ ]*[0-9a-zA-Z\-]+[ ]*$', siteurl)
         urlm = re.match('^(https?\\://[\w\\-\\.\\:]+/share)/page/site/(\w+)/[\w\\-\\./]*$', siteurl)
         if idm is not None:
+            
             sitename = idm.group(0)
         elif urlm is not None:
             url = urlm.group(1)
@@ -105,6 +106,8 @@ def main(argv):
     print "Delete site '%s'" % (sitename)
     try:
         sc.deleteSite(sitename)
+        """site shortname is blocked by site in trashcan - https://issues.alfresco.com/jira/browse/ACE-2756"""
+        print "... Deleted site '%s' - site shortname is locked by site in user trashcan (delete in profile)" % (sitename)
     except alfresco.SurfRequestError, e:
         if e.code == 404:
             print "Site '%s' does not exist" % (sitename)

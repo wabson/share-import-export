@@ -169,8 +169,10 @@ def main(argv):
     try:
         filenamenoext = os.path.splitext(os.path.split(filename)[1])[0]
         thisdir = os.path.dirname(filename)
-        if thisdir == "":
-            thisdir = os.path.dirname(sys.argv[0])
+        if thisdir is not "":
+            thisdir = thisdir + os.sep
+        """if thisdir == "":"""
+        """    thisdir = os.path.dirname(sys.argv[0])"""
         sd = json.loads(open(filename).read())
         siteId = str(sd['shortName'])
         if create_site:
@@ -232,7 +234,9 @@ def main(argv):
         # Import ACP files
         if importContent:
             for container in siteContainers:
-                acpFile = thisdir + os.sep + '%s-%s.acp' % (filenamenoext, container.replace(' ', '_'))
+                print "Import Content for site container: %s" % container
+                acpFile = thisdir + '%s-%s.acp' % (filenamenoext, container.replace(' ', '_'))
+                print "... using file %s" % acpFile
                 if os.path.isfile(acpFile) or uploadContent == False:
                     print "Import %s content" % (container)
                     fileobj = file(acpFile, 'rb') if uploadContent == True else None
@@ -244,6 +248,7 @@ def main(argv):
         # Import site tags
         if importTags:
             for container in siteContainers:
+                print "Import Tags for site container: %s" % container
                 jsonFile = thisdir + os.sep + '%s-%s-tags.json' % (filenamenoext, container.replace(' ', '_'))
                 if os.path.isfile(jsonFile):
                     print "Import %s tags" % (container)
@@ -251,6 +256,7 @@ def main(argv):
                     sc.importSiteTags(siteId, items)
                 
     except alfresco.SurfRequestError, e:
+        print "Error (%s)" % (e.description)
         if e.description == "error.duplicateShortName":
             print "Site with short name '%s' already exists" % (siteId)
             sys.exit(1)
