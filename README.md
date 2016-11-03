@@ -184,24 +184,23 @@ To remove only a few selected users, add the `--users=user1,user2` flag to the c
 
 This are the steps needed in order to migrate a complete Site of Alfresco including categories and tags. This procedure has been checked with Alfresco Community 4.2.f as the origin system and Alfresco Community 201605-GA as the destination.
 
-1. First, we need to export the Site in the origin instance, along with **all** users, groups and categories (and also tags)
+First, we need to export the Site in the origin instance, along with **all** users, groups and categories (and also tags)
 
-  python export-groups.py exported-groups.json --skip-groups=EMAIL_CONTRIBUTORS,ALFRESCO_ADMINISTRATORS
-  python export-users.py exported-users.json
-  python export-categories.py exported-categories.json
-  python export-site.py siteid exported-site.json --export-content --export-tags
+    python export-groups.py exported-groups.json --skip-groups=EMAIL_CONTRIBUTORS,ALFRESCO_ADMINISTRATORS
+    python export-users.py exported-users.json
+    python export-categories.py exported-categories.json
+    python export-site.py siteid exported-site.json --export-content --export-tags
+ 
+And obviously now we need to import all this in the destination Alfresco instance
 
-2. And obviously now we need to import all this in the destination Alfresco instance
-
-  python import-groups.py exported-groups.json
-  python import-users.py exported-users.json (if executed in first place memberships are not processed)
-  python import-categories.py exported-categories.json
-  python import-site.py exported-site.json --create-missing-members --users-file exported-users.json --import-tags
-
+    python import-groups.py exported-groups.json
+    python import-users.py exported-users.json (if executed in first place memberships are not processed)
+    python import-categories.py exported-categories.json
+    python import-site.py exported-site.json --create-missing-members --users-file exported-users.json --import-tags
 
 Also all above commands need this other arguments, omitted for clarity
 
-  --username=username --password=password --url=<share-url>
+    --username=username --password=password --url=<share-url>
 
 Troubleshooting
 ---------------
