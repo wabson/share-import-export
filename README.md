@@ -3,14 +3,22 @@ Share Import/Export Tools
 
 Author: Will Abson
 
-The Share Import/Export tools provide a set of Python scripts for importing and 
-exporting site-based content and user information held within Alfresco Share, 
+The Share Import/Export tools provide a set of Python scripts for importing and
+exporting site-based content and user information held within Alfresco Share,
 and also provide some sample demo content.
 
 The tools were written to help set up demonstration environments quickly, reliably and consistently. Others have used them for migrating sites from one system to another and some enhancements have been made to better support this. However we do not recommend using the scripts for creating backups.
 
 The scripts connect to Alfresco Share via HTTP, so can be used against a local or
 a remote instance of Share, or even the public [MyAlfresco](https://my.alfresco.com/) service.
+
+Contribution: Mikel Asla
+
+* Added support to import category trees
+* Minor fixes
+  * Fixed encoding issue exporting categories with non-ascii characters
+  * Fixed import-groups.py not to create users as groups (when found by the script as children of group being created)
+  * Additional argument for import-users.py to support default_email as a workaround to importing users with no email specified
 
 What can be imported/exported?
 ------------------------------
@@ -22,7 +30,7 @@ What can be imported/exported?
     * All content held within the site
     * Records Management sites (must have RM installed)
     * Web Quick Start sites (must have WQS installed)
-    * Document categories and tags (specify `--export-tags` and `--import-tags`) 
+    * Document categories and tags (specify `--export-tags` and `--import-tags`)
 
   * Users
     * All profile information, including profile images
@@ -32,7 +40,7 @@ What can be imported/exported?
 
 What is not imported/exported?
 
-  * User passwords (passwords are set to the same value as the username by default, since they cannot be exported) 
+  * User passwords (passwords are set to the same value as the username by default, since they cannot be exported)
   * User passwords and account enabled flags (all accounts enabled)
   * Activity feed entries
   * File system-level customisations (e.g. custom dashlets) and configuration
@@ -44,7 +52,7 @@ The scripts work with fully with versions 3.3, 3.4 and 4.x of Alfresco, with add
 
 *Note: in Alfresco 4.2 and greater the new CSRF filter blocks some of the requests made by the tools and must be temporarily disabled - see Troubleshooting, below, for details of how to do this.*
 
-[Python](http://www.python.org/) 2.6 or greater is required to run the scripts, with Python 2.7 recommended for packaging site bootstrap packages. At present Python 3.x is **not supported**. 
+[Python](http://www.python.org/) 2.6 or greater is required to run the scripts, with Python 2.7 recommended for packaging site bootstrap packages. At present Python 3.x is **not supported**.
 
 Usage
 -----
@@ -55,14 +63,14 @@ The tools are supplied as a set of executable Python scripts that can be run fro
 
 This assumes that Python is set up on your system and installed in your system `PATH`.
 
-You can use the `--help` option with any of the scripts mentioned below for information on the different parameters accepted. 
+You can use the `--help` option with any of the scripts mentioned below for information on the different parameters accepted.
 
 ### Importing Content
 
 Sites and users can be imported from JSON files on your local system, and examples of these
 are supplied in the `data` folder.
 
-To import one of the sample sites, change into the project root directory at a 
+To import one of the sample sites, change into the project root directory at a
 command prompt. Then type the following
 
     python import-site.py data/sites/branding.json \
@@ -70,13 +78,13 @@ command prompt. Then type the following
       --users-file=data/cloud-users.json \
       --username=username --password=password \
       --url=<share-url>
-      
+
 For more site definitions you can choose between the files `images.json`, `usersgroup2010.json`, `exec1.json` and `rm.json`.
 
-After importing the site(s) you should see them listed when you log in to Alfresco Share as Paul Hampton (`phampton`/`phampton`). 
+After importing the site(s) you should see them listed when you log in to Alfresco Share as Paul Hampton (`phampton`/`phampton`).
 
-You must either create the user accounts of all site members (see below) before creating sites, or specify the 
-`--create-missing-members` and `--users-file` arguments, otherwise the site import script will 
+You must either create the user accounts of all site members (see below) before creating sites, or specify the
+`--create-missing-members` and `--users-file` arguments, otherwise the site import script will
 fail when it tries to add site members which do not exist.
 
 If your site has group-based members then you must import these separately first, using the
@@ -90,7 +98,7 @@ using the default password, you can omit the `--username`, `--password` and `--u
 
 ### Importing users
 
-If you only want to import users without any site content, you can import users defined in 
+If you only want to import users without any site content, you can import users defined in
 a JSON users file. An example `cloud-users.json` is supplied in the data folder.
 
 Change into the project root directory at a command prompt. Then type the following
@@ -107,7 +115,7 @@ with the Share URL `share-url`.
 If you are running a local instance of Alfresco and wish to run the import as the admin user
 using the default password, you can omit the `--username`, `--password` and `--url` arguments.
 
-To set user preferences and upload profile images, remove the `--create-only` argument from 
+To set user preferences and upload profile images, remove the `--create-only` argument from
 the command. Note that on Windows systems, the large number of HTTP requests may cause
 problems.
 
@@ -140,7 +148,7 @@ Run the following command from a terminal
 The `siteid` argument is the URL name of the site in Share. If you are not sure what this means
 you can use the full URL of the site dashboard page instead.
 
-The second argument is the name of the file where the site information will be stored in JSON 
+The second argument is the name of the file where the site information will be stored in JSON
 format.
 
 To also export the site content in ACP format, add the `--export-content` flag to the command. You
@@ -172,6 +180,28 @@ This will remove ALL the users specified in the local file `users-file.json` fro
 
 To remove only a few selected users, add the `--users=user1,user2` flag to the command.
 
+#### Migrating a complete Site (including categories)
+
+This are the steps needed in order to migrate a complete Site of Alfresco including categories and tags. This procedure has been checked with Alfresco Community 4.2.f as the origin system and Alfresco Community 201605-GA as the destination.
+
+First, we need to export the Site in the origin instance, along with **all** users, groups and categories (and also tags)
+
+    python export-groups.py exported-groups.json --skip-groups=EMAIL_CONTRIBUTORS,ALFRESCO_ADMINISTRATORS
+    python export-users.py exported-users.json
+    python export-categories.py exported-categories.json
+    python export-site.py siteid exported-site.json --export-content --export-tags
+ 
+And obviously now we need to import all this in the destination Alfresco instance
+
+    python import-groups.py exported-groups.json
+    python import-users.py exported-users.json (if executed in first place memberships are not processed)
+    python import-categories.py exported-categories.json
+    python import-site.py exported-site.json --create-missing-members --users-file exported-users.json --import-tags
+
+Also all above commands need this other arguments, omitted for clarity
+
+    --username=username --password=password --url=<share-url>
+
 Troubleshooting
 ---------------
 
@@ -182,7 +212,7 @@ The CSRF filter [introduced in Alfresco 4.2](http://blogs.alfresco.com/wp/ewinlo
     <config evaluator="string-compare" condition="CSRFPolicy" replace="true">
        <filter/>
     </config>
-    
+
 Once you have completed the import/export you should remove this configuration to re-enable the filter.
 
 ### The authority with name xxxxx could not be found

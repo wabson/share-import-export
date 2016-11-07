@@ -1143,7 +1143,7 @@ class ShareClient:
                 if getPreferences:
                     p['preferences'] = self.doJSONGet('proxy/alfresco/api/people/%s/preferences' % (urllib.quote(unicode(p['userName']))))
         
-    def createUser(self, user, defaultPassword=None):
+    def createUser(self, user, defaultPassword=None, defaultEmail=None):
         """Create a person object in the repository"""
         # Work around bug where create/update user calls do not accept null values
         # Create call does not like jobtitle being null; webtier update profile does not tolerate any being null
@@ -1156,15 +1156,18 @@ class ShareClient:
                 user['password'] = defaultPassword
             else:
                 user['password'] = user['userName']
+        if not ('email' in user) or user['email'] == u'':
+            if defaultEmail is not None and defaultEmail != '':
+                user['email'] = defaultEmail
         return self.doJSONPost('proxy/alfresco/api/people', json.dumps(user))
 
-    def createUsers(self, users, skip_users=[], default_password=None):
+    def createUsers(self, users, skip_users=[], default_password=None, default_email=None):
         """Create several person objects in the repository"""
         for u in users:
             if not (u['userName'] in skip_users):
                 print "Creating user '%s'" % (u['userName'])
                 try:
-                    self.createUser(u, default_password)
+                    self.createUser(u, default_password, default_email)
                 except urllib2.HTTPError, e:
                     if e.code == 409:
                         print "User '%s' already exists, skipping" % (u['userName'])
@@ -1242,11 +1245,12 @@ class ShareClient:
             else:
                 childBase = '%s/%s' % (parent, group['displayName'])
             for child in group['children']:
-                self.createGroups(child, childBase)
+                if child['authorityType'] != 'USER':
+                    self.createGroups(child, childBase)
     
     def getCategories(self, path):
         """Fetch a list of child categories at the given location, in a recursive structure"""
-        categories = self.doJSONGet('proxy/alfresco/slingshot/doclib/categorynode/node/%s' % (urllib.quote(path)))['items']
+        categories = self.doJSONGet('proxy/alfresco/slingshot/doclib/categorynode/node/%s' % (urllib.quote(path.encode('utf-8'))))['items']
         # Recursively call the function on each child to find child categories
         for c in categories:
             c['children'] = self.getCategories('%s/%s' % (path, c['name']))
@@ -1255,6 +1259,24 @@ class ShareClient:
     def getAllCategories(self):
         """Fetch all the categories in the repository, in a tree structure"""
         return self.getCategories('alfresco/category/root')
+    
+    def createCategories(self, category, parent=None):
+        """Create a tree of Categories"""
+        newCategory = self.createCategory(category, parent)
+        if 'children' in category:
+            for child in category['children']:
+                newChildCategory = self.createCategory(child, newCategory['persistedObject'])
+                if 'children' in child:
+                    for categoryChild in child['children']:
+                        self.createCategories(categoryChild, newChildCategory['persistedObject'])
+        
+    def createCategory(self, category, parentNodeRef=None):
+        """Create a single category"""
+        if parentNodeRef is None:
+            newCategory = self.doJSONPost('proxy/alfresco/api/category', {'name':category['name'].encode('utf-8')})
+        else:
+            newCategory = self.doJSONPost('proxy/alfresco/api/category/%s' % (parentNodeRef.replace('://', '/')) , {'name':category['name'].encode('utf-8')})               
+        return newCategory
     
     def getAllTags(self):
         """Fetch all the tags used in the repository"""

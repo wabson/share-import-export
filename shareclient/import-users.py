@@ -52,6 +52,8 @@ file.json           Name of the JSON file to import user information from.
 
 --default-password  Password value to use for new users if no password is 
                     specified
+                    
+--default-email     Email value to use for new users if no email is specified
 
 --cloud             Use this to import users into the Alfresco Cloud service
                     instead of an on-premise install. This will use the 
@@ -91,6 +93,7 @@ def main(argv):
     update_profile = False
     set_avatars = True
     default_password = None
+    default_email = None
     isCloud = False
     _debug = 0
     
@@ -110,7 +113,7 @@ def main(argv):
         sys.exit(1)
     
     try:
-        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant=", "users=", "skip-users=", "no-create", "no-dashboards", "no-preferences", "update-profile", "no-avatars", "create-only", "default-password=", "cloud"])
+        opts, args = getopt.getopt(argv[1:], "hdu:p:U:", ["help", "username=", "password=", "url=", "tenant=", "users=", "skip-users=", "no-create", "no-dashboards", "no-preferences", "update-profile", "no-avatars", "create-only", "default-password=", "default-email=", "cloud"])
     except getopt.GetoptError, e:
         usage()
         sys.exit(1)
@@ -150,6 +153,8 @@ def main(argv):
             set_avatars = False
         elif opt == '--default-password':
             default_password = arg
+        elif opt == '--default-email':
+            default_email = arg
         elif opt == "--cloud":
             isCloud = True
     
@@ -179,7 +184,7 @@ def main(argv):
         try:
             print "Create %s user(s)" % (len(create_users))
             if not isCloud:
-                sc.createUsers(create_users, skip_users=skip_users, default_password=default_password)
+                sc.createUsers(create_users, skip_users=skip_users, default_password=default_password, default_email=default_email)
             else:
                 ssc = alfresco.ShareClient(url=url, tenant="-system-", debug=_debug)
                 sscloginres = ssc.doLogin(username, password)
